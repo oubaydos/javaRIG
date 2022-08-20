@@ -5,6 +5,12 @@ import lombok.ToString;
 
 import java.util.List;
 
+/**
+ * this is the test class for which we will be trying to generate random objects
+ * it is annotated with @Setter
+ * @see lombok.Setter
+ * @author obaydah bouifadene
+ */
 @NoArgsConstructor
 @Setter
 @ToString
