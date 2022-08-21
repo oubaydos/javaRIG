@@ -1,6 +1,7 @@
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.lang.reflect.Type;
+import java.util.Random;
 
 /**
  * this will be responsible for generating random instance of a class
@@ -10,12 +11,13 @@ import java.lang.reflect.Type;
  * @author obaydah bouifadene
  */
 public class RandomGenerator {
+    private final Random random = new Random();
     /**
      * if type.getName() in {"int", "java.lang.Integer"}
-     * @return a random int between 0 and 100
+     * @return a random int between 0 and Integer.MAX_VALUE
      */
     public int getRandomInt() {
-        return (int) (Math.random() * 100);
+        return random.nextInt(0, Integer.MAX_VALUE);
     }
 
     /**
