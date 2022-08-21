@@ -16,7 +16,7 @@ public class RandomGenerator {
      * if type.getName() in {"int", "java.lang.Integer"}
      * @return a random int between 0 and Integer.MAX_VALUE
      */
-    public int getRandomInt() {
+    private int getRandomInt() {
         return random.nextInt(0, Integer.MAX_VALUE);
     }
 
@@ -25,11 +25,12 @@ public class RandomGenerator {
      * @return a random string of length 10
      * @see org.apache.commons.lang3.RandomStringUtils
      */
-    public String getRandomString() {
+    private String getRandomString() {
         return RandomStringUtils.randomAlphanumeric(10);
     }
 
     /**
+     * the facade to the other generation methods
      * will be the base method for generating random values for all types of fields
      * @param type the type of the field
      * @return a random value of the according type Object
