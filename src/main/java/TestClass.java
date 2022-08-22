@@ -1,9 +1,6 @@
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.util.List;
 
 /**
  * this is the test class for which we will be trying to generate random objects
