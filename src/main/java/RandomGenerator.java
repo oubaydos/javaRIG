@@ -34,6 +34,26 @@ public class RandomGenerator {
     private String getRandomString() {
         return RandomStringUtils.randomAlphanumeric(10);
     }
+    /**
+     * if type.getName() in {"[B", "[Ljava.lang.Byte;"}
+     * @return a random byte array with size between 5 and 15
+     */
+    private byte[] getBytes(){
+        int size = (int) (Math.random() * 15) +5;
+        byte[] bytes = new byte[size];
+        new Random().nextBytes(bytes);
+        return bytes;
+    }
+
+    /**
+     * if type.getName() in {"byte", "java.lang.Byte"}
+     * @return a random byte between -128 and 127
+     */
+    private byte getByte(){
+        byte[] bytes = new byte[1];
+        new Random().nextBytes(bytes);
+        return bytes[0];
+    }
 
     /**
      * if type extends Enum<>
@@ -60,6 +80,10 @@ public class RandomGenerator {
             return getRandomInt();
         } else if (type == String.class) {
             return getRandomString();
+        } else if (type == Byte.class || type == byte.class) {
+            return getByte();
+        } else if (type == Byte[].class || type == byte[].class) {
+            return getBytes();
         }
         return null;
     }
