@@ -24,7 +24,9 @@ public class RandomGenerator {
     private int getRandomInt() {
         return random.nextInt(0, Integer.MAX_VALUE);
     }
-
+    private short getRandomShort(){
+        return (short) random.nextInt(Short.MAX_VALUE + 1);
+    }
     /**
      * if type.getName() is "java.lang.String"
      *
@@ -60,6 +62,9 @@ public class RandomGenerator {
             return getRandomInt();
         } else if (type == String.class) {
             return getRandomString();
+        }
+        else if (type==Short.class || type ==short.class){
+            return getRandomShort();
         }
         return null;
     }

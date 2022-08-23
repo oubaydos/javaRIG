@@ -15,5 +15,6 @@ public class TestClass {
     private final String a = "";
     private Integer b;
     private String alpha;
+    private Short shortNumber;
 //    private List<String> list;
 }
