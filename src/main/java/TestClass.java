@@ -18,5 +18,6 @@ public class TestClass {
     private Short shortNumber;
     private float floatNumber;
     private long longNumber;
+    private boolean booleanNumber;
 //    private List<String> list;
 }

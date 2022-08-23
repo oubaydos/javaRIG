@@ -33,6 +33,9 @@ public class RandomGenerator {
     private float getRandomFloat(){
         return random.nextFloat(0,Float.MAX_VALUE);
     }
+    private boolean getRandomBoolean(){
+        return random.nextBoolean();
+    }
     /**
      * if type.getName() is "java.lang.String"
      *
@@ -76,6 +79,8 @@ public class RandomGenerator {
             return getRandomLong();
         }else if (type==Float.class || type ==float.class){
             return getRandomFloat();
+        }else if (type==Boolean.class || type ==boolean.class){
+            return getRandomBoolean();
         }
         return null;
     }
