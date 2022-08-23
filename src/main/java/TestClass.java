@@ -16,5 +16,7 @@ public class TestClass {
     private Integer b;
     private String alpha;
     private Short shortNumber;
+    private float floatNumber;
+    private long longNumber;
 //    private List<String> list;
 }

@@ -25,7 +25,13 @@ public class RandomGenerator {
         return random.nextInt(0, Integer.MAX_VALUE);
     }
     private short getRandomShort(){
-        return (short) random.nextInt(Short.MAX_VALUE + 1);
+        return (short) random.nextInt(0,Short.MAX_VALUE + 1);
+    }
+    private long getRandomLong(){
+        return random.nextLong(0,Long.MAX_VALUE);
+    }
+    private float getRandomFloat(){
+        return random.nextFloat(0,Float.MAX_VALUE);
     }
     /**
      * if type.getName() is "java.lang.String"
@@ -65,6 +71,11 @@ public class RandomGenerator {
         }
         else if (type==Short.class || type ==short.class){
             return getRandomShort();
+        }
+        else if (type==Long.class || type ==long.class){
+            return getRandomLong();
+        }else if (type==Float.class || type ==float.class){
+            return getRandomFloat();
         }
         return null;
     }
