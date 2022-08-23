@@ -41,7 +41,7 @@ public class RandomGenerator {
     private byte[] getBytes(){
         int size = (int) (Math.random() * 15) +5;
         byte[] bytes = new byte[size];
-        new Random().nextBytes(bytes);
+        random.nextBytes(bytes);
         return bytes;
     }
 
@@ -51,7 +51,7 @@ public class RandomGenerator {
      */
     private byte getByte(){
         byte[] bytes = new byte[1];
-        new Random().nextBytes(bytes);
+        random.nextBytes(bytes);
         return bytes[0];
     }
 
