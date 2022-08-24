@@ -26,6 +26,34 @@ public class RandomGenerator {
     }
 
     /**
+     * generate a random short
+     * @return a random short between 0 and Short.MAX_VALUE
+     */
+    private short getRandomShort(){
+        return (short) random.nextInt(0,Short.MAX_VALUE + 1);
+    }
+    /**
+     * generate a random long
+     * @return a random long between 0 and Long.MAX_VALUE
+     */
+    private long getRandomLong(){
+        return random.nextLong(0,Long.MAX_VALUE+1);
+    }
+    /**
+     * generate a random float
+     * @return a random float between 0.0 and Float.MAX_VALUE
+     */
+    private float getRandomFloat(){
+        return random.nextFloat(0,Float.MAX_VALUE+1);
+    }
+    /**
+     * generate a random boolean
+     * @return a random boolean : true or false
+     */
+    private boolean getRandomBoolean(){
+        return random.nextBoolean();
+    }
+    /**
      * if type.getName() is "java.lang.String"
      *
      * @return a random string of length 10
@@ -84,6 +112,16 @@ public class RandomGenerator {
             return getByte();
         } else if (type == Byte[].class || type == byte[].class) {
             return getBytes();
+        }
+        else if (type==Short.class || type ==short.class){
+            return getRandomShort();
+        }
+        else if (type==Long.class || type ==long.class){
+            return getRandomLong();
+        }else if (type==Float.class || type ==float.class){
+            return getRandomFloat();
+        }else if (type==Boolean.class || type ==boolean.class){
+            return getRandomBoolean();
         }
         return null;
     }
