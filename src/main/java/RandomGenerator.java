@@ -39,7 +39,7 @@ public class RandomGenerator {
      * @return a random byte array with size between 5 and 15
      */
     private byte[] getBytes(){
-        int size = (int) (Math.random() * 15) +5;
+        int size =  random.nextInt(5,15);
         byte[] bytes = new byte[size];
         random.nextBytes(bytes);
         return bytes;

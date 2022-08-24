@@ -12,8 +12,8 @@ import lombok.ToString;
 @Setter
 @ToString
 public class TestClass {
-    private final String a = "";
-    private Integer b;
-    private String alpha;
+//    private final String a = "";
+    private byte[] b;
+//    private String alpha;
 //    private List<String> list;
 }
