@@ -37,14 +37,14 @@ public class RandomGenerator {
      * @return a random long between 0 and Long.MAX_VALUE
      */
     private long getRandomLong(){
-        return random.nextLong(0,Long.MAX_VALUE+1);
+        return random.nextLong(0,Long.MAX_VALUE);
     }
     /**
      * generate a random float
      * @return a random float between 0.0 and Float.MAX_VALUE
      */
     private float getRandomFloat(){
-        return random.nextFloat(0,Float.MAX_VALUE+1);
+        return random.nextFloat(0,Float.MAX_VALUE);
     }
     /**
      * generate a random boolean
