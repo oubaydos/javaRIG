@@ -40,7 +40,7 @@ public class RandomGenerator {
      * @return a random long between 0 and Long.MAX_VALUE
      */
     private long getRandomLong() {
-        return random.nextLong(0, Long.MAX_VALUE + 1);
+        return random.nextLong(0, Long.MAX_VALUE);
     }
 
     /**
