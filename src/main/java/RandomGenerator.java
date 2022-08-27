@@ -141,6 +141,8 @@ public class RandomGenerator {
             return getRandomFloat();
         } else if (type == Boolean.class || type == boolean.class) {
             return getRandomBoolean();
+        } else if (type == Character.class || type == char.class) {
+            return getRandomChar();
         }
         return null;
     }
