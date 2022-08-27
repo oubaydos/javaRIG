@@ -63,7 +63,7 @@ public class RandomGenerator {
         return RandomStringUtils.randomAlphanumeric(10);
     }
     /**
-     * if type.getName() in {"[B", "[Ljava.lang.Byte;"}
+     * if type.getName() in {"[B", "[Ljava.lang.Byte"}
      * @return a random byte array with size between 5 and 15
      */
     private byte[] getBytes(){
