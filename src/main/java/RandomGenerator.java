@@ -109,7 +109,7 @@ public class RandomGenerator {
      * @param enumClass the enum class : to be passed as EnumName.class for example
      * @return a random Enum of the given type or null if the enum is empty
      */
-    public <T extends Enum<T>> T getRandomEnum(@NotNull Class<T> enumClass) {
+    private <T extends Enum<T>> T getRandomEnum(@NotNull Class<T> enumClass) {
         EnumSet<T> enumSet = EnumSet.allOf(enumClass);
         if (enumSet.isEmpty()) {
             return null;
@@ -143,6 +143,8 @@ public class RandomGenerator {
             return getRandomBoolean();
         } else if (type == Character.class || type == char.class) {
             return getRandomChar();
+        } else if (((Class<?>) type).isEnum()) {
+            return getRandomEnum((Class<? extends Enum>) type);
         }
         return null;
     }
