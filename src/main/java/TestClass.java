@@ -12,15 +12,20 @@ import lombok.ToString;
 @Setter
 @ToString
 public class TestClass {
-    private final String a = "";
-    private Integer b;
-    private String alpha;
-    private Short shortNumber;
-    private float floatNumber;
-    private long longNumber;
-    private boolean booleanNumber;
-    private Character character;
-    private byte by;
-    private byte[] bytes;
+//    private final String a = "";
+//    private Integer b;
+//    private String alpha;
+//    private Short shortNumber;
+//    private float floatNumber;
+//    private long longNumber;
+//    private boolean booleanNumber;
+//    private Character character;
+//    private byte by;
+//    private byte[] bytes;
+    private TestEnum testEnum;
 //    private List<String> list;
+}
+
+enum TestEnum{
+    A,B,C
 }
