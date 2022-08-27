@@ -1,9 +1,15 @@
 import jakarta.validation.constraints.NotNull;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.jetbrains.annotations.Contract;
 
 import java.lang.reflect.Type;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.Random;
+
+import static java.time.ZoneOffset.UTC;
 
 /**
  * this will be responsible for generating random instance of a class
@@ -15,6 +21,8 @@ import java.util.Random;
  */
 public class RandomGenerator {
     private final Random random = new Random();
+    private final Instant MIN_INSTANT = Instant.ofEpochMilli(0);
+    private final Instant MAX_INSTANT = LocalDate.of(2100, 12, 31).atStartOfDay(UTC).toInstant();
 
     /**
      * if type.getName() in {"int", "java.lang.Integer"}
@@ -66,9 +74,10 @@ public class RandomGenerator {
      *
      * @return random character from [a-zA-Z]
      */
-    public char getRandomChar() {
+    private char getRandomChar() {
         return RandomStringUtils.randomAlphabetic(1).charAt(0);
     }
+
 
     /**
      * if type.getName() is "java.lang.String"
@@ -76,6 +85,7 @@ public class RandomGenerator {
      * @return a random string of length 10
      * @see org.apache.commons.lang3.RandomStringUtils
      */
+    @NotNull
     private String getRandomString() {
         return RandomStringUtils.randomAlphanumeric(10);
     }
@@ -85,11 +95,61 @@ public class RandomGenerator {
      *
      * @return a random byte array with size between 5 and 15
      */
+    @NotNull
     private byte[] getBytes() {
         int size = random.nextInt(5, 15);
         byte[] bytes = new byte[size];
         random.nextBytes(bytes);
         return bytes;
+    }
+
+    /**
+     * generates a random Instant between two instants
+     *
+     * @param startInclusive : starting Instant (included)
+     * @param endExclusive   : ending Instant (not included)
+     * @return random instant of type Instant
+     * @see <a href="https://github.com/RKumsher/utils/blob/9f27615414acaafc9a24ae85537be666efd52fe7/src/main/java/com/github/rkumsher/date/RandomDateUtils.java">Source Code</a>
+     */
+    @org.jetbrains.annotations.NotNull
+    @NotNull
+    private Instant getRandomInstant(Instant startInclusive, Instant endExclusive) {
+        return Instant.ofEpochMilli(random.nextLong(startInclusive.toEpochMilli(), endExclusive.toEpochMilli()));
+    }
+
+    /**
+     * generates a random Instant between {@link RandomGenerator#MIN_INSTANT Instant.Min} and {@link RandomGenerator#MAX_INSTANT 2100}
+     *
+     * @return a random Instant
+     */
+    @org.jetbrains.annotations.NotNull
+    @NotNull
+    private Instant getRandomInstant() {
+        return this.getRandomInstant(MIN_INSTANT, MAX_INSTANT);
+    }
+
+    /**
+     * generates a random Date between {@link RandomGenerator#MIN_INSTANT Instant.Min} and {@link RandomGenerator#MAX_INSTANT 2100}
+     *
+     * @return a random Date
+     */
+    @Contract(" -> new")
+    @org.jetbrains.annotations.NotNull
+    @NotNull
+    private Date getRandomDate() {
+        return Date.from(this.getRandomInstant());
+    }
+
+    /**
+     * generates a random LocalDate between {@link RandomGenerator#MIN_INSTANT Instant.Min} and {@link RandomGenerator#MAX_INSTANT 2100}
+     *
+     * @return a random LocalDate
+     */
+    @Contract(" -> new")
+    @org.jetbrains.annotations.NotNull
+    @NotNull
+    private LocalDate getRandomLocalDate() {
+        return this.getRandomInstant().atZone(UTC).toLocalDate();
     }
 
     /**
@@ -116,6 +176,7 @@ public class RandomGenerator {
         }
         return enumSet.stream().skip(new Random().nextInt(enumSet.size())).findFirst().orElse(null);
     }
+
 
     /**
      * the facade to the other generation methods
@@ -145,6 +206,12 @@ public class RandomGenerator {
             return getRandomChar();
         } else if (((Class<?>) type).isEnum()) {
             return getRandomEnum((Class<? extends Enum>) type);
+        } else if (type == Instant.class) {
+            return getRandomInstant();
+        } else if (type == Date.class) {
+            return getRandomDate();
+        } else if (type == LocalDate.class) {
+            return getRandomLocalDate();
         }
         return null;
     }
