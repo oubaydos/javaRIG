@@ -18,7 +18,10 @@ public class Main {
 //        TestClass.class.getDeclaredField("b").setAccessible(true);
 //        TestClass.class.getDeclaredField("b").set(testClass, 1);
         log.debug("{}", testClass);
-
+//        Field testMap = Test.class.getDeclaredField("genericTestMap");
+//        testMap.setAccessible(true);
+//
+//        ParameterizedType type = (ParameterizedType) testMap.getGenericType();
 //        for (var i : Arrays.stream(TestClass.class.getDeclaredFields()).map(Field::getGenericType).toList()){
 //            testClass.
 //        }

@@ -2,12 +2,11 @@ import jakarta.validation.constraints.NotNull;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.Contract;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.Random;
+import java.util.*;
 
 import static java.time.ZoneOffset.UTC;
 
@@ -176,7 +175,15 @@ public class RandomGenerator {
         }
         return enumSet.stream().skip(new Random().nextInt(enumSet.size())).findFirst().orElse(null);
     }
-
+    public <K,V> Map<K,V> getRandomMap(Field field){
+        // TODO @hamza
+        return null;
+    }
+    public <T> List<T> getRandomList(Field field){
+        // TODO @ibrahim
+        return null;
+    }
+    // other list / array etc methods @Ibrahim
 
     /**
      * the facade to the other generation methods
@@ -184,6 +191,7 @@ public class RandomGenerator {
      *
      * @param type the type of the field
      * @return a random value of the according type Object
+     * TODO : refactor this method to accept Field field instead to Type type
      */
     public Object getRandomObject(Type type) {
         if (type == Integer.class || type == int.class) {

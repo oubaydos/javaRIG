@@ -5,6 +5,7 @@ import lombok.ToString;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * this is the test class for which we will be trying to generate random objects
@@ -30,6 +31,7 @@ public class TestClass {
     private Instant instant;
     private Date date;
     private LocalDate localDate;
+    private Map<String,String> map;
 //    private List<String> list;
 }
 
