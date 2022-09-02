@@ -51,6 +51,12 @@ public class RandomGenerator {
     }
 
     /**
+     * generate a random double
+     * @return a double between 0 and Double.MAX_VALUE
+     */
+    private double getRandomDouble(){return random.nextDouble(0,Double.MAX_VALUE);}
+
+    /**
      * generate a random float
      *
      * @return a random float between 0.0 and Float.MAX_VALUE
@@ -206,6 +212,8 @@ public class RandomGenerator {
             return getRandomShort();
         } else if (type == Long.class || type == long.class) {
             return getRandomLong();
+        } else if (type == Double.class || type == double.class) {
+            return getRandomDouble();
         } else if (type == Float.class || type == float.class) {
             return getRandomFloat();
         } else if (type == Boolean.class || type == boolean.class) {

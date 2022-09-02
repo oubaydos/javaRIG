@@ -24,6 +24,7 @@ public class TestClass {
     private float floatNumber;
     private long longNumber;
     private boolean booleanNumber;
+    private double doubleNumber;
     private Character character;
     private byte by;
     private byte[] bytes;
