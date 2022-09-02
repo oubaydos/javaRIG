@@ -2,6 +2,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.Map;
+
 /**
  * this is the test class for which we will be trying to generate random objects
  * it is annotated with @Setter
@@ -19,5 +24,17 @@ public class TestClass {
     private float floatNumber;
     private long longNumber;
     private boolean booleanNumber;
+    private Character character;
+    private byte by;
+    private byte[] bytes;
+    private TestEnum testEnum;
+    private Instant instant;
+    private Date date;
+    private LocalDate localDate;
+    private Map<String,String> map;
 //    private List<String> list;
+}
+
+enum TestEnum{
+    A,B,C
 }
