@@ -185,6 +185,10 @@ public class RandomGenerator {
         return enumSet.stream().skip(new Random().nextInt(enumSet.size())).findFirst().orElse(null);
     }
 
+    /**
+     *
+     * @return a random Map with size between 5 and 15
+     */
     public  Map<Object,Object> getRandomMap(Type type) {
         int size = random.nextInt(5, 15);
         ParameterizedType parameterizedType = (ParameterizedType)type;
