@@ -1,10 +1,8 @@
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -15,24 +13,26 @@ import java.util.Map;
  */
 @NoArgsConstructor
 @Setter
+@Getter
 @ToString
 public class TestClass {
-    private final String a = "";
-    private Integer b;
-    private String alpha;
-    private Short shortNumber;
-    private float floatNumber;
-    private long longNumber;
-    private boolean booleanNumber;
-    private double doubleNumber;
-    private Character character;
-    private byte by;
-    private byte[] bytes;
-    private TestEnum testEnum;
-    private Instant instant;
-    private Date date;
-    private LocalDate localDate;
+//    private final String a = "";
+//    private Integer b;
+//    private String alpha;
+//    private Short shortNumber;
+//    private float floatNumber;
+//    private long longNumber;
+//    private boolean booleanNumber;
+//    private double doubleNumber;
+//    private Character character;
+//    private byte by;
+//    private byte[] bytes;
+//    private TestEnum testEnum;
+//    private Instant instant;
+//    private Date date;
+//    private LocalDate localDate;
     private Map<String,String> map;
+    private TestEnum e;
 //    private List<String> list;
 }
 

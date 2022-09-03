@@ -2,7 +2,7 @@ import jakarta.validation.constraints.NotNull;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.Contract;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -52,9 +52,12 @@ public class RandomGenerator {
 
     /**
      * generate a random double
+     *
      * @return a double between 0 and Double.MAX_VALUE
      */
-    private double getRandomDouble(){return random.nextDouble(0,Double.MAX_VALUE);}
+    private double getRandomDouble() {
+        return random.nextDouble(0, Double.MAX_VALUE);
+    }
 
     /**
      * generate a random float
@@ -101,7 +104,7 @@ public class RandomGenerator {
      * @return a random byte array with size between 5 and 15
      */
     @NotNull
-    private byte[] getBytes() {
+    private byte[] getRandomBytes() {
         int size = random.nextInt(5, 15);
         byte[] bytes = new byte[size];
         random.nextBytes(bytes);
@@ -162,7 +165,7 @@ public class RandomGenerator {
      *
      * @return a random byte between -128 and 127
      */
-    private byte getByte() {
+    private byte getRandomByte() {
         byte[] bytes = new byte[1];
         random.nextBytes(bytes);
         return bytes[0];
@@ -181,11 +184,24 @@ public class RandomGenerator {
         }
         return enumSet.stream().skip(new Random().nextInt(enumSet.size())).findFirst().orElse(null);
     }
-    public <K,V> Map<K,V> getRandomMap(Field field){
-        // TODO @hamza
-        return null;
+
+    /**
+     *
+     * @return a random Map with size between 5 and 15
+     */
+    private  Map<Object,Object> getRandomMap(Type type) {
+        int size = random.nextInt(5, 15);
+        ParameterizedType parameterizedType = (ParameterizedType)type;
+        Type keyType =parameterizedType.getActualTypeArguments()[0];
+        Type valueType = parameterizedType.getActualTypeArguments()[1];
+        Map<Object,Object> resultedMap = new HashMap<>();
+        for(int i=0;i<size;i++){
+            resultedMap.put(getRandomObject(keyType),getRandomObject(valueType));
+        }
+        return resultedMap;
     }
-    public <T> List<T> getRandomList(Field field){
+
+    public <T> List<T> getRandomList(Type type) {
         // TODO @ibrahim
         return null;
     }
@@ -197,38 +213,28 @@ public class RandomGenerator {
      *
      * @param type the type of the field
      * @return a random value of the according type Object
-     * TODO : refactor this method to accept Field field instead to Type type
      */
+    @SuppressWarnings({"unchecked","rawtypes"})
     public Object getRandomObject(Type type) {
-        if (type == Integer.class || type == int.class) {
-            return getRandomInt();
-        } else if (type == String.class) {
-            return getRandomString();
-        } else if (type == Byte.class || type == byte.class) {
-            return getByte();
-        } else if (type == Byte[].class || type == byte[].class) {
-            return getBytes();
-        } else if (type == Short.class || type == short.class) {
-            return getRandomShort();
-        } else if (type == Long.class || type == long.class) {
-            return getRandomLong();
-        } else if (type == Double.class || type == double.class) {
-            return getRandomDouble();
-        } else if (type == Float.class || type == float.class) {
-            return getRandomFloat();
-        } else if (type == Boolean.class || type == boolean.class) {
-            return getRandomBoolean();
-        } else if (type == Character.class || type == char.class) {
-            return getRandomChar();
-        } else if (((Class<?>) type).isEnum()) {
-            return getRandomEnum((Class<? extends Enum>) type);
-        } else if (type == Instant.class) {
-            return getRandomInstant();
-        } else if (type == Date.class) {
-            return getRandomDate();
-        } else if (type == LocalDate.class) {
-            return getRandomLocalDate();
-        }
-        return null;
+        TypeEnum typeEnum = TypeEnum.fromType(type);
+        return switch (typeEnum) {
+            case INTEGER -> getRandomInt();
+            case STRING -> getRandomString();
+            case BYTE -> getRandomByte();
+            case BYTE_ARRAY -> getRandomBytes();
+            case SHORT -> getRandomShort();
+            case LONG -> getRandomLong();
+            case DOUBLE -> getRandomDouble();
+            case FLOAT -> getRandomFloat();
+            case BOOLEAN -> getRandomBoolean();
+            case CHAR -> getRandomChar();
+            case INSTANT -> getRandomInstant();
+            case DATE -> getRandomDate();
+            case LOCAL_DATE -> getRandomLocalDate();
+            case MAP -> getRandomMap(type);
+            case LIST -> getRandomList(type);
+            case ENUM -> getRandomEnum((Class<? extends Enum>) type);
+            case UNDEFINED -> null;
+        };
     }
 }

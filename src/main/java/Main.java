@@ -1,6 +1,8 @@
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 
 
@@ -27,12 +29,18 @@ public class Main {
 //        }
         for (var method : Arrays.stream(TestClass.class.getDeclaredMethods()).filter(method -> method.getName().startsWith("set")).toList()) {
             try {
-                Class<?> type = method.getParameterTypes()[0];
+
+                Field testMap = TestClass.class.getDeclaredField(Utils.getFieldNameFromSetterMethodName(method.getName()));
+                Type type =  testMap.getGenericType();
                 log.debug("{}",type == Character.class);
-                method.invoke(testClass, randomGenerator.getRandomObject(type));
+                method.invoke(testClass,
+                        randomGenerator.getRandomObject(type)
+                );
 //                break;
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
+            } catch (NoSuchFieldException e) {
+                throw new RuntimeException(e);
             }
         }
         log.info("{}", testClass);
