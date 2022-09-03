@@ -189,7 +189,7 @@ public class RandomGenerator {
      *
      * @return a random Map with size between 5 and 15
      */
-    public  Map<Object,Object> getRandomMap(Type type) {
+    private  Map<Object,Object> getRandomMap(Type type) {
         int size = random.nextInt(5, 15);
         ParameterizedType parameterizedType = (ParameterizedType)type;
         Type keyType =parameterizedType.getActualTypeArguments()[0];
@@ -213,8 +213,8 @@ public class RandomGenerator {
      *
      * @param type the type of the field
      * @return a random value of the according type Object
-     * TODO : refactor this method to accept Field field instead to Type type
      */
+    @SuppressWarnings({"unchecked","rawtypes"})
     public Object getRandomObject(Type type) {
         TypeEnum typeEnum = TypeEnum.fromType(type);
         return switch (typeEnum) {
