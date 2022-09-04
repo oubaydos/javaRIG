@@ -1,7 +1,10 @@
 import jakarta.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.Contract;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.time.Instant;
@@ -18,6 +21,7 @@ import static java.time.ZoneOffset.UTC;
  * @author obaydah bouifadene
  * @see java.lang.reflect
  */
+@Slf4j
 public class RandomGenerator {
     private final Random random = new Random();
     private final Instant MIN_INSTANT = Instant.ofEpochMilli(0);
@@ -186,17 +190,16 @@ public class RandomGenerator {
     }
 
     /**
-     *
      * @return a random Map with size between 5 and 15
      */
-    private  Map<Object,Object> getRandomMap(Type type) {
+    private Map<Object, Object> getRandomMap(Type type) {
         int size = random.nextInt(5, 15);
-        ParameterizedType parameterizedType = (ParameterizedType)type;
-        Type keyType =parameterizedType.getActualTypeArguments()[0];
+        ParameterizedType parameterizedType = (ParameterizedType) type;
+        Type keyType = parameterizedType.getActualTypeArguments()[0];
         Type valueType = parameterizedType.getActualTypeArguments()[1];
-        Map<Object,Object> resultedMap = new HashMap<>();
-        for(int i=0;i<size;i++){
-            resultedMap.put(getRandomObject(keyType),getRandomObject(valueType));
+        Map<Object, Object> resultedMap = new HashMap<>();
+        for (int i = 0; i < size; i++) {
+            resultedMap.put(generateRandomObjectForType(keyType), generateRandomObjectForType(valueType));
         }
         return resultedMap;
     }
@@ -214,9 +217,10 @@ public class RandomGenerator {
      * @param type the type of the field
      * @return a random value of the according type Object
      */
-    @SuppressWarnings({"unchecked","rawtypes"})
-    public Object getRandomObject(Type type) {
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public Object generateRandomObjectForType(Type type) {
         TypeEnum typeEnum = TypeEnum.fromType(type);
+        // TODO : nested objects are not yet supported
         return switch (typeEnum) {
             case INTEGER -> getRandomInt();
             case STRING -> getRandomString();
@@ -236,5 +240,18 @@ public class RandomGenerator {
             case ENUM -> getRandomEnum((Class<? extends Enum>) type);
             case UNDEFINED -> null;
         };
+    }
+
+
+    public <T> T generateRandomObject(@NotNull Class<T> objectClass) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchFieldException {
+        T object = objectClass.getConstructor().newInstance();
+        log.info("created object of type {}", objectClass.getName());
+        for (var method : Arrays.stream(objectClass.getDeclaredMethods()).filter(method -> method.getName().startsWith("set")).toList()) {
+            Field field = TestClass.class.getDeclaredField(Utils.getFieldNameFromSetterMethodName(method.getName()));
+            Type type = field.getGenericType();
+            method.invoke(object, this.generateRandomObjectForType(type));
+        }
+        log.info("created object {}", object);
+        return object;
     }
 }
