@@ -3,10 +3,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.Contract;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
@@ -244,7 +241,21 @@ public class RandomGenerator {
     }
 
 
-    public <T> T generateRandomObject(@NotNull Class<T> objectClass) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchFieldException {
+    /**
+     * generate a random object of type objectClass
+     * @param objectClass the class of the object - not null
+     * @param <T> the object type
+     * @return a random object of type objectClass - not null
+     * @throws NoSuchMethodException when the no arguments' constructor for the class does not exist.
+     * @throws InvocationTargetException if the underlying constructor throws an exception
+     * @throws InstantiationException if the class {@code objectClass} is abstract
+     * @throws IllegalAccessException if the no arguments' Constructor object is enforcing Java language access control and the underlying constructor is inaccessible.
+     * @see java.lang.reflect.Constructor#newInstance(java.lang.Object...) for the 3 exceptions above
+     * @throws NoSuchFieldException if a field with the specified name is not found
+     * @see java.lang.Class#getDeclaredField(String)
+     */
+    @NotNull
+    public <T> T generateRandomObject(@NotNull Class<T> objectClass) throws NoSuchFieldException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         T object = objectClass.getConstructor().newInstance();
         log.info("created object of type {}", objectClass.getName());
         for (var method : Arrays.stream(objectClass.getDeclaredMethods()).filter(method -> method.getName().startsWith("set")).toList()) {
