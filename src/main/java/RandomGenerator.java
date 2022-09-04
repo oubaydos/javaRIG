@@ -2,11 +2,13 @@ import jakarta.validation.constraints.NotNull;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.Contract;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static java.time.ZoneOffset.UTC;
 
@@ -22,6 +24,13 @@ public class RandomGenerator {
     private final Random random = new Random();
     private final Instant MIN_INSTANT = Instant.ofEpochMilli(0);
     private final Instant MAX_INSTANT = LocalDate.of(2100, 12, 31).atStartOfDay(UTC).toInstant();
+
+    //new add by bihi_23
+
+    private final  Integer MIN_COLLECTION_SIZE = 5 ;
+    private final  Integer MAX_COLLECTION_SIZE = 5 ;
+
+    // bihi_23
 
     /**
      * if type.getName() in {"int", "java.lang.Integer"}
@@ -190,7 +199,7 @@ public class RandomGenerator {
      * @return a random Map with size between 5 and 15
      */
     private  Map<Object,Object> getRandomMap(Type type) {
-        int size = random.nextInt(5, 15);
+        int size = random.nextInt(1, 15);
         ParameterizedType parameterizedType = (ParameterizedType)type;
         Type keyType =parameterizedType.getActualTypeArguments()[0];
         Type valueType = parameterizedType.getActualTypeArguments()[1];
@@ -201,10 +210,48 @@ public class RandomGenerator {
         return resultedMap;
     }
 
-    public <T> List<T> getRandomList(Type type) {
+    //added by bihi23
+
+
+
+    public <T> List<T> getRandomList(List<T> listTofill) throws NoSuchFieldException {
         // TODO @ibrahim
-        return null;
+        int randomSize = ThreadLocalRandom
+                .current()
+                .nextInt(MIN_COLLECTION_SIZE, MAX_COLLECTION_SIZE);
+
+        Field ListField = RandomGenerator.class.getDeclaredField("listTofill");
+        ParameterizedType ListType = (ParameterizedType) ListField.getGenericType();
+        Class<?> inputListClass = (Class<?>) ListType.getActualTypeArguments()[0];
+        //System.out.println(ListClass);
+
+        List<Object> outputList = new ArrayList<Object>() ;
+
+        for (int i = 0; i < randomSize ; i++) {
+            outputList.add(getRandomObject(inputListClass)) ;
+        }
+
+        return (List<T>) outputList;
+
     }
+    public <T> List<T> getRandomList(Type type) {
+        int randomSize = ThreadLocalRandom
+                .current()
+                .nextInt(MIN_COLLECTION_SIZE, MAX_COLLECTION_SIZE);
+        ParameterizedType parameterizedType = (ParameterizedType)type;
+        Class<?> inputListClass = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+
+        List<Object> outputList = new ArrayList<Object>() ;
+
+        for (int i = 0; i < randomSize ; i++) {
+            outputList.add(getRandomObject(inputListClass)) ;
+        }
+
+        return (List<T>) outputList;
+
+    }
+
+    // added by bihi23
     // other list / array etc methods @Ibrahim
 
     /**
