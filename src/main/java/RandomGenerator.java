@@ -1,9 +1,9 @@
 import jakarta.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.Contract;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
@@ -18,6 +18,7 @@ import static java.time.ZoneOffset.UTC;
  * @author obaydah bouifadene
  * @see java.lang.reflect
  */
+@Slf4j
 public class RandomGenerator {
     private final Random random = new Random();
     private final Instant MIN_INSTANT = Instant.ofEpochMilli(0);
@@ -186,17 +187,16 @@ public class RandomGenerator {
     }
 
     /**
-     *
      * @return a random Map with size between 5 and 15
      */
-    private  Map<Object,Object> getRandomMap(Type type) {
+    private Map<Object, Object> getRandomMap(Type type) {
         int size = random.nextInt(5, 15);
-        ParameterizedType parameterizedType = (ParameterizedType)type;
-        Type keyType =parameterizedType.getActualTypeArguments()[0];
+        ParameterizedType parameterizedType = (ParameterizedType) type;
+        Type keyType = parameterizedType.getActualTypeArguments()[0];
         Type valueType = parameterizedType.getActualTypeArguments()[1];
-        Map<Object,Object> resultedMap = new HashMap<>();
-        for(int i=0;i<size;i++){
-            resultedMap.put(getRandomObject(keyType),getRandomObject(valueType));
+        Map<Object, Object> resultedMap = new HashMap<>();
+        for (int i = 0; i < size; i++) {
+            resultedMap.put(generateRandomObjectForType(keyType), generateRandomObjectForType(valueType));
         }
         return resultedMap;
     }
@@ -214,9 +214,11 @@ public class RandomGenerator {
      * @param type the type of the field
      * @return a random value of the according type Object
      */
-    @SuppressWarnings({"unchecked","rawtypes"})
-    public Object getRandomObject(Type type) {
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public Object generateRandomObjectForType(Type type) {
         TypeEnum typeEnum = TypeEnum.fromType(type);
+        // TODO : nested objects are not yet supported
+        // TODO : when supporting nested objects watch out for infinite recursion ( Set a maximum recursion depth for example )
         return switch (typeEnum) {
             case INTEGER -> getRandomInt();
             case STRING -> getRandomString();
@@ -236,5 +238,32 @@ public class RandomGenerator {
             case ENUM -> getRandomEnum((Class<? extends Enum>) type);
             case UNDEFINED -> null;
         };
+    }
+
+
+    /**
+     * generate a random object of type objectClass
+     * @param objectClass the class of the object - not null
+     * @param <T> the object type
+     * @return a random object of type objectClass - not null
+     * @throws NoSuchMethodException when the no arguments' constructor for the class does not exist.
+     * @throws InvocationTargetException if the underlying constructor throws an exception
+     * @throws InstantiationException if the class {@code objectClass} is abstract
+     * @throws IllegalAccessException if the no arguments' Constructor object is enforcing Java language access control and the underlying constructor is inaccessible.
+     * @see java.lang.reflect.Constructor#newInstance(java.lang.Object...) for the 3 exceptions above
+     * @throws NoSuchFieldException if a field with the specified name is not found
+     * @see java.lang.Class#getDeclaredField(String)
+     */
+    @NotNull
+    public <T> T generateRandomObject(@NotNull Class<T> objectClass) throws NoSuchFieldException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        T object = objectClass.getConstructor().newInstance();
+        log.info("created object of type {}", objectClass.getName());
+        for (var method : Arrays.stream(objectClass.getDeclaredMethods()).filter(method -> method.getName().startsWith("set")).toList()) {
+            Field field = TestClass.class.getDeclaredField(Utils.getFieldNameFromSetterMethodName(method.getName()));
+            Type type = field.getGenericType();
+            method.invoke(object, this.generateRandomObjectForType(type));
+        }
+        log.info("created object {}", object);
+        return object;
     }
 }
