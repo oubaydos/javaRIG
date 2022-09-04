@@ -221,6 +221,7 @@ public class RandomGenerator {
     public Object generateRandomObjectForType(Type type) {
         TypeEnum typeEnum = TypeEnum.fromType(type);
         // TODO : nested objects are not yet supported
+        // TODO : when supporting nested objects watch out for infinite recursion ( Set a maximum recursion depth for example )
         return switch (typeEnum) {
             case INTEGER -> getRandomInt();
             case STRING -> getRandomString();
