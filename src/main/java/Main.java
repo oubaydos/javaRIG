@@ -1,9 +1,6 @@
 import lombok.extern.slf4j.Slf4j;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Type;
-import java.util.Arrays;
 
 
 /**
@@ -15,7 +12,8 @@ public class Main {
     private static final RandomGenerator randomGenerator = new RandomGenerator();
 
     public static void main(String[] args) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException, NoSuchFieldException {
-        randomGenerator.generateRandomObject(TestClass.class);
+//        randomGenerator.generateRandomObject(TestClass.class);
+        TestClass testClass;
 //        TestClass.class.getDeclaredField("b").setAccessible(true);
 //        TestClass.class.getDeclaredField("b").set(testClass, 1);
 //        Field testMap = Test.class.getDeclaredField("genericTestMap");

@@ -29,7 +29,7 @@ public class RandomGenerator {
      *
      * @return a random int between 0 and Integer.MAX_VALUE
      */
-    private int getRandomInt() {
+    public int getRandomInt() {
         return random.nextInt(0, Integer.MAX_VALUE);
     }
 
