@@ -209,7 +209,7 @@ public class RandomGenerator {
         Type inputListType = parameterizedType.getActualTypeArguments()[0] ;
         // Class<?> inputListClass = (Class<?>) parameterizedType.getActualTypeArguments()[0];
 
-        List<Object> outputList = new ArrayList<Object>() ;
+        List<Object> outputList = new ArrayList<Object>(randomSize) ;
 
         for (int i = 0; i < randomSize ; i++) {
             outputList.add(getRandomObject(inputListType)) ;
