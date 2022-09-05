@@ -202,8 +202,19 @@ public class RandomGenerator {
     }
 
     public <T> List<T> getRandomList(Type type) {
-        // TODO @ibrahim
-        return null;
+        int randomSize = ThreadLocalRandom
+                .current()
+                .nextInt(MIN_COLLECTION_SIZE, MAX_COLLECTION_SIZE) ;
+        ParameterizedType parameterizedType = (ParameterizedType)type ;
+        Type inputListType = parameterizedType.getActualTypeArguments()[0] ;
+        // Class<?> inputListClass = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+
+        List<Object> outputList = new ArrayList<Object>(randomSize) ;
+
+        for (int i = 0; i < randomSize ; i++) {
+            outputList.add(getRandomObject(inputListType)) ;
+        }
+        return (List<T>) outputList;
     }
     // other list / array etc methods @Ibrahim
 
