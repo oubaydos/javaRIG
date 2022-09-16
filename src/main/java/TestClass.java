@@ -1,7 +1,4 @@
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -18,6 +15,7 @@ import java.util.Map;
 @Setter
 @Getter
 @ToString
+@AllArgsConstructor
 public class TestClass {
     private final String a = "";
     private Integer b;

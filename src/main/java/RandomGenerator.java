@@ -7,6 +7,7 @@ import java.lang.reflect.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static java.time.ZoneOffset.UTC;
 
@@ -20,6 +21,8 @@ import static java.time.ZoneOffset.UTC;
  */
 @Slf4j
 public class RandomGenerator {
+    private static final int MIN_COLLECTION_SIZE = 1;
+    private static final int MAX_COLLECTION_SIZE = 1000 ;
     private final Random random = new Random();
     private final Instant MIN_INSTANT = Instant.ofEpochMilli(0);
     private final Instant MAX_INSTANT = LocalDate.of(2100, 12, 31).atStartOfDay(UTC).toInstant();
@@ -212,7 +215,7 @@ public class RandomGenerator {
         List<Object> outputList = new ArrayList<Object>(randomSize) ;
 
         for (int i = 0; i < randomSize ; i++) {
-            outputList.add(getRandomObject(inputListType)) ;
+            outputList.add(generateRandomObjectForType(inputListType)) ;
         }
         return (List<T>) outputList;
     }
