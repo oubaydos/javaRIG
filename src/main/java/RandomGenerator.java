@@ -20,9 +20,13 @@ import static java.time.ZoneOffset.UTC;
  */
 @Slf4j
 public class RandomGenerator {
+
+    private Stack<Type> objectStack = new Stack<>();
     private final Random random = new Random();
     private final Instant MIN_INSTANT = Instant.ofEpochMilli(0);
     private final Instant MAX_INSTANT = LocalDate.of(2100, 12, 31).atStartOfDay(UTC).toInstant();
+    private final Integer MIN_COLLECTION_SIZE = 5;
+    private final Integer MAX_COLLECTION_SIZE = 15;
 
     /**
      * if type.getName() in {"int", "java.lang.Integer"}
@@ -106,7 +110,7 @@ public class RandomGenerator {
      */
     @NotNull
     private byte[] getRandomBytes() {
-        int size = random.nextInt(5, 15);
+        int size = random.nextInt(MIN_COLLECTION_SIZE, MAX_COLLECTION_SIZE);
         byte[] bytes = new byte[size];
         random.nextBytes(bytes);
         return bytes;
@@ -175,7 +179,7 @@ public class RandomGenerator {
     /**
      * if type extends Enum<>
      *
-     * @param enumClass the enum class : to be passed as EnumName.class for example
+     * @param enumClass the enum class : to be passed as 'EnumName.class' for example
      * @return a random Enum of the given type or null if the enum is empty
      */
     private <T extends Enum<T>> T getRandomEnum(@NotNull Class<T> enumClass) {
@@ -189,8 +193,8 @@ public class RandomGenerator {
     /**
      * @return a random Map with size between 5 and 15
      */
-    private Map<Object, Object> getRandomMap(Type type) {
-        int size = random.nextInt(5, 15);
+    private Map<Object, Object> getRandomMap(Type type) throws NoSuchFieldException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+        int size = random.nextInt(MIN_COLLECTION_SIZE, MAX_COLLECTION_SIZE);
         ParameterizedType parameterizedType = (ParameterizedType) type;
         Type keyType = parameterizedType.getActualTypeArguments()[0];
         Type valueType = parameterizedType.getActualTypeArguments()[1];
@@ -201,22 +205,16 @@ public class RandomGenerator {
         return resultedMap;
     }
 
-    public <T> List<T> getRandomList(Type type) {
-        int randomSize = ThreadLocalRandom
-                .current()
-                .nextInt(MIN_COLLECTION_SIZE, MAX_COLLECTION_SIZE) ;
-        ParameterizedType parameterizedType = (ParameterizedType)type ;
-        Type inputListType = parameterizedType.getActualTypeArguments()[0] ;
-        // Class<?> inputListClass = (Class<?>) parameterizedType.getActualTypeArguments()[0];
-
-        List<Object> outputList = new ArrayList<Object>(randomSize) ;
-
-        for (int i = 0; i < randomSize ; i++) {
-            outputList.add(getRandomObject(inputListType)) ;
+    private <T> List<T> getRandomList(Type type) throws NoSuchFieldException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+        int randomSize = random.nextInt(MIN_COLLECTION_SIZE, MAX_COLLECTION_SIZE);
+        ParameterizedType parameterizedType = (ParameterizedType) type;
+        Type inputListType = parameterizedType.getActualTypeArguments()[0];
+        List<Object> outputList = new ArrayList<>(randomSize);
+        for (int i = 0; i < randomSize; i++) {
+            outputList.add(generateRandomObjectForType(inputListType));
         }
         return (List<T>) outputList;
     }
-    // other list / array etc methods @Ibrahim
 
     /**
      * the facade to the other generation methods
@@ -226,11 +224,19 @@ public class RandomGenerator {
      * @return a random value of the according type Object
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public Object generateRandomObjectForType(Type type) {
+    public Object generateRandomObjectForType(Type type) throws NoSuchFieldException, InvocationTargetException,
+            NoSuchMethodException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+
+        //check if type exists in objectStack, if so then object can't be generated because there is recursion
+        // in this object's fields (there a field that it's instantiation depends on a father object)
+        //so NestedObjectRecursion is thrown
+        if( !objectStack.isEmpty() && objectStack.contains(type)){
+            throw new NestedObjectRecursionException(type);
+        }
+        objectStack.push(type);
         TypeEnum typeEnum = TypeEnum.fromType(type);
-        // TODO : nested objects are not yet supported
-        // TODO : when supporting nested objects watch out for infinite recursion ( Set a maximum recursion depth for example )
-        return switch (typeEnum) {
+        Object generatedObject;
+        generatedObject = switch (typeEnum) {
             case INTEGER -> getRandomInt();
             case STRING -> getRandomString();
             case BYTE -> getRandomByte();
@@ -247,30 +253,33 @@ public class RandomGenerator {
             case MAP -> getRandomMap(type);
             case LIST -> getRandomList(type);
             case ENUM -> getRandomEnum((Class<? extends Enum>) type);
-            case UNDEFINED -> null;
+            case OBJECT -> generateRandomObject(Class.forName(type.getTypeName()));
         };
+        objectStack.pop();
+        return generatedObject;
     }
 
 
     /**
      * generate a random object of type objectClass
+     *
      * @param objectClass the class of the object - not null
-     * @param <T> the object type
+     * @param <T>         the object type
      * @return a random object of type objectClass - not null
-     * @throws NoSuchMethodException when the no arguments' constructor for the class does not exist.
+     * @throws NoSuchMethodException     when the no arguments' constructor for the class does not exist.
      * @throws InvocationTargetException if the underlying constructor throws an exception
-     * @throws InstantiationException if the class {@code objectClass} is abstract
-     * @throws IllegalAccessException if the no arguments' Constructor object is enforcing Java language access control and the underlying constructor is inaccessible.
+     * @throws InstantiationException    if the class {@code objectClass} is abstract
+     * @throws IllegalAccessException    if the no arguments' Constructor object is enforcing Java language access control and the underlying constructor is inaccessible.
+     * @throws NoSuchFieldException      if a field with the specified name is not found
      * @see java.lang.reflect.Constructor#newInstance(java.lang.Object...) for the 3 exceptions above
-     * @throws NoSuchFieldException if a field with the specified name is not found
      * @see java.lang.Class#getDeclaredField(String)
      */
     @NotNull
-    public <T> T generateRandomObject(@NotNull Class<T> objectClass) throws NoSuchFieldException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public <T> T generateRandomObject(@NotNull Class<T> objectClass) throws NoSuchFieldException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, ClassNotFoundException {
         T object = objectClass.getConstructor().newInstance();
-        log.info("created object of type {}", objectClass.getName());
+        log.info("generating object of type {} ...", objectClass.getName());
         for (var method : Arrays.stream(objectClass.getDeclaredMethods()).filter(method -> method.getName().startsWith("set")).toList()) {
-            Field field = TestClass.class.getDeclaredField(Utils.getFieldNameFromSetterMethodName(method.getName()));
+            Field field = objectClass.getDeclaredField(Utils.getFieldNameFromSetterMethodName(method.getName()));
             Type type = field.getGenericType();
             method.invoke(object, this.generateRandomObjectForType(type));
         }
