@@ -27,9 +27,9 @@ public class RandomInstanceGeneratorProcessor extends AbstractProcessor {
             Set<? extends Element> annotatedElements = roundEnv.getElementsAnnotatedWith(annotation);
             for (Element element : annotatedElements){
                 try {
-                    Method method = element.getClass().getDeclaredMethod("setB");
+                    Method method = element.getClass().getConstructor().newInstance();
                     method.invoke(element, new RandomGenerator().getRandomInt());
-                } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
                     e.printStackTrace();
                 }
             }

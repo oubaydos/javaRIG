@@ -18,6 +18,7 @@ import java.util.Map;
 @Setter
 @Getter
 @ToString
+@RandomInstanceGenerator
 public class TestClass {
     private final String a = "";
     private Integer b;

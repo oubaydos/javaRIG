@@ -5,6 +5,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 // we will start by local variables
-@Target(ElementType.METHOD)
+@Target(ElementType.TYPE)
 public @interface RandomInstanceGenerator {
 }
