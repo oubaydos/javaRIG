@@ -208,8 +208,8 @@ public class RandomGenerator {
         int randomSize = ThreadLocalRandom
                 .current()
                 .nextInt(MIN_COLLECTION_SIZE, MAX_COLLECTION_SIZE) ;
-        ParameterizedType parameterizedType = (ParameterizedType)type ;
-        Type inputListType = parameterizedType.getActualTypeArguments()[0] ;
+//        ParameterizedType parameterizedType = (ParameterizedType)type ;
+        Type inputListType = type ;
         // Class<?> inputListClass = (Class<?>) parameterizedType.getActualTypeArguments()[0];
 
         List<Object> outputList = new ArrayList<Object>(randomSize) ;

@@ -21,12 +21,6 @@ class RandomGeneratorTest {
     }
 
     @Test
-    void getRandomList() {
-        List<Integer> integerList=randomGenerator.getRandomList(Integer.class);
-
-    }
-
-    @Test
     void generateRandomObjectForType() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchFieldException {
         for (var method : Arrays.stream(TestClass.class.getDeclaredMethods()).filter(method -> method.getName().startsWith("set")).toList()) {
             Field field = TestClass.class.getDeclaredField(Utils.getFieldNameFromSetterMethodName(method.getName()));
@@ -37,6 +31,6 @@ class RandomGeneratorTest {
 
     @Test
     void generateRandomObject() throws NoSuchFieldException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        Object object=randomGenerator.generateRandomObject(TestClass.class);
+        TestClass TestClass=randomGenerator.generateRandomObject(TestClass.class);
     }
 }
