@@ -21,7 +21,8 @@ import static java.time.ZoneOffset.UTC;
 @Slf4j
 public class RandomGenerator {
 
-    private Stack<Type> objectStack = new Stack<>();
+    //stack that holds the history of objects that needs to be generated so that it detects recursion
+    private final Stack<Type> objectStack = new Stack<>();
     private final Random random = new Random();
     private final Instant MIN_INSTANT = Instant.ofEpochMilli(0);
     private final Instant MAX_INSTANT = LocalDate.of(2100, 12, 31).atStartOfDay(UTC).toInstant();
@@ -222,15 +223,18 @@ public class RandomGenerator {
      *
      * @param type the type of the field
      * @return a random value of the according type Object
+     * @throws NestedObjectRecursionException when this object create a recursion in generation; this object depends on itself to be generated,
+     *                                        so it can't be generated
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     public Object generateRandomObjectForType(Type type) throws NoSuchFieldException, InvocationTargetException,
-            NoSuchMethodException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+            NoSuchMethodException, InstantiationException, IllegalAccessException, ClassNotFoundException,
+            NestedObjectRecursionException {
 
         //check if type exists in objectStack, if so then object can't be generated because there is recursion
         // in this object's fields (there a field that it's instantiation depends on a father object)
         //so NestedObjectRecursion is thrown
-        if( !objectStack.isEmpty() && objectStack.contains(type)){
+        if (!objectStack.isEmpty() && objectStack.contains(type)) {
             throw new NestedObjectRecursionException(type);
         }
         objectStack.push(type);
