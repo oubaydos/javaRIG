@@ -7,6 +7,7 @@ import java.lang.reflect.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static java.time.ZoneOffset.UTC;
 
@@ -23,6 +24,8 @@ public class RandomGenerator {
     private final Random random = new Random();
     private final Instant MIN_INSTANT = Instant.ofEpochMilli(0);
     private final Instant MAX_INSTANT = LocalDate.of(2100, 12, 31).atStartOfDay(UTC).toInstant();
+    private final Integer MIN_COLLECTION_SIZE = 1;
+    private final Integer MAX_COLLECTION_SIZE = 5;
 
     /**
      * if type.getName() in {"int", "java.lang.Integer"}
@@ -201,12 +204,16 @@ public class RandomGenerator {
         return resultedMap;
     }
 
-    public <T> List<T> getRandomList(Type type) {
-        // TODO @ibrahim
-        return null;
+    private <T> List<T> getRandomList(Type type) {
+        int randomSize = random.nextInt(MIN_COLLECTION_SIZE, MAX_COLLECTION_SIZE) ;
+        ParameterizedType parameterizedType = (ParameterizedType)type ;
+        Type inputListType = parameterizedType.getActualTypeArguments()[0] ;
+        List<Object> outputList = new ArrayList<>(randomSize) ;
+        for (int i = 0; i < randomSize ; i++) {
+            outputList.add(generateRandomObjectForType(inputListType)) ;
+        }
+        return (List<T>) outputList;
     }
-    // other list / array etc methods @Ibrahim
-
     /**
      * the facade to the other generation methods
      * will be the base method for generating random values for all types of fields
