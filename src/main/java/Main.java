@@ -14,7 +14,7 @@ public class Main {
 
     private static final RandomGenerator randomGenerator = new RandomGenerator();
 
-    public static void main(String[] args) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException, NoSuchFieldException {
+    public static void main(String[] args) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException, NoSuchFieldException, ClassNotFoundException {
         randomGenerator.generateRandomObject(TestClass.class);
 //        TestClass.class.getDeclaredField("b").setAccessible(true);
 //        TestClass.class.getDeclaredField("b").set(testClass, 1);

@@ -25,7 +25,7 @@ public enum TypeEnum {
     MAP(List.of(Map.class)),
     LIST(List.of(List.class)),
     ENUM(List.of()),
-    UNDEFINED(List.of());
+    OBJECT(List.of());
 
     final List<Type> values;
 
@@ -44,7 +44,7 @@ public enum TypeEnum {
                         if (((Class<?>) finalType).isEnum())
                             return ENUM;
                     }catch (Exception ignored){}
-                    return UNDEFINED;
+                    return OBJECT;
                 });
     }
 }

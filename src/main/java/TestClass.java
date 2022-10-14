@@ -20,24 +20,7 @@ import java.util.Map;
 @Getter
 @ToString
 public class TestClass {
-//    private final String a = "";
-//    private Integer b;
-//    private String alpha;
-//    private Short shortNumber;
-//    private float floatNumber;
-//    private long longNumber;
-//    private boolean booleanNumber;
-//    private double doubleNumber;
-//    private Character character;
-//    private byte by;
-//    private byte[] bytes;
-//    private TestEnum testEnum;
-//    private Instant instant;
-//    private Date date;
-//    private LocalDate localDate;
-//    private Map<Instant,TestEnum> map;
-//    private TestEnum e;
-    private List<String> list;
+    private TestClass2 testClass2;
 }
 
 enum TestEnum{
