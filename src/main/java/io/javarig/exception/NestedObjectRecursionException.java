@@ -1,3 +1,5 @@
+package io.javarig.exception;
+
 import java.lang.reflect.Type;
 
 public class NestedObjectRecursionException extends RuntimeException {

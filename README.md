@@ -4,7 +4,7 @@ Description
 ------------
 This project aims to provide a random instances generator for any class in java,
 it iterates through setters of an empty object and sets the fields values (using Java reflection api) 
-randomly using one of the random generators defined in ``src/main/java/RandomGenerator.java``
+randomly using one of the random generators defined in ``src/main/java/io.javarig.generator.RandomGenerator.java``
 
 
 
@@ -27,9 +27,9 @@ Project Structure
     .
     ├── ...
         ├── ...    
-            ├── Main              # the playground for testing our code
-            ├── RandomGenerator   # the instance generator
-            ├── TestClass         # the test class for which we will be trying to generate random objects
+            ├── io.javarig.Main              # the playground for testing our code
+            ├── io.javarig.generator.RandomGenerator   # the instance generator
+            ├── io.javarig.TestClass         # the test class for which we will be trying to generate random objects
     ├── README.md, LICENSE...   # other files
 
 To build sources locally follow these instructions.
