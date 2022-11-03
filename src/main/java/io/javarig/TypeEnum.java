@@ -1,5 +1,7 @@
 package io.javarig;
 
+import io.javarig.generator.*;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.time.Instant;
@@ -8,28 +10,29 @@ import java.util.*;
 
 public enum TypeEnum {
 
-    INTEGER(List.of(Integer.class, int.class)),
-    STRING(List.of(String.class)),
-    BYTE(List.of(Byte.class, byte.class)),
-    BYTE_ARRAY(List.of(Byte[].class, byte[].class)),
-    SHORT(List.of(Short.class, short.class)),
-    LONG(List.of(Long.class, long.class)),
-    DOUBLE(List.of(Double.class, double.class)),
-    FLOAT(List.of(Float.class, float.class)),
-    BOOLEAN(List.of(Boolean.class, boolean.class)),
-    CHAR(List.of(Character.class, char.class)),
-    INSTANT(List.of(Instant.class)),
-    DATE(List.of(Date.class)),
-    LOCAL_DATE(List.of(LocalDate.class)),
-    MAP(List.of(Map.class)),
-    LIST(List.of(List.class)),
-    ENUM(List.of()),
-    OBJECT(List.of());
+    INTEGER(List.of(Integer.class, int.class), new IntegerGenerator()),
+    STRING(List.of(String.class), new StringGenerator()),
+    BYTE(List.of(Byte.class, byte.class), new ByteGenerator()),
+    BYTE_ARRAY(List.of(Byte[].class, byte[].class), new ByteArrayGenerator()),
+    SHORT(List.of(Short.class, short.class), new ShortGenerator()),
+    LONG(List.of(Long.class, long.class), new LongGenerator()),
+    DOUBLE(List.of(Double.class, double.class), new DoubleGenerator()),
+    FLOAT(List.of(Float.class, float.class), new FloatGenerator()),
+    BOOLEAN(List.of(Boolean.class, boolean.class), new BooleanGenerator()),
+    CHAR(List.of(Character.class, char.class), new CharGenerator()),
+    INSTANT(List.of(Instant.class), new InstantGenerator()),
+    DATE(List.of(Date.class), new DateGenerator()),
+    LOCAL_DATE(List.of(LocalDate.class), new LocalDateGenerator()),
+    MAP(List.of(Map.class), new MapGenerator()),
+    LIST(List.of(List.class), new ListGenerator()),
+    ENUM(List.of(), new EnumGenerator()),
+    OBJECT(List.of(), new ObjectGenerator());
 
     final List<Type> values;
-
-    TypeEnum(List<Type> values) {
+    final Generator generator;
+    TypeEnum(List<Type> values, Generator generator) {
         this.values = values;
+        this.generator = generator;
     }
 
     public static TypeEnum fromType(Type type) {
@@ -49,5 +52,9 @@ public enum TypeEnum {
                     } catch (Exception ignored) {}
                     return OBJECT;
                 });
+    }
+
+    public Generator generator(){
+        return this.generator;
     }
 }

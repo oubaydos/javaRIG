@@ -1,6 +1,5 @@
-package io.javarig.generator;
+package io.javarig;
 
-import io.javarig.TypeEnum;
 import io.javarig.exception.NestedObjectRecursionException;
 import io.javarig.util.Utils;
 import jakarta.validation.constraints.NotNull;
@@ -24,6 +23,7 @@ import static java.time.ZoneOffset.UTC;
  * @see java.lang.reflect
  */
 @Slf4j
+@Deprecated
 public class RandomGenerator {
 
     //stack that holds the history of objects that needs to be generated so that it detects recursion
