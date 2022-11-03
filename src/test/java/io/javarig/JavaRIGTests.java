@@ -9,15 +9,15 @@ import static org.assertj.core.api.Assertions.*;
 
 @Slf4j
 public class JavaRIGTests {
-    private RandomGeneratorV2 randomGeneratorV2;
+    private RandomGenerator randomGenerator;
     @BeforeEach
     public void setUp() {
-        randomGeneratorV2 = new RandomGeneratorV2();
+        randomGenerator = new RandomGenerator();
     }
 
     @Test
     public void shouldGenerateString() {
-        Object generated = randomGeneratorV2.generate(String.class);
+        Object generated = randomGenerator.generate(String.class);
         log.info("shouldGenerateString : {}",generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(String.class);
@@ -26,7 +26,7 @@ public class JavaRIGTests {
     @Test
     public void shouldGenerateStringWithExactSize() {
         int size = 20;
-        Object generated = randomGeneratorV2.generate(String.class,size);
+        Object generated = randomGenerator.generate(String.class,size);
         log.info("shouldGenerateString : {}",generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(String.class);
@@ -37,7 +37,7 @@ public class JavaRIGTests {
     public void shouldGenerateStringBetweenMinAndMaxSize() {
         int minSize = 20;
         int maxSize = 40;
-        Object generated = randomGeneratorV2.generate(String.class,minSize,maxSize);
+        Object generated = randomGenerator.generate(String.class,minSize,maxSize);
         log.info("shouldGenerateString : {}",generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(String.class);
@@ -46,7 +46,7 @@ public class JavaRIGTests {
 
     @Test
     public void shouldGenerateInteger(){
-        Object generated = randomGeneratorV2.generate(Integer.class);
+        Object generated = randomGenerator.generate(Integer.class);
         log.info("shouldGenerateInteger : {}",generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(Integer.class);
