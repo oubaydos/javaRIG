@@ -1,3 +1,5 @@
+package io.javarig.util;
+
 public class Utils {
     public static String getFieldNameFromSetterMethodName(String setterMethodName){
         String fieldName = setterMethodName.replace("set","");

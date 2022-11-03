@@ -1,3 +1,5 @@
+package io.javarig;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,6 +9,6 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class TestClass2 {
-    private TestClass3 s;
+public class TestClass3 {
+    private String s;
 }

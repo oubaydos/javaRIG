@@ -1,3 +1,7 @@
+package io.javarig;
+
+import io.javarig.exception.NestedObjectRecursionException;
+import io.javarig.util.Utils;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -19,15 +23,36 @@ import static java.time.ZoneOffset.UTC;
  * @see java.lang.reflect
  */
 @Slf4j
-public class RandomGenerator {
+@Deprecated
+public class OldRandomGenerator {
 
     //stack that holds the history of objects that needs to be generated so that it detects recursion
     private final Stack<Type> objectStack = new Stack<>();
     private final Random random = new Random();
     private final Instant MIN_INSTANT = Instant.ofEpochMilli(0);
     private final Instant MAX_INSTANT = LocalDate.of(2100, 12, 31).atStartOfDay(UTC).toInstant();
-    private final Integer MIN_COLLECTION_SIZE = 5;
-    private final Integer MAX_COLLECTION_SIZE = 15;
+    private Integer minCollectionSize = 5;
+    private Integer maxCollectionSize = 15;
+
+    private Integer stringSize = 10;
+
+    public OldRandomGenerator(Integer minCollectionSize, Integer maxCollectionSize) {
+        this.minCollectionSize = minCollectionSize;
+        this.maxCollectionSize = maxCollectionSize;
+    }
+
+    public OldRandomGenerator(Integer stringSize) {
+        this.stringSize = stringSize;
+    }
+
+    public OldRandomGenerator(Integer minCollectionSize, Integer maxCollectionSize, Integer stringSize) {
+        this.minCollectionSize = minCollectionSize;
+        this.maxCollectionSize = maxCollectionSize;
+        this.stringSize = stringSize;
+    }
+
+    public OldRandomGenerator() {
+    }
 
     /**
      * if type.getName() in {"int", "java.lang.Integer"}
@@ -101,7 +126,7 @@ public class RandomGenerator {
      */
     @NotNull
     private String getRandomString() {
-        return RandomStringUtils.randomAlphanumeric(10);
+        return RandomStringUtils.randomAlphanumeric(stringSize);
     }
 
     /**
@@ -111,7 +136,7 @@ public class RandomGenerator {
      */
     @NotNull
     private byte[] getRandomBytes() {
-        int size = random.nextInt(MIN_COLLECTION_SIZE, MAX_COLLECTION_SIZE);
+        int size = random.nextInt(minCollectionSize, maxCollectionSize);
         byte[] bytes = new byte[size];
         random.nextBytes(bytes);
         return bytes;
@@ -132,7 +157,7 @@ public class RandomGenerator {
     }
 
     /**
-     * generates a random Instant between {@link RandomGenerator#MIN_INSTANT Instant.Min} and {@link RandomGenerator#MAX_INSTANT 2100}
+     * generates a random Instant between {@link OldRandomGenerator#MIN_INSTANT Instant.Min} and {@link OldRandomGenerator#MAX_INSTANT 2100}
      *
      * @return a random Instant
      */
@@ -143,7 +168,7 @@ public class RandomGenerator {
     }
 
     /**
-     * generates a random Date between {@link RandomGenerator#MIN_INSTANT Instant.Min} and {@link RandomGenerator#MAX_INSTANT 2100}
+     * generates a random Date between {@link OldRandomGenerator#MIN_INSTANT Instant.Min} and {@link OldRandomGenerator#MAX_INSTANT 2100}
      *
      * @return a random Date
      */
@@ -155,7 +180,7 @@ public class RandomGenerator {
     }
 
     /**
-     * generates a random LocalDate between {@link RandomGenerator#MIN_INSTANT Instant.Min} and {@link RandomGenerator#MAX_INSTANT 2100}
+     * generates a random LocalDate between {@link OldRandomGenerator#MIN_INSTANT Instant.Min} and {@link OldRandomGenerator#MAX_INSTANT 2100}
      *
      * @return a random LocalDate
      */
@@ -195,42 +220,42 @@ public class RandomGenerator {
      * @return a random Map with size between 5 and 15
      */
     private Map<Object, Object> getRandomMap(Type type) throws NoSuchFieldException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, ClassNotFoundException {
-        int size = random.nextInt(MIN_COLLECTION_SIZE, MAX_COLLECTION_SIZE);
+        int size = random.nextInt(minCollectionSize, maxCollectionSize);
         ParameterizedType parameterizedType = (ParameterizedType) type;
         Type keyType = parameterizedType.getActualTypeArguments()[0];
         Type valueType = parameterizedType.getActualTypeArguments()[1];
         Map<Object, Object> resultedMap = new HashMap<>();
         for (int i = 0; i < size; i++) {
-            resultedMap.put(generateRandomObjectForType(keyType), generateRandomObjectForType(valueType));
+            resultedMap.put(generate(Class.forName(keyType.getTypeName())),
+                    generate(Class.forName(valueType.getTypeName())));
         }
         return resultedMap;
     }
 
-    private <T> List<T> getRandomList(Type type) throws NoSuchFieldException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, ClassNotFoundException {
-        int randomSize = random.nextInt(MIN_COLLECTION_SIZE, MAX_COLLECTION_SIZE);
+    private List<Object> getRandomList(Type type) throws NoSuchFieldException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+        int randomSize = random.nextInt(minCollectionSize, maxCollectionSize);
         ParameterizedType parameterizedType = (ParameterizedType) type;
         Type inputListType = parameterizedType.getActualTypeArguments()[0];
         List<Object> outputList = new ArrayList<>(randomSize);
         for (int i = 0; i < randomSize; i++) {
-            outputList.add(generateRandomObjectForType(inputListType));
+            outputList.add(generate(Class.forName(inputListType.getTypeName())));
         }
-        return (List<T>) outputList;
+        return outputList;
     }
 
     /**
      * the facade to the other generation methods
      * will be the base method for generating random values for all types of fields
      *
-     * @param type the type of the field
+     * @param type the Class of the field
      * @return a random value of the according type Object
      * @throws NestedObjectRecursionException when this object create a recursion in generation; this object depends on itself to be generated,
      *                                        so it can't be generated
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public Object generateRandomObjectForType(Type type) throws NoSuchFieldException, InvocationTargetException,
+    public Object generate(Type type) throws NoSuchFieldException, InvocationTargetException,
             NoSuchMethodException, InstantiationException, IllegalAccessException, ClassNotFoundException,
             NestedObjectRecursionException {
-
         //check if type exists in objectStack, if so then object can't be generated because there is recursion
         // in this object's fields (there a field that it's instantiation depends on a father object)
         //so NestedObjectRecursion is thrown
@@ -239,8 +264,9 @@ public class RandomGenerator {
         }
         objectStack.push(type);
         TypeEnum typeEnum = TypeEnum.fromType(type);
-        Object generatedObject;
-        generatedObject = switch (typeEnum) {
+        // Object o = typeEnum.getGenerator().generate();
+        log.info(type.getTypeName());
+        Object generatedObject = switch (typeEnum) {
             case INTEGER -> getRandomInt();
             case STRING -> getRandomString();
             case BYTE -> getRandomByte();
@@ -264,6 +290,10 @@ public class RandomGenerator {
     }
 
 
+    public <T> T generateAndCast(Type type) throws NoSuchFieldException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        return (T) generate(type);
+    }
+
     /**
      * generate a random object of type objectClass
      *
@@ -279,13 +309,16 @@ public class RandomGenerator {
      * @see java.lang.Class#getDeclaredField(String)
      */
     @NotNull
-    public <T> T generateRandomObject(@NotNull Class<T> objectClass) throws NoSuchFieldException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public <T> T generateRandomObject(@NotNull Class<T> objectClass) throws NoSuchFieldException, NoSuchMethodException,
+            InvocationTargetException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+
         T object = objectClass.getConstructor().newInstance();
         log.info("generating object of type {} ...", objectClass.getName());
-        for (var method : Arrays.stream(objectClass.getDeclaredMethods()).filter(method -> method.getName().startsWith("set")).toList()) {
+        for (var method : Arrays.stream(objectClass.getDeclaredMethods())
+                .filter(method -> method.getName().startsWith("set")).toList()) {
             Field field = objectClass.getDeclaredField(Utils.getFieldNameFromSetterMethodName(method.getName()));
             Type type = field.getGenericType();
-            method.invoke(object, this.generateRandomObjectForType(type));
+            method.invoke(object, this.generate(type));
         }
         log.info("created object {}", object);
         return object;
