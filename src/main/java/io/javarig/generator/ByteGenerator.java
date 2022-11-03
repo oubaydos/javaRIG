@@ -6,6 +6,8 @@ public class ByteGenerator implements Generator {
 
     @Override
     public Byte generate(Type type) {
-        return null;
+        byte[] bytes = new byte[1];
+        random.nextBytes(bytes);
+        return bytes[0];
     }
 }
