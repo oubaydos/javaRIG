@@ -2,9 +2,9 @@ package io.javarig.generator;
 
 import java.lang.reflect.Type;
 
-public class FloatGenerator implements Generator{
+public class FloatGenerator implements Generator {
     @Override
     public Float generate(Type type) {
-        return null;
+        return random.nextFloat(0, Float.MAX_VALUE + 1);
     }
 }
