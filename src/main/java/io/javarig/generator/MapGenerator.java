@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class MapGenerator extends CollectionGenerator {
     @Override
-    public Object generate(Type type) {
+    public Map<Object,Object> generate(Type type) {
         int size = random.nextInt(minSize, maxSize);
         ParameterizedType parameterizedType = (ParameterizedType) type;
         Type keyType = parameterizedType.getActualTypeArguments()[0];
