@@ -17,11 +17,9 @@ public class RandomGenerator {
         objectStack.push(type);
         TypeEnum typeEnum = TypeEnum.fromType(type);
         Generator generator = typeEnum.generator();
-        //the part that changes
         if (generator instanceof CollectionGenerator collectionGenerator) {
             setCollectionSize.accept(collectionGenerator);
         }
-        //
         T generated = (T) generator.generate(type);
         objectStack.pop();
         return generated;
@@ -41,6 +39,11 @@ public class RandomGenerator {
             collectionGenerator.setMinSize(minSize);
             collectionGenerator.setMaxSize(maxSize);
         });
+    }
+
+    public <T> T generate(Type type, Type... genericTypes) {
+        Type parameterizedType = new ParameterizedTypeImpl(genericTypes,(Class<?>) type,null);
+        return generate(parameterizedType);
     }
 
     /**
