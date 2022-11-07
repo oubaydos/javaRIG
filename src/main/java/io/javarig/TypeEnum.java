@@ -30,16 +30,18 @@ public enum TypeEnum {
 
     final List<Type> values;
     final Generator generator;
+
     TypeEnum(List<Type> values, Generator generator) {
         this.values = values;
         this.generator = generator;
     }
 
     public static TypeEnum fromType(Type type) {
-        if (type instanceof ParameterizedType) type = ((ParameterizedType) type).getRawType();
-        Class<?> finalType = (Class<?>) type;
-        return Arrays.stream(TypeEnum.values())
-                .filter(typeEnum -> typeEnum.values.contains(finalType))
+        Type rawType = type;
+        if (type instanceof ParameterizedType) rawType = ((ParameterizedType) rawType).getRawType();
+        Class<?> finalType = (Class<?>) rawType;
+        TypeEnum typeEnum = Arrays.stream(TypeEnum.values())
+                .filter(tEnum -> tEnum.values.contains(finalType))
                 .findFirst()
                 .orElseGet(() -> {
                     try {
@@ -49,12 +51,21 @@ public enum TypeEnum {
                             return LIST;
                         if (finalType.isEnum())
                             return ENUM;
-                    } catch (Exception ignored) {}
+                    } catch (Exception ignored) {
+                    }
                     return OBJECT;
                 });
+        typeEnum.setType(type);
+        return typeEnum;
     }
 
-    public Generator generator(){
+    public Generator generator() {
         return this.generator;
+    }
+
+    public void setType(Type type) {
+        if (this.generator instanceof GenericTypeGenerator genericTypeGenerator) {
+            genericTypeGenerator.setType((ParameterizedType) type);
+        }
     }
 }

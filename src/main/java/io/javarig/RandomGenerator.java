@@ -12,7 +12,7 @@ public class RandomGenerator {
     private final Stack<Type> objectStack = new Stack<>();
 
     @SuppressWarnings({"unchecked"})
-    private <T> T generate(Type type, Consumer<CollectionGenerator> setCollectionSize) {
+    private synchronized <T> T generate(Type type, Consumer<CollectionGenerator> setCollectionSize) {
         checkForRecursion(type);
         objectStack.push(type);
         TypeEnum typeEnum = TypeEnum.fromType(type);
@@ -20,7 +20,7 @@ public class RandomGenerator {
         if (generator instanceof CollectionGenerator collectionGenerator) {
             setCollectionSize.accept(collectionGenerator);
         }
-        T generated = (T) generator.generate(type);
+        T generated = (T) generator.generate();
         objectStack.pop();
         return generated;
     }
@@ -42,8 +42,18 @@ public class RandomGenerator {
     }
 
     public <T> T generate(Type type, Type... genericTypes) {
-        Type parameterizedType = new ParameterizedTypeImpl(genericTypes,(Class<?>) type,null);
+        Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type, null);
         return generate(parameterizedType);
+    }
+
+    public <T> T generate(Type type, int size, Type... genericTypes) {
+        Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type, null);
+        return generate(parameterizedType, size);
+    }
+
+    public <T> T generate(Type type, int minSize, int maxSize, Type... genericTypes) {
+        Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type, null);
+        return generate(parameterizedType, minSize, maxSize);
     }
 
     /**

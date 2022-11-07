@@ -1,15 +1,23 @@
 package io.javarig.generator;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MapGenerator extends CollectionGenerator {
+@Setter
+@Getter
+public class MapGenerator implements GenericTypeGenerator, CollectionGenerator {
+    private int minSize = 5;
+    private int maxSize = 15;
+    private ParameterizedType type;
     @Override
-    public Map<Object,Object> generate(Type type) {
-        int size = random.nextInt(minSize, maxSize);
-        ParameterizedType parameterizedType = (ParameterizedType) type;
+    public Map<Object,Object> generate() {
+        int size = random.nextInt(getMinSize(), getMaxSize());
+        ParameterizedType parameterizedType = getType();
         Type keyType = parameterizedType.getActualTypeArguments()[0];
         Type valueType = parameterizedType.getActualTypeArguments()[1];
         Map<Object, Object> resultedMap = new HashMap<>();
