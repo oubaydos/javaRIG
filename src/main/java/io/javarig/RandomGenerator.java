@@ -34,10 +34,10 @@ public class RandomGenerator {
         return generate(type, collectionGenerator -> collectionGenerator.setSize(size));
     }
 
-    public <T> T generate(Type type, int minSize, int maxSize) {
+    public <T> T generate(Type type, int minSizeInclusive, int maxSizeExclusive) {
         return generate(type, collectionGenerator -> {
-            collectionGenerator.setMinSize(minSize);
-            collectionGenerator.setMaxSize(maxSize);
+            collectionGenerator.setMinSizeInclusive(minSizeInclusive);
+            collectionGenerator.setMaxSizeExclusive(maxSizeExclusive);
         });
     }
 
