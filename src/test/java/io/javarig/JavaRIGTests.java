@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -124,7 +127,7 @@ public class JavaRIGTests {
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(List.class);
 
-        //asserting keys type
+        //asserting type
         assertThat(generated)
                 .asInstanceOf(LIST)
                 .first()
@@ -144,7 +147,7 @@ public class JavaRIGTests {
         assertThat(generated).isInstanceOf(List.class);
         assertThat(generated).asInstanceOf(LIST).hasSize(size);
 
-        //asserting keys type
+        //asserting type
         assertThat(generated)
                 .asInstanceOf(LIST)
                 .first()
@@ -165,12 +168,13 @@ public class JavaRIGTests {
         assertThat(generated).isInstanceOf(List.class);
         assertThat(generated).asInstanceOf(LIST).hasSizeBetween(minSize, maxSize);
 
-        //asserting keys type
+        //asserting type
         assertThat(generated)
                 .asInstanceOf(LIST)
                 .first()
                 .isInstanceOf(type);
     }
+
     @Test
     public void shouldReturnMap() {
         //given
@@ -249,5 +253,58 @@ public class JavaRIGTests {
                 .asInstanceOf(MAP)
                 .extracting((map) -> map.values().toArray()[0])
                 .isInstanceOf(valueType);
+    }
+
+    @Test
+    public void shouldReturnInstant() {
+        Object generated = randomGenerator.generate(Instant.class);
+        log.info("shouldReturnInstant : {}", generated);
+        assertThat(generated).isNotNull();
+        assertThat(generated).isInstanceOf(Instant.class);
+    }
+
+    @Test
+    public void shouldReturnDate() {
+        Object generated = randomGenerator.generate(Date.class);
+        log.info("shouldReturnDate : {}", generated);
+        assertThat(generated).isNotNull();
+        assertThat(generated).isInstanceOf(Date.class);
+    }
+
+    @Test
+    public void shouldReturnLocalDate() {
+        Object generated = randomGenerator.generate(LocalDate.class);
+        log.info("shouldReturnLocalDate : {}", generated);
+        assertThat(generated).isNotNull();
+        assertThat(generated).isInstanceOf(LocalDate.class);
+    }
+
+    @Test
+    public void shouldReturnByteArray() {
+        Object generated = randomGenerator.generate(byte[].class);
+        log.info("shouldReturnByteArray : {}", generated);
+        assertThat(generated).isNotNull();
+        assertThat(generated).isInstanceOf(byte[].class);
+    }
+
+    @Test
+    public void shouldReturnByteArrayWithExactSize() {
+        int size = 20;
+        Object generated = randomGenerator.generate(byte[].class, size);
+        log.info("shouldGenerateString : {}", generated);
+        assertThat(generated).isNotNull();
+        assertThat(generated).isInstanceOf(byte[].class);
+        assertThat(generated).asInstanceOf(BYTE_ARRAY).hasSize(size);
+    }
+
+    @Test
+    public void shouldReturnByteArrayWithSizeBetween() {
+        int minSize = 20;
+        int maxSize = 40;
+        Object generated = randomGenerator.generate(byte[].class, minSize, maxSize);
+        log.info("shouldGenerateString : {}", generated);
+        assertThat(generated).isNotNull();
+        assertThat(generated).isInstanceOf(byte[].class);
+        assertThat(generated).asInstanceOf(BYTE_ARRAY).hasSizeBetween(minSize, maxSize);
     }
 }

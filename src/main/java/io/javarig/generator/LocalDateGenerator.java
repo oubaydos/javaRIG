@@ -1,8 +1,12 @@
 package io.javarig.generator;
 
-public class LocalDateGenerator implements Generator{
+import java.time.Instant;
+
+import static java.time.ZoneOffset.UTC;
+
+public class LocalDateGenerator implements Generator {
     @Override
     public Object generate() {
-        return null;
+        return ((Instant) randomGenerator.generate(Instant.class)).atZone(UTC).toLocalDate();
     }
 }
