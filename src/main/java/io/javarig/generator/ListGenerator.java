@@ -17,7 +17,7 @@ public class ListGenerator implements CollectionGenerator, GenericTypeGenerator 
     private ParameterizedType type;
 
     @Override
-    public Object generate() {
+    public List<Object> generate() {
         int randomSize = random.nextInt(getMinSizeInclusive(), getMaxSizeExclusive());
         ParameterizedType parameterizedType = getType();
         Type inputListType = parameterizedType.getActualTypeArguments()[0];
