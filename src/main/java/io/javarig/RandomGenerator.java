@@ -42,17 +42,17 @@ public class RandomGenerator {
     }
 
     public <T> T generate(Type type, Type... genericTypes) {
-        Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type, null);
+        Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type);
         return generate(parameterizedType);
     }
 
     public <T> T generate(Type type, int size, Type... genericTypes) {
-        Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type, null);
+        Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type);
         return generate(parameterizedType, size);
     }
 
     public <T> T generate(Type type, int minSize, int maxSize, Type... genericTypes) {
-        Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type, null);
+        Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type);
         return generate(parameterizedType, minSize, maxSize);
     }
 
