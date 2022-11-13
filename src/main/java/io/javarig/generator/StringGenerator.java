@@ -1,12 +1,16 @@
 package io.javarig.generator;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import java.lang.reflect.Type;
-
-public class StringGenerator extends CollectionGenerator{
+@Setter
+@Getter
+public class StringGenerator implements CollectionGenerator {
+    private int minSize = 5;
+    private int maxSize = 15;
     @Override
-    public String generate(Type type) {
-        return RandomStringUtils.randomAlphanumeric(minSize,maxSize);
+    public String generate() {
+        return RandomStringUtils.randomAlphanumeric(this.getMinSize(), this.getMaxSize());
     }
 }

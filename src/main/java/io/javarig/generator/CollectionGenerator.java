@@ -1,16 +1,18 @@
 package io.javarig.generator;
 
-import lombok.Getter;
-import lombok.Setter;
+public interface CollectionGenerator extends Generator{
+    default int getMaxSize(){
+        return 15;
+    }
 
-@Setter
-@Getter
-public abstract class CollectionGenerator implements Generator{
-    protected int maxSize = 15;
-    protected int minSize = 5;
+    default int getMinSize(){
+        return 5;
+    }
 
-    public void setSize(int size){
-        this.minSize = size;
-        this.maxSize = size;
+    void setMinSize(int minSize);
+    void setMaxSize(int maxSize);
+    default void setSize(int size){
+        this.setMinSize(size);
+        this.setMaxSize(size);
     }
 }
