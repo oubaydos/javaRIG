@@ -2,6 +2,7 @@ package io.javarig;
 
 import io.javarig.exception.NestedObjectRecursionException;
 import io.javarig.generator.CollectionGenerator;
+import io.javarig.generator.EnumGenerator;
 import io.javarig.generator.Generator;
 
 import java.lang.reflect.Type;
@@ -19,6 +20,9 @@ public class RandomGenerator {
         Generator generator = typeEnum.generator();
         if (generator instanceof CollectionGenerator collectionGenerator) {
             setCollectionSize.accept(collectionGenerator);
+        }
+        if (generator instanceof EnumGenerator enumGenerator) {
+            enumGenerator.setType(type);
         }
         T generated = (T) generator.generate();
         objectStack.pop();
