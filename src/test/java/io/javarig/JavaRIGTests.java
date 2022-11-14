@@ -307,4 +307,21 @@ public class JavaRIGTests {
         assertThat(generated).isInstanceOf(byte[].class);
         assertThat(generated).asInstanceOf(BYTE_ARRAY).hasSizeBetween(minSize, maxSize);
     }
+    @Test
+    public void shouldReturnEnum(){
+        //when
+        Object generated = randomGenerator.generate(TestEnum.class);
+        //then
+        log.info("shouldReturnEnum : {}", generated);
+        assertThat(generated).isNotNull();
+        assertThat(generated).isInstanceOf(TestEnum.class);
+    }
+    @Test
+    public void shouldReturnNullEnum(){
+        //when
+        Object generated = randomGenerator.generate(NullTestEnum.class);
+        //then
+        log.info("shouldReturnEnum : {}", generated);
+        assertThat(generated).isNull();
+    }
 }
