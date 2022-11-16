@@ -34,25 +34,25 @@ public class RandomGenerator {
         return generate(type, collectionGenerator -> collectionGenerator.setSize(size));
     }
 
-    public <T> T generate(Type type, int minSize, int maxSize) {
+    public <T> T generate(Type type, int minSizeInclusive, int maxSizeExclusive) {
         return generate(type, collectionGenerator -> {
-            collectionGenerator.setMinSize(minSize);
-            collectionGenerator.setMaxSize(maxSize);
+            collectionGenerator.setMinSizeInclusive(minSizeInclusive);
+            collectionGenerator.setMaxSizeExclusive(maxSizeExclusive);
         });
     }
 
     public <T> T generate(Type type, Type... genericTypes) {
-        Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type, null);
+        Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type);
         return generate(parameterizedType);
     }
 
     public <T> T generate(Type type, int size, Type... genericTypes) {
-        Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type, null);
+        Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type);
         return generate(parameterizedType, size);
     }
 
     public <T> T generate(Type type, int minSize, int maxSize, Type... genericTypes) {
-        Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type, null);
+        Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type);
         return generate(parameterizedType, minSize, maxSize);
     }
 

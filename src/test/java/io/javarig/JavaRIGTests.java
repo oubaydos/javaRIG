@@ -1,13 +1,17 @@
 package io.javarig;
 
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.*;
 
 
 @Slf4j
@@ -38,7 +42,7 @@ public class JavaRIGTests {
     }
 
     @Test
-    public void shouldGenerateStringBetweenMinAndMaxSize() {
+    public void shouldGenerateStringWithSizeBetween() {
         int minSize = 20;
         int maxSize = 40;
         Object generated = randomGenerator.generate(String.class, minSize, maxSize);
@@ -113,27 +117,194 @@ public class JavaRIGTests {
     }
 
     @Test
+    public void shouldReturnList() {
+        //given
+        Class<?> type = String.class;
+        //when
+        Object generated = randomGenerator.generate(List.class, type);
+        //then
+        log.info("shouldReturnList : {}", generated);
+        assertThat(generated).isNotNull();
+        assertThat(generated).isInstanceOf(List.class);
+
+        //asserting type
+        assertThat(generated)
+                .asInstanceOf(LIST)
+                .first()
+                .isInstanceOf(type);
+    }
+
+    @Test
+    public void shouldReturnListWithExactSize() {
+        //given
+        int size = 20;
+        Class<?> type = String.class;
+        //when
+        Object generated = randomGenerator.generate(List.class, size, type);
+        //then
+        log.info("shouldReturnListWithExactSize : {}", generated);
+        assertThat(generated).isNotNull();
+        assertThat(generated).isInstanceOf(List.class);
+        assertThat(generated).asInstanceOf(LIST).hasSize(size);
+
+        //asserting type
+        assertThat(generated)
+                .asInstanceOf(LIST)
+                .first()
+                .isInstanceOf(type);
+    }
+
+    @Test
+    public void shouldReturnListWithSizeBetween() {
+        //given
+        int minSize = 20;
+        int maxSize = 40;
+        Class<?> type = String.class;
+        //when
+        Object generated = randomGenerator.generate(List.class, minSize, maxSize, type);
+        //then
+        log.info("shouldReturnListWithSizeBetween : {}", generated);
+        assertThat(generated).isNotNull();
+        assertThat(generated).isInstanceOf(List.class);
+        assertThat(generated).asInstanceOf(LIST).hasSizeBetween(minSize, maxSize);
+
+        //asserting type
+        assertThat(generated)
+                .asInstanceOf(LIST)
+                .first()
+                .isInstanceOf(type);
+    }
+
+    @Test
     public void shouldReturnMap() {
         //given
-            Class<?> keyType = String.class;
-            Class<?> valueType = Integer.class;
+        Class<?> keyType = String.class;
+        Class<?> valueType = Integer.class;
         //when
-            Object generated = randomGenerator.generate(Map.class, keyType, valueType);
+        Object generated = randomGenerator.generate(Map.class, keyType, valueType);
         //then
-            log.info("shouldReturnMap : {}", generated);
-            assertThat(generated).isNotNull();
-            assertThat(generated).isInstanceOf(Map.class);
+        log.info("shouldReturnMap : {}", generated);
+        assertThat(generated).isNotNull();
+        assertThat(generated).isInstanceOf(Map.class);
 
-            //asserting keys type
-            assertThat(generated)
-                    .asInstanceOf(InstanceOfAssertFactories.MAP)
-                    .extracting((map) -> map.keySet().toArray()[0])
-                    .isInstanceOf(keyType);
+        //asserting keys type
+        assertThat(generated)
+                .asInstanceOf(MAP)
+                .extracting((map) -> map.keySet().toArray()[0])
+                .isInstanceOf(keyType);
 
-            //asserting values type
-            assertThat(generated)
-                    .asInstanceOf(InstanceOfAssertFactories.MAP)
-                    .extracting((map) -> map.values().toArray()[0])
-                    .isInstanceOf(valueType);
+        //asserting values type
+        assertThat(generated)
+                .asInstanceOf(MAP)
+                .extracting((map) -> map.values().toArray()[0])
+                .isInstanceOf(valueType);
+    }
+
+    @Test
+    public void shouldReturnMapWithExactSize() {
+        //given
+        int size = 20;
+        Class<?> keyType = String.class;
+        Class<?> valueType = Integer.class;
+        //when
+        Object generated = randomGenerator.generate(Map.class, size, keyType, valueType);
+        //then
+        log.info("shouldReturnMapWithExactSize : {}", generated);
+        assertThat(generated).isNotNull();
+        assertThat(generated).isInstanceOf(Map.class);
+        assertThat(generated).asInstanceOf(MAP).hasSize(size);
+
+        //asserting keys type
+        assertThat(generated)
+                .asInstanceOf(MAP)
+                .extracting((map) -> map.keySet().toArray()[0])
+                .isInstanceOf(keyType);
+
+        //asserting values type
+        assertThat(generated)
+                .asInstanceOf(MAP)
+                .extracting((map) -> map.values().toArray()[0])
+                .isInstanceOf(valueType);
+    }
+
+    @Test
+    public void shouldReturnMapWithSizeBetween() {
+        //given
+        int minSize = 20;
+        int maxSize = 40;
+        Class<?> keyType = String.class;
+        Class<?> valueType = Integer.class;
+        //when
+        Object generated = randomGenerator.generate(Map.class, minSize, maxSize, keyType, valueType);
+        //then
+        log.info("shouldReturnMapWithSizeBetween : {}", generated);
+        assertThat(generated).isNotNull();
+        assertThat(generated).isInstanceOf(Map.class);
+        assertThat(generated).asInstanceOf(MAP).hasSizeBetween(minSize, maxSize);
+
+        //asserting keys type
+        assertThat(generated)
+                .asInstanceOf(MAP)
+                .extracting((map) -> map.keySet().toArray()[0])
+                .isInstanceOf(keyType);
+
+        //asserting values type
+        assertThat(generated)
+                .asInstanceOf(MAP)
+                .extracting((map) -> map.values().toArray()[0])
+                .isInstanceOf(valueType);
+    }
+
+    @Test
+    public void shouldReturnInstant() {
+        Object generated = randomGenerator.generate(Instant.class);
+        log.info("shouldReturnInstant : {}", generated);
+        assertThat(generated).isNotNull();
+        assertThat(generated).isInstanceOf(Instant.class);
+    }
+
+    @Test
+    public void shouldReturnDate() {
+        Object generated = randomGenerator.generate(Date.class);
+        log.info("shouldReturnDate : {}", generated);
+        assertThat(generated).isNotNull();
+        assertThat(generated).isInstanceOf(Date.class);
+    }
+
+    @Test
+    public void shouldReturnLocalDate() {
+        Object generated = randomGenerator.generate(LocalDate.class);
+        log.info("shouldReturnLocalDate : {}", generated);
+        assertThat(generated).isNotNull();
+        assertThat(generated).isInstanceOf(LocalDate.class);
+    }
+
+    @Test
+    public void shouldReturnByteArray() {
+        Object generated = randomGenerator.generate(byte[].class);
+        log.info("shouldReturnByteArray : {}", generated);
+        assertThat(generated).isNotNull();
+        assertThat(generated).isInstanceOf(byte[].class);
+    }
+
+    @Test
+    public void shouldReturnByteArrayWithExactSize() {
+        int size = 20;
+        Object generated = randomGenerator.generate(byte[].class, size);
+        log.info("shouldGenerateString : {}", generated);
+        assertThat(generated).isNotNull();
+        assertThat(generated).isInstanceOf(byte[].class);
+        assertThat(generated).asInstanceOf(BYTE_ARRAY).hasSize(size);
+    }
+
+    @Test
+    public void shouldReturnByteArrayWithSizeBetween() {
+        int minSize = 20;
+        int maxSize = 40;
+        Object generated = randomGenerator.generate(byte[].class, minSize, maxSize);
+        log.info("shouldGenerateString : {}", generated);
+        assertThat(generated).isNotNull();
+        assertThat(generated).isInstanceOf(byte[].class);
+        assertThat(generated).asInstanceOf(BYTE_ARRAY).hasSizeBetween(minSize, maxSize);
     }
 }

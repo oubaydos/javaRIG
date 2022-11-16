@@ -1,18 +1,18 @@
 package io.javarig.generator;
 
 public interface CollectionGenerator extends Generator{
-    default int getMaxSize(){
+    default int getMaxSizeExclusive(){
         return 15;
     }
 
-    default int getMinSize(){
+    default int getMinSizeInclusive(){
         return 5;
     }
 
-    void setMinSize(int minSize);
-    void setMaxSize(int maxSize);
+    void setMinSizeInclusive(int minSizeInclusive);
+    void setMaxSizeExclusive(int maxSizeExclusive);
     default void setSize(int size){
-        this.setMinSize(size);
-        this.setMaxSize(size);
+        this.setMinSizeInclusive(size);
+        this.setMaxSizeExclusive(size+1);
     }
 }

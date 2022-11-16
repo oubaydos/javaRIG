@@ -14,6 +14,11 @@ public class ParameterizedTypeImpl implements ParameterizedType {
         this.ownerType = ownerType;
     }
 
+    public ParameterizedTypeImpl(Type[] actualTypeArguments, Class<?> rawType) {
+        this.actualTypeArguments = actualTypeArguments;
+        this.rawType = rawType;
+        this.ownerType = null;
+    }
     @Override
     public Type[] getActualTypeArguments() {
         return actualTypeArguments;
