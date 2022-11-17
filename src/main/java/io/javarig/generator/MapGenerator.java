@@ -14,8 +14,9 @@ public class MapGenerator implements GenericTypeGenerator, CollectionGenerator {
     private int minSizeInclusive = 5;
     private int maxSizeExclusive = 15;
     private ParameterizedType type;
+
     @Override
-    public Map<Object,Object> generate() {
+    public Map<Object, Object> generate() {
         int size = random.nextInt(getMinSizeInclusive(), getMaxSizeExclusive());
         ParameterizedType parameterizedType = getType();
         Type keyType = parameterizedType.getActualTypeArguments()[0];

@@ -324,4 +324,14 @@ public class JavaRIGTests {
         log.info("shouldReturnEnum : {}", generated);
         assertThat(generated).isNull();
     }
+
+    @Test
+    public void shouldReturnAnObjectInstance(){
+        //when
+        Object generated = randomGenerator.generate(TestClass.class);
+        //then
+        log.info("shouldReturnAnObjectInstance : {}", generated);
+        assertThat(generated).isNotNull();
+        assertThat(generated).isInstanceOf(TestClass.class);
+    }
 }
