@@ -1,28 +1,22 @@
 package io.javarig.generator;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.lang.reflect.Type;
-import java.util.EnumSet;
-import java.util.Random;
 
-public class EnumGenerator<T extends Enum<T>> implements Generator{
+@Getter
+@Setter
+public class EnumGenerator implements Generator {
 
-    private Class<T> tClass;
+    private Type type;
 
     @Override
-    public T generate() {
-        EnumSet<T> enumSet = EnumSet.allOf(tClass);
-        if (enumSet.isEmpty()) {
+    public Object generate() {
+        Object[] enumConstants = ((Class<?>) type).getEnumConstants();
+        if (enumConstants.length == 0) {
             return null;
         }
-        return enumSet.stream().skip(new Random().nextInt(enumSet.size())).findFirst().orElse(null);
-    }
-
-
-    public Class<T> getType() {
-        return tClass;
-    }
-
-    public void setType(Type type) {
-        tClass = (Class<T>) type;
+        return enumConstants[random.nextInt(enumConstants.length)];
     }
 }

@@ -66,6 +66,8 @@ public enum TypeEnum {
     public void setType(Type type) {
         if (this.generator instanceof GenericTypeGenerator genericTypeGenerator) {
             genericTypeGenerator.setType((ParameterizedType) type);
+        } else if (this.generator instanceof EnumGenerator enumGenerator) {
+            enumGenerator.setType(type);
         }
     }
 }

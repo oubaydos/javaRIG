@@ -13,17 +13,12 @@ public class RandomGenerator {
     private final Stack<Type> objectStack = new Stack<>();
 
     @SuppressWarnings({"unchecked"})
-    private synchronized <T> T generate(Type type, Consumer<CollectionGenerator> setCollectionSize) {
+    private synchronized <T> T generate(Type type, Consumer<CollectionGenerator> collectionSizeSetter) {
         checkForRecursion(type);
         objectStack.push(type);
         TypeEnum typeEnum = TypeEnum.fromType(type);
         Generator generator = typeEnum.generator();
-        if (generator instanceof CollectionGenerator collectionGenerator) {
-            setCollectionSize.accept(collectionGenerator);
-        }
-        if (generator instanceof EnumGenerator enumGenerator) {
-            enumGenerator.setType(type);
-        }
+        generator = setCollectionSize(generator,collectionSizeSetter);
         T generated = (T) generator.generate();
         objectStack.pop();
         return generated;
@@ -71,5 +66,13 @@ public class RandomGenerator {
         if (!objectStack.isEmpty() && objectStack.contains(type)) {
             throw new NestedObjectRecursionException(type);
         }
+    }
+
+    private Generator setCollectionSize(Generator generator,Consumer<CollectionGenerator> collectionSizeSetter){
+        if (generator instanceof CollectionGenerator collectionGenerator) {
+            collectionSizeSetter.accept(collectionGenerator);
+            return collectionGenerator;
+        }
+        return generator;
     }
 }
