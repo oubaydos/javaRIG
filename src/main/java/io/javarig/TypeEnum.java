@@ -23,7 +23,9 @@ public enum TypeEnum {
     INSTANT(List.of(Instant.class), new InstantGenerator()),
     DATE(List.of(Date.class), new DateGenerator()),
     LOCAL_DATE(List.of(LocalDate.class), new LocalDateGenerator()),
-    MAP(List.of(Map.class), new MapGenerator()),
+    MAP(List.of(Map.class), new HashMapGenerator()),
+    HASH_MAP(List.of(Map.class), new HashMapGenerator()),
+    TREE_MAP(List.of(Map.class), new TreeMapGenerator()),
     LIST(List.of(List.class), new ListGenerator()),
     ENUM(List.of(), new EnumGenerator()),
     OBJECT(List.of(), new ObjectGenerator());
