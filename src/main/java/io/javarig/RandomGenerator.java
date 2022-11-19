@@ -3,13 +3,25 @@ package io.javarig;
 import io.javarig.exception.NestedObjectRecursionException;
 import io.javarig.generator.CollectionGenerator;
 import io.javarig.generator.Generator;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.Singular;
 
 import java.lang.reflect.Type;
 import java.util.Stack;
 import java.util.function.Consumer;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RandomGenerator {
+
+    private static RandomGenerator randomGenerator;
     private final Stack<Type> objectStack = new Stack<>();
+    public static synchronized RandomGenerator getInstance() {
+        if (randomGenerator == null) {
+            randomGenerator = new RandomGenerator();
+        }
+        return randomGenerator;
+    }
 
     @SuppressWarnings({"unchecked"})
     private synchronized <T> T generate(Type type, Consumer<CollectionGenerator> collectionSizeSetter) {

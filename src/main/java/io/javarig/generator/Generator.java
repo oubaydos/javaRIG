@@ -6,6 +6,6 @@ import java.util.Random;
 
 public interface Generator {
     Random random = new Random();
-    RandomGenerator randomGenerator = new RandomGenerator();
+    RandomGenerator randomGenerator = RandomGenerator.getInstance();
     Object generate();
 }

@@ -20,7 +20,7 @@ public class JavaRIGTests {
 
     @BeforeEach
     public void setUp() {
-        randomGenerator = new RandomGenerator();
+        randomGenerator = RandomGenerator.getInstance();
     }
 
     @Test
