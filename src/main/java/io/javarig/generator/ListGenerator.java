@@ -10,16 +10,16 @@ import java.util.List;
 
 @Setter
 @Getter
-public class ListGenerator implements CollectionGenerator, GenericTypeGenerator {
+public class ListGenerator implements CollectionGenerator, TypeBasedGenerator {
     private int minSizeInclusive = 5;
     private int maxSizeExclusive = 15;
 
-    private ParameterizedType type;
+    private Type type;
 
     @Override
     public List<Object> generate() {
         int randomSize = random.nextInt(getMinSizeInclusive(), getMaxSizeExclusive());
-        ParameterizedType parameterizedType = getType();
+        ParameterizedType parameterizedType = (ParameterizedType) getType();
         Type inputListType = parameterizedType.getActualTypeArguments()[0];
         List<Object> outputList = new ArrayList<>(randomSize);
         for (int i = 0; i < randomSize; i++) {

@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @Slf4j
-public class ObjectGenerator implements Generator {
+public class ObjectGenerator implements TypeBasedGenerator {
     private Type type;
 
     @Override

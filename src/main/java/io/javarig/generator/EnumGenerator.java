@@ -7,7 +7,7 @@ import java.lang.reflect.Type;
 
 @Getter
 @Setter
-public class EnumGenerator implements Generator {
+public class EnumGenerator implements TypeBasedGenerator {
 
     private Type type;
 
