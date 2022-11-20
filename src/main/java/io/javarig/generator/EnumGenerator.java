@@ -1,8 +1,22 @@
 package io.javarig.generator;
 
-public class EnumGenerator implements Generator {
+import lombok.Getter;
+import lombok.Setter;
+
+import java.lang.reflect.Type;
+
+@Getter
+@Setter
+public class EnumGenerator implements TypeBasedGenerator {
+
+    private Type type;
+
     @Override
     public Object generate() {
-        return null;
+        Object[] enumConstants = ((Class<?>) type).getEnumConstants();
+        if (enumConstants.length == 0) {
+            return null;
+        }
+        return enumConstants[random.nextInt(enumConstants.length)];
     }
 }

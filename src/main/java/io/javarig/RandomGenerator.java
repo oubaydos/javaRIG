@@ -3,23 +3,33 @@ package io.javarig;
 import io.javarig.exception.NestedObjectRecursionException;
 import io.javarig.generator.CollectionGenerator;
 import io.javarig.generator.Generator;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.Singular;
 
 import java.lang.reflect.Type;
 import java.util.Stack;
 import java.util.function.Consumer;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RandomGenerator {
+
+    private static RandomGenerator randomGenerator;
     private final Stack<Type> objectStack = new Stack<>();
+    public static synchronized RandomGenerator getInstance() {
+        if (randomGenerator == null) {
+            randomGenerator = new RandomGenerator();
+        }
+        return randomGenerator;
+    }
 
     @SuppressWarnings({"unchecked"})
-    private synchronized <T> T generate(Type type, Consumer<CollectionGenerator> setCollectionSize) {
+    private synchronized <T> T generate(Type type, Consumer<CollectionGenerator> collectionSizeSetter) {
         checkForRecursion(type);
         objectStack.push(type);
         TypeEnum typeEnum = TypeEnum.fromType(type);
         Generator generator = typeEnum.generator();
-        if (generator instanceof CollectionGenerator collectionGenerator) {
-            setCollectionSize.accept(collectionGenerator);
-        }
+        generator = setCollectionSize(generator, collectionSizeSetter);
         T generated = (T) generator.generate();
         objectStack.pop();
         return generated;
@@ -67,5 +77,13 @@ public class RandomGenerator {
         if (!objectStack.isEmpty() && objectStack.contains(type)) {
             throw new NestedObjectRecursionException(type);
         }
+    }
+
+    private Generator setCollectionSize(Generator generator, Consumer<CollectionGenerator> collectionSizeSetter) {
+        if (generator instanceof CollectionGenerator collectionGenerator) {
+            collectionSizeSetter.accept(collectionGenerator);
+            return collectionGenerator;
+        }
+        return generator;
     }
 }

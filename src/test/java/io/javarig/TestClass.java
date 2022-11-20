@@ -31,6 +31,3 @@ public class TestClass {
     //    private TestEnum e;
 }
 
-enum TestEnum {
-    A, B, C
-}

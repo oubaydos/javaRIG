@@ -10,14 +10,15 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class MapGenerator implements GenericTypeGenerator, CollectionGenerator {
+public class MapGenerator implements TypeBasedGenerator, CollectionGenerator {
     private int minSizeInclusive = 5;
     private int maxSizeExclusive = 15;
-    private ParameterizedType type;
+    private Type type;
+
     @Override
-    public Map<Object,Object> generate() {
+    public Map<Object, Object> generate() {
         int size = random.nextInt(getMinSizeInclusive(), getMaxSizeExclusive());
-        ParameterizedType parameterizedType = getType();
+        ParameterizedType parameterizedType = (ParameterizedType) getType();
         Type keyType = parameterizedType.getActualTypeArguments()[0];
         Type valueType = parameterizedType.getActualTypeArguments()[1];
         Map<Object, Object> resultedMap = new HashMap<>();
