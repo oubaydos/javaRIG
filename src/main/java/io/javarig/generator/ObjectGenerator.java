@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @Slf4j
-public class ObjectGenerator implements TypeBasedGenerator {
+public class ObjectGenerator extends AbstractGenerator implements TypeBasedGenerator {
     private Type type;
 
     @Override
@@ -49,7 +49,7 @@ public class ObjectGenerator implements TypeBasedGenerator {
 
     private void generateField(Object object, Method setter, Field field) throws InvocationTargetException, IllegalAccessException {
         Type type = field.getGenericType();
-        Object generated = randomGenerator.generate(type);
+        Object generated = getRandomGenerator().generate(type);
         setter.invoke(object, generated);
     }
 }

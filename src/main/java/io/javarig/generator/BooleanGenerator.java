@@ -1,8 +1,8 @@
 package io.javarig.generator;
 
-public class BooleanGenerator implements Generator{
+public class BooleanGenerator extends AbstractGenerator{
     @Override
     public Boolean generate() {
-        return random.nextBoolean();
+        return getRandom().nextBoolean();
     }
 }

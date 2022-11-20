@@ -1,8 +1,8 @@
 package io.javarig.generator;
 
-public class LongGenerator implements Generator{
+public class LongGenerator extends AbstractGenerator{
     @Override
     public Long generate() {
-        return random.nextLong(0, Long.MAX_VALUE);
+        return getRandom().nextLong(0, Long.MAX_VALUE);
     }
 }

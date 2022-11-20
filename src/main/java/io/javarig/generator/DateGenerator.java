@@ -3,9 +3,9 @@ package io.javarig.generator;
 import java.time.Instant;
 import java.util.Date;
 
-public class DateGenerator implements Generator {
+public class DateGenerator extends AbstractGenerator {
     @Override
     public Date generate() {
-        return Date.from(randomGenerator.generate(Instant.class));
+        return Date.from(getRandomGenerator().generate(Instant.class));
     }
 }

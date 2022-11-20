@@ -1,6 +1,9 @@
 package io.javarig;
 
 import io.javarig.generator.*;
+import io.javarig.generator.list.ArrayListGenerator;
+import io.javarig.generator.map.HashMapGenerator;
+import io.javarig.generator.map.TreeMapGenerator;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -24,21 +27,23 @@ public enum TypeEnum {
     DATE(List.of(Date.class), new DateGenerator()),
     LOCAL_DATE(List.of(LocalDate.class), new LocalDateGenerator()),
     MAP(List.of(Map.class), new HashMapGenerator()),
-    HASH_MAP(List.of(Map.class), new HashMapGenerator()),
-    TREE_MAP(List.of(Map.class), new TreeMapGenerator()),
-    LIST(List.of(List.class), new ListGenerator()),
+    HASH_MAP(List.of(HashMap.class), new HashMapGenerator()),
+    TREE_MAP(List.of(TreeMap.class), new TreeMapGenerator()),
+    LIST(List.of(List.class), new ArrayListGenerator()),
+    ARRAY_LIST(List.of(List.class), new ArrayListGenerator()),
+
     ENUM(List.of(), new EnumGenerator()),
     OBJECT(List.of(), new ObjectGenerator());
 
     final List<Type> values;
-    final Generator generator;
+    final AbstractGenerator generator;
 
-    TypeEnum(List<Type> values, Generator generator) {
+    TypeEnum(List<Type> values, AbstractGenerator generator) {
         this.values = values;
         this.generator = generator;
     }
 
-    public static TypeEnum fromType(Type type) {
+    public static TypeEnum getTypeEnum(Type type, RandomGenerator randomGenerator) {
         Type rawType = type;
         if (type instanceof ParameterizedType) rawType = ((ParameterizedType) rawType).getRawType();
         Class<?> finalType = (Class<?>) rawType;
@@ -46,19 +51,17 @@ public enum TypeEnum {
                 .filter(tEnum -> tEnum.values.contains(finalType))
                 .findFirst()
                 .orElseGet(() -> {
-                    try {
-                        if (finalType.getSuperclass().equals(AbstractMap.class))
-                            return MAP;
-                        if (finalType.getSuperclass().equals(AbstractList.class))
-                            return LIST;
-                        if (finalType.isEnum())
-                            return ENUM;
-                    } catch (Exception ignored) {
-                    }
+                    if (finalType.isEnum())
+                        return ENUM;
                     return OBJECT;
                 });
         typeEnum.setType(type);
+        typeEnum.setRandomGenerator(randomGenerator);
         return typeEnum;
+    }
+
+    private void setRandomGenerator(RandomGenerator randomGenerator) {
+        this.generator.setRandomGenerator(randomGenerator);
     }
 
     public Generator generator() {

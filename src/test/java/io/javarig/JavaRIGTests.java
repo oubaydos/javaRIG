@@ -6,9 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.*;
@@ -20,7 +18,7 @@ public class JavaRIGTests {
 
     @BeforeEach
     public void setUp() {
-        randomGenerator = RandomGenerator.getInstance();
+        randomGenerator = new RandomGenerator();
     }
 
     @Test
@@ -178,81 +176,93 @@ public class JavaRIGTests {
     @Test
     public void shouldReturnMap() {
         //given
+        List<Class<?>> mapClasses = List.of(Map.class, TreeMap.class, HashMap.class);
         Class<?> keyType = String.class;
         Class<?> valueType = Integer.class;
-        //when
-        Object generated = randomGenerator.generate(Map.class, keyType, valueType);
-        //then
-        log.info("shouldReturnMap : {}", generated);
-        assertThat(generated).isNotNull();
-        assertThat(generated).isInstanceOf(Map.class);
 
-        //asserting keys type
-        assertThat(generated)
-                .asInstanceOf(MAP)
-                .extracting((map) -> map.keySet().toArray()[0])
-                .isInstanceOf(keyType);
+        for (var mapClass : mapClasses) {
+            //when
+            Object generated = randomGenerator.generate(mapClass, keyType, valueType);
+            //then
+            log.info("shouldReturnMap of type {} : {}", mapClass.getName(), generated);
+            assertThat(generated).isNotNull();
+            assertThat(generated).isInstanceOf(mapClass);
 
-        //asserting values type
-        assertThat(generated)
-                .asInstanceOf(MAP)
-                .extracting((map) -> map.values().toArray()[0])
-                .isInstanceOf(valueType);
+            //asserting keys type
+            assertThat(generated)
+                    .asInstanceOf(MAP)
+                    .extracting((map) -> map.keySet().toArray()[0])
+                    .isInstanceOf(keyType);
+
+            //asserting values type
+            assertThat(generated)
+                    .asInstanceOf(MAP)
+                    .extracting((map) -> map.values().toArray()[0])
+                    .isInstanceOf(valueType);
+        }
     }
 
     @Test
     public void shouldReturnMapWithExactSize() {
         //given
+        List<Class<?>> mapClasses = List.of(Map.class, TreeMap.class, HashMap.class);
         int size = 20;
         Class<?> keyType = String.class;
         Class<?> valueType = Integer.class;
-        //when
-        Object generated = randomGenerator.generate(Map.class, size, keyType, valueType);
-        //then
-        log.info("shouldReturnMapWithExactSize : {}", generated);
-        assertThat(generated).isNotNull();
-        assertThat(generated).isInstanceOf(Map.class);
-        assertThat(generated).asInstanceOf(MAP).hasSize(size);
 
-        //asserting keys type
-        assertThat(generated)
-                .asInstanceOf(MAP)
-                .extracting((map) -> map.keySet().toArray()[0])
-                .isInstanceOf(keyType);
+        for (var mapClass : mapClasses) {
+            //when
+            Object generated = randomGenerator.generate(mapClass, size, keyType, valueType);
+            //then
+            log.info("shouldReturnMapWithExactSize of type {} : {}", mapClass.getName(), generated);
+            assertThat(generated).isNotNull();
+            assertThat(generated).isInstanceOf(mapClass);
+            assertThat(generated).asInstanceOf(MAP).hasSize(size);
 
-        //asserting values type
-        assertThat(generated)
-                .asInstanceOf(MAP)
-                .extracting((map) -> map.values().toArray()[0])
-                .isInstanceOf(valueType);
+            //asserting keys type
+            assertThat(generated)
+                    .asInstanceOf(MAP)
+                    .extracting((map) -> map.keySet().toArray()[0])
+                    .isInstanceOf(keyType);
+
+            //asserting values type
+            assertThat(generated)
+                    .asInstanceOf(MAP)
+                    .extracting((map) -> map.values().toArray()[0])
+                    .isInstanceOf(valueType);
+        }
     }
 
     @Test
     public void shouldReturnMapWithSizeBetween() {
         //given
+        List<Class<?>> mapClasses = List.of(Map.class, TreeMap.class, HashMap.class);
         int minSize = 20;
         int maxSize = 40;
         Class<?> keyType = String.class;
         Class<?> valueType = Integer.class;
-        //when
-        Object generated = randomGenerator.generate(Map.class, minSize, maxSize, keyType, valueType);
-        //then
-        log.info("shouldReturnMapWithSizeBetween : {}", generated);
-        assertThat(generated).isNotNull();
-        assertThat(generated).isInstanceOf(Map.class);
-        assertThat(generated).asInstanceOf(MAP).hasSizeBetween(minSize, maxSize);
 
-        //asserting keys type
-        assertThat(generated)
-                .asInstanceOf(MAP)
-                .extracting((map) -> map.keySet().toArray()[0])
-                .isInstanceOf(keyType);
+        for (var mapClass : mapClasses) {
+            //when
+            Object generated = randomGenerator.generate(mapClass, minSize, maxSize, keyType, valueType);
+            //then
+            log.info("shouldReturnMapWithSizeBetween of type {} : {}", mapClass.getName(), generated);
+            assertThat(generated).isNotNull();
+            assertThat(generated).isInstanceOf(mapClass);
+            assertThat(generated).asInstanceOf(MAP).hasSizeBetween(minSize, maxSize);
 
-        //asserting values type
-        assertThat(generated)
-                .asInstanceOf(MAP)
-                .extracting((map) -> map.values().toArray()[0])
-                .isInstanceOf(valueType);
+            //asserting keys type
+            assertThat(generated)
+                    .asInstanceOf(MAP)
+                    .extracting((map) -> map.keySet().toArray()[0])
+                    .isInstanceOf(keyType);
+
+            //asserting values type
+            assertThat(generated)
+                    .asInstanceOf(MAP)
+                    .extracting((map) -> map.values().toArray()[0])
+                    .isInstanceOf(valueType);
+        }
     }
 
     @Test
@@ -307,8 +317,9 @@ public class JavaRIGTests {
         assertThat(generated).isInstanceOf(byte[].class);
         assertThat(generated).asInstanceOf(BYTE_ARRAY).hasSizeBetween(minSize, maxSize);
     }
+
     @Test
-    public void shouldReturnEnum(){
+    public void shouldReturnEnum() {
         //when
         Object generated = randomGenerator.generate(TestEnum.class);
         //then
@@ -316,8 +327,9 @@ public class JavaRIGTests {
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(TestEnum.class);
     }
+
     @Test
-    public void shouldReturnNullEnum(){
+    public void shouldReturnNullEnum() {
         //when
         Object generated = randomGenerator.generate(NullTestEnum.class);
         //then
@@ -326,7 +338,7 @@ public class JavaRIGTests {
     }
 
     @Test
-    public void shouldReturnAnObjectInstance(){
+    public void shouldReturnAnObjectInstance() {
         //when
         Object generated = randomGenerator.generate(TestClass.class);
         //then

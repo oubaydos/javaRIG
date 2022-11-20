@@ -4,9 +4,9 @@ import java.time.Instant;
 
 import static java.time.ZoneOffset.UTC;
 
-public class LocalDateGenerator implements Generator {
+public class LocalDateGenerator extends AbstractGenerator {
     @Override
     public Object generate() {
-        return ((Instant) randomGenerator.generate(Instant.class)).atZone(UTC).toLocalDate();
+        return ((Instant) getRandomGenerator().generate(Instant.class)).atZone(UTC).toLocalDate();
     }
 }
