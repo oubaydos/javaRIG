@@ -32,12 +32,12 @@ public abstract class MapGenerator extends AbstractGenerator implements TypeBase
         return null;
     }
 
-    private Map<Object, Object> generate(ParameterizedType type, int size) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    private Map<Object, Object> generate(ParameterizedType type, int size) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         Type keyType = type.getActualTypeArguments()[0];
         Type valueType = type.getActualTypeArguments()[1];
         Map<Object, Object> resultedMap = getImplementationType().getConstructor().newInstance();
         for (int i = 0; i < size; i++) {
-            resultedMap.put(getRandomGenerator().generate(Class.forName(keyType.getTypeName())), getRandomGenerator().generate(Class.forName(valueType.getTypeName())));
+            resultedMap.put(getRandomGenerator().generate(keyType), getRandomGenerator().generate(valueType));
         }
         return resultedMap;
     }

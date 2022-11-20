@@ -36,10 +36,10 @@ public abstract class ListGenerator extends AbstractGenerator implements Collect
     }
 
     @NotNull
-    private List<Object> generate(Type inputListType, int randomSize) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
+    private List<Object> generate(Type inputListType, int randomSize) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         List<Object> outputList = getImplementationType().getConstructor(int.class).newInstance(randomSize);
         for (int i = 0; i < randomSize; i++) {
-            outputList.add(getRandomGenerator().generate(Class.forName(inputListType.getTypeName())));
+            outputList.add(getRandomGenerator().generate(inputListType));
         }
         return outputList;
     }
