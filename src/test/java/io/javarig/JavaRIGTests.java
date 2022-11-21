@@ -1,16 +1,20 @@
 package io.javarig;
 
+import io.javarig.exception.NestedObjectRecursionException;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.AbstractMap;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.InstanceOfAssertFactories.*;
 
 
@@ -23,6 +27,7 @@ public class JavaRIGTests {
         randomGenerator = RandomGenerator.getInstance();
     }
 
+    @SneakyThrows
     @Test
     public void shouldGenerateString() {
         Object generated = randomGenerator.generate(String.class);
@@ -31,6 +36,7 @@ public class JavaRIGTests {
         assertThat(generated).isInstanceOf(String.class);
     }
 
+    @SneakyThrows
     @Test
     public void shouldGenerateStringWithExactSize() {
         int size = 20;
@@ -41,6 +47,7 @@ public class JavaRIGTests {
         assertThat(generated).asString().hasSize(size);
     }
 
+    @SneakyThrows
     @Test
     public void shouldGenerateStringWithSizeBetween() {
         int minSize = 20;
@@ -52,6 +59,7 @@ public class JavaRIGTests {
         assertThat(generated).asString().hasSizeBetween(minSize, maxSize);
     }
 
+    @SneakyThrows
     @Test
     public void shouldGenerateInteger() {
         Object generated = randomGenerator.generate(Integer.class);
@@ -60,6 +68,7 @@ public class JavaRIGTests {
         assertThat(generated).isInstanceOf(Integer.class);
     }
 
+    @SneakyThrows
     @Test
     public void shouldReturnBoolean() {
         Object generated = randomGenerator.generate(Boolean.class);
@@ -68,6 +77,7 @@ public class JavaRIGTests {
         assertThat(generated).isInstanceOf(Boolean.class);
     }
 
+    @SneakyThrows
     @Test
     public void shouldReturnFloat() {
         Object generated = randomGenerator.generate(Float.class);
@@ -76,6 +86,7 @@ public class JavaRIGTests {
         assertThat(generated).isInstanceOf(Float.class);
     }
 
+    @SneakyThrows
     @Test
     public void shouldReturnLong() {
         Object generated = randomGenerator.generate(Long.class);
@@ -84,6 +95,7 @@ public class JavaRIGTests {
         assertThat(generated).isInstanceOf(Long.class);
     }
 
+    @SneakyThrows
     @Test
     public void shouldReturnShort() {
         Object generated = randomGenerator.generate(Short.class);
@@ -92,6 +104,7 @@ public class JavaRIGTests {
         assertThat(generated).isInstanceOf(Short.class);
     }
 
+    @SneakyThrows
     @Test
     public void shouldReturnChar() {
         Object generated = randomGenerator.generate(Character.class);
@@ -100,6 +113,7 @@ public class JavaRIGTests {
         assertThat(generated).isInstanceOf(Character.class);
     }
 
+    @SneakyThrows
     @Test
     public void shouldReturnDouble() {
         Object generated = randomGenerator.generate(Double.class);
@@ -108,6 +122,7 @@ public class JavaRIGTests {
         assertThat(generated).isInstanceOf(Double.class);
     }
 
+    @SneakyThrows
     @Test
     public void shouldReturnByte() {
         Object generated = randomGenerator.generate(Byte.class);
@@ -116,6 +131,7 @@ public class JavaRIGTests {
         assertThat(generated).isInstanceOf(Byte.class);
     }
 
+    @SneakyThrows
     @Test
     public void shouldReturnList() {
         //given
@@ -134,6 +150,7 @@ public class JavaRIGTests {
                 .isInstanceOf(type);
     }
 
+    @SneakyThrows
     @Test
     public void shouldReturnListWithExactSize() {
         //given
@@ -154,6 +171,7 @@ public class JavaRIGTests {
                 .isInstanceOf(type);
     }
 
+    @SneakyThrows
     @Test
     public void shouldReturnListWithSizeBetween() {
         //given
@@ -175,6 +193,7 @@ public class JavaRIGTests {
                 .isInstanceOf(type);
     }
 
+    @SneakyThrows
     @Test
     public void shouldReturnMap() {
         //given
@@ -200,6 +219,8 @@ public class JavaRIGTests {
                 .isInstanceOf(valueType);
     }
 
+
+    @SneakyThrows
     @Test
     public void shouldReturnMapWithExactSize() {
         //given
@@ -227,6 +248,7 @@ public class JavaRIGTests {
                 .isInstanceOf(valueType);
     }
 
+    @SneakyThrows
     @Test
     public void shouldReturnMapWithSizeBetween() {
         //given
@@ -255,6 +277,7 @@ public class JavaRIGTests {
                 .isInstanceOf(valueType);
     }
 
+    @SneakyThrows
     @Test
     public void shouldReturnInstant() {
         Object generated = randomGenerator.generate(Instant.class);
@@ -263,6 +286,7 @@ public class JavaRIGTests {
         assertThat(generated).isInstanceOf(Instant.class);
     }
 
+    @SneakyThrows
     @Test
     public void shouldReturnDate() {
         Object generated = randomGenerator.generate(Date.class);
@@ -271,6 +295,7 @@ public class JavaRIGTests {
         assertThat(generated).isInstanceOf(Date.class);
     }
 
+    @SneakyThrows
     @Test
     public void shouldReturnLocalDate() {
         Object generated = randomGenerator.generate(LocalDate.class);
@@ -279,6 +304,7 @@ public class JavaRIGTests {
         assertThat(generated).isInstanceOf(LocalDate.class);
     }
 
+    @SneakyThrows
     @Test
     public void shouldReturnByteArray() {
         Object generated = randomGenerator.generate(byte[].class);
@@ -287,6 +313,7 @@ public class JavaRIGTests {
         assertThat(generated).isInstanceOf(byte[].class);
     }
 
+    @SneakyThrows
     @Test
     public void shouldReturnByteArrayWithExactSize() {
         int size = 20;
@@ -297,6 +324,7 @@ public class JavaRIGTests {
         assertThat(generated).asInstanceOf(BYTE_ARRAY).hasSize(size);
     }
 
+    @SneakyThrows
     @Test
     public void shouldReturnByteArrayWithSizeBetween() {
         int minSize = 20;
@@ -307,8 +335,10 @@ public class JavaRIGTests {
         assertThat(generated).isInstanceOf(byte[].class);
         assertThat(generated).asInstanceOf(BYTE_ARRAY).hasSizeBetween(minSize, maxSize);
     }
+
+    @SneakyThrows
     @Test
-    public void shouldReturnEnum(){
+    public void shouldReturnEnum() {
         //when
         Object generated = randomGenerator.generate(TestEnum.class);
         //then
@@ -316,8 +346,10 @@ public class JavaRIGTests {
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(TestEnum.class);
     }
+
+    @SneakyThrows
     @Test
-    public void shouldReturnNullEnum(){
+    public void shouldReturnNullEnum() {
         //when
         Object generated = randomGenerator.generate(NullTestEnum.class);
         //then
@@ -325,13 +357,23 @@ public class JavaRIGTests {
         assertThat(generated).isNull();
     }
 
+    @SneakyThrows
     @Test
-    public void shouldReturnAnObjectInstance(){
+    public void shouldReturnAnObjectInstance() {
         //when
         Object generated = randomGenerator.generate(TestClass.class);
         //then
         log.info("shouldReturnAnObjectInstance : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(TestClass.class);
+    }
+
+    @Test
+    public void shouldThrowNestedObjectException() {
+        //when
+        assertThatThrownBy(
+                () -> randomGenerator.generate(NestedClassTest.class)
+        ).isInstanceOf(NestedObjectRecursionException.class);
+        // then
     }
 }
