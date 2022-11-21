@@ -19,21 +19,16 @@ public class ObjectGenerator implements TypeBasedGenerator {
     private Type type;
 
     @Override
-    public Object generate() {
-        try {
-            Class<?> objectClass = (Class<?>) getType();
-            Object object = objectClass.getConstructor().newInstance();
-            log.info("generating object of type {} ...", objectClass.getName());
-            generateFields(object, objectClass);
-            log.info("created object {}", object);
-            return object;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Object generate() throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
+        Class<?> objectClass = (Class<?>) getType();
+        Object object = objectClass.getConstructor().newInstance();
+        log.info("generating object of type {} ...", objectClass.getName());
+        generateFields(object, objectClass);
+        log.info("created object {}", object);
+        return object;
     }
 
-    private void generateFields(Object object, Class<?> objectClass) throws NoSuchFieldException, InvocationTargetException, IllegalAccessException {
+    private void generateFields(Object object, Class<?> objectClass) throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
 
         List<Method> setters = Arrays.stream(objectClass.getDeclaredMethods())
                 .filter(method -> method.getName().startsWith("set"))
@@ -47,7 +42,7 @@ public class ObjectGenerator implements TypeBasedGenerator {
 
     }
 
-    private void generateField(Object object, Method setter, Field field) throws InvocationTargetException, IllegalAccessException {
+    private void generateField(Object object, Method setter, Field field) throws InvocationTargetException, IllegalAccessException, NoSuchFieldException, NoSuchMethodException, InstantiationException {
         Type type = field.getGenericType();
         Object generated = randomGenerator.generate(type);
         setter.invoke(object, generated);

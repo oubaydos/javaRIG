@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.Stack;
 import java.util.function.Consumer;
@@ -24,7 +25,7 @@ public class RandomGenerator {
     }
 
     @SuppressWarnings({"unchecked"})
-    private synchronized <T> T generate(Type type, Consumer<CollectionGenerator> collectionSizeSetter) {
+    private synchronized <T> T generate(Type type, Consumer<CollectionGenerator> collectionSizeSetter) throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
         checkForRecursion(type);
         objectStack.push(type);
         TypeEnum typeEnum = TypeEnum.fromType(type);
@@ -35,33 +36,33 @@ public class RandomGenerator {
         return generated;
     }
 
-    public <T> T generate(Type type) {
+    public <T> T generate(Type type) throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
         return generate(type, ignore -> {
         });
     }
 
-    public <T> T generate(Type type, int size) {
+    public <T> T generate(Type type, int size) throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
         return generate(type, collectionGenerator -> collectionGenerator.setSize(size));
     }
 
-    public <T> T generate(Type type, int minSizeInclusive, int maxSizeExclusive) {
+    public <T> T generate(Type type, int minSizeInclusive, int maxSizeExclusive) throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
         return generate(type, collectionGenerator -> {
             collectionGenerator.setMinSizeInclusive(minSizeInclusive);
             collectionGenerator.setMaxSizeExclusive(maxSizeExclusive);
         });
     }
 
-    public <T> T generate(Type type, Type... genericTypes) {
+    public <T> T generate(Type type, Type... genericTypes) throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
         Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type);
         return generate(parameterizedType);
     }
 
-    public <T> T generate(Type type, int size, Type... genericTypes) {
+    public <T> T generate(Type type, int size, Type... genericTypes) throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
         Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type);
         return generate(parameterizedType, size);
     }
 
-    public <T> T generate(Type type, int minSize, int maxSize, Type... genericTypes) {
+    public <T> T generate(Type type, int minSize, int maxSize, Type... genericTypes) throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
         Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type);
         return generate(parameterizedType, minSize, maxSize);
     }
