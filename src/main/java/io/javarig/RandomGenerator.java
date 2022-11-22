@@ -1,5 +1,6 @@
 package io.javarig;
 
+import io.javarig.exception.InstanceGenerationException;
 import io.javarig.exception.NestedObjectRecursionException;
 import io.javarig.generator.CollectionGenerator;
 import io.javarig.generator.Generator;
@@ -13,10 +14,10 @@ public class RandomGenerator {
     private final Stack<Type> objectStack = new Stack<>();
 
     @SuppressWarnings({"unchecked"})
-    private synchronized <T> T generate(Type type, Consumer<CollectionGenerator> collectionSizeSetter) {
+    private synchronized <T> T generate(Type type, Consumer<CollectionGenerator> collectionSizeSetter) throws InstanceGenerationException {
         checkForRecursion(type);
         objectStack.push(type);
-        TypeEnum typeEnum = TypeEnum.getTypeEnum(type,this);
+        TypeEnum typeEnum = TypeEnum.getTypeEnum(type, this);
         Generator generator = typeEnum.generator();
         generator = setCollectionSize(generator, collectionSizeSetter);
         T generated = (T) generator.generate();
@@ -24,33 +25,33 @@ public class RandomGenerator {
         return generated;
     }
 
-    public <T> T generate(Type type) {
+    public <T> T generate(Type type) throws InstanceGenerationException {
         return generate(type, ignore -> {
         });
     }
 
-    public <T> T generate(Type type, int size) {
+    public <T> T generate(Type type, int size) throws InstanceGenerationException {
         return generate(type, collectionGenerator -> collectionGenerator.setSize(size));
     }
 
-    public <T> T generate(Type type, int minSizeInclusive, int maxSizeExclusive) {
+    public <T> T generate(Type type, int minSizeInclusive, int maxSizeExclusive) throws InstanceGenerationException {
         return generate(type, collectionGenerator -> {
             collectionGenerator.setMinSizeInclusive(minSizeInclusive);
             collectionGenerator.setMaxSizeExclusive(maxSizeExclusive);
         });
     }
 
-    public <T> T generate(Type type, Type... genericTypes) {
+    public <T> T generate(Type type, Type... genericTypes) throws InstanceGenerationException {
         Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type);
         return generate(parameterizedType);
     }
 
-    public <T> T generate(Type type, int size, Type... genericTypes) {
+    public <T> T generate(Type type, int size, Type... genericTypes) throws InstanceGenerationException {
         Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type);
         return generate(parameterizedType, size);
     }
 
-    public <T> T generate(Type type, int minSize, int maxSize, Type... genericTypes) {
+    public <T> T generate(Type type, int minSize, int maxSize, Type... genericTypes) throws InstanceGenerationException {
         Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type);
         return generate(parameterizedType, minSize, maxSize);
     }

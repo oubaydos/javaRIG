@@ -1,5 +1,6 @@
 package io.javarig.generator.list;
 
+import io.javarig.exception.InstanceGenerationException;
 import io.javarig.generator.AbstractGenerator;
 import io.javarig.generator.CollectionGenerator;
 import io.javarig.generator.TypeBasedGenerator;
@@ -7,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -24,23 +24,23 @@ public abstract class ListGenerator extends AbstractGenerator implements Collect
     protected abstract Class<? extends List> getImplementationType();
 
     @Override
-    public List<Object> generate() {
+    public List<Object> generate() throws InstanceGenerationException {
         int randomSize = getRandom().nextInt(getMinSizeInclusive(), getMaxSizeExclusive());
         ParameterizedType parameterizedType = (ParameterizedType) getType();
-        Type inputListType = parameterizedType.getActualTypeArguments()[0];
-        try {
-            return generate(inputListType, randomSize);
-        } catch (Exception ignore) {
-        }
-        return null;
+        Type listParameterType = parameterizedType.getActualTypeArguments()[0];
+        return generate(listParameterType, randomSize);
     }
 
     @NotNull
-    private List<Object> generate(Type inputListType, int randomSize) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-        List<Object> outputList = getImplementationType().getConstructor(int.class).newInstance(randomSize);
-        for (int i = 0; i < randomSize; i++) {
-            outputList.add(getRandomGenerator().generate(inputListType));
+    public List<Object> generate(Type listParameterType, int size) throws InstanceGenerationException{
+        try {
+            List<Object> outputList = getImplementationType().getConstructor(int.class).newInstance(size);
+            for (int i = 0; i < size; i++) {
+                outputList.add(getRandomGenerator().generate(listParameterType));
+            }
+            return outputList;
+        } catch (ReflectiveOperationException e) {
+            throw new InstanceGenerationException(e);
         }
-        return outputList;
     }
 }

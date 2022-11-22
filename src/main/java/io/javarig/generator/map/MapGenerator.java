@@ -1,12 +1,12 @@
 package io.javarig.generator.map;
 
+import io.javarig.exception.InstanceGenerationException;
 import io.javarig.generator.AbstractGenerator;
 import io.javarig.generator.CollectionGenerator;
 import io.javarig.generator.TypeBasedGenerator;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -22,23 +22,27 @@ public abstract class MapGenerator extends AbstractGenerator implements TypeBase
     protected abstract Class<? extends Map> getImplementationType();
 
     @Override
-    public Map<Object, Object> generate() {
+    public Map<Object, Object> generate() throws InstanceGenerationException {
         int size = getRandom().nextInt(getMinSizeInclusive(), getMaxSizeExclusive());
         ParameterizedType parameterizedType = (ParameterizedType) getType();
-        try {
-            return generate(parameterizedType, size);
-        } catch (Exception ignore) {
-        }
-        return null;
+        return generate(parameterizedType, size);
+
     }
 
-    private Map<Object, Object> generate(ParameterizedType type, int size) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public Map<Object, Object> generate(ParameterizedType type, int size) throws InstanceGenerationException{
         Type keyType = type.getActualTypeArguments()[0];
         Type valueType = type.getActualTypeArguments()[1];
-        Map<Object, Object> resultedMap = getImplementationType().getConstructor().newInstance();
-        for (int i = 0; i < size; i++) {
-            resultedMap.put(getRandomGenerator().generate(keyType), getRandomGenerator().generate(valueType));
+        try {
+            Map<Object, Object> resultedMap = getImplementationType().getConstructor().newInstance();
+            for (int i = 0; i < size; i++) {
+                resultedMap.put(
+                        getRandomGenerator().generate(keyType),
+                        getRandomGenerator().generate(valueType)
+                );
+            }
+            return resultedMap;
+        } catch (ReflectiveOperationException e) {
+            throw new InstanceGenerationException(e);
         }
-        return resultedMap;
     }
 }

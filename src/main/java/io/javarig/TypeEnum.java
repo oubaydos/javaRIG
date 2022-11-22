@@ -30,7 +30,7 @@ public enum TypeEnum {
     HASH_MAP(List.of(HashMap.class), new HashMapGenerator()),
     TREE_MAP(List.of(TreeMap.class), new TreeMapGenerator()),
     LIST(List.of(List.class), new ArrayListGenerator()),
-    ARRAY_LIST(List.of(List.class), new ArrayListGenerator()),
+    ARRAY_LIST(List.of(ArrayList.class), new ArrayListGenerator()),
 
     ENUM(List.of(), new EnumGenerator()),
     OBJECT(List.of(), new ObjectGenerator());
@@ -45,7 +45,7 @@ public enum TypeEnum {
 
     public static TypeEnum getTypeEnum(Type type, RandomGenerator randomGenerator) {
         Type rawType = type;
-        if (type instanceof ParameterizedType) rawType = ((ParameterizedType) rawType).getRawType();
+        if (type instanceof ParameterizedType parameterizedType) rawType = parameterizedType.getRawType();
         Class<?> finalType = (Class<?>) rawType;
         TypeEnum typeEnum = Arrays.stream(TypeEnum.values())
                 .filter(tEnum -> tEnum.values.contains(finalType))
