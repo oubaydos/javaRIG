@@ -1,16 +1,22 @@
 package io.javarig;
 
+import io.javarig.exception.InstanceGenerationException;
+import io.javarig.exception.NoDefaultConstructorException;
+import io.javarig.exception.NoFieldAssociatedToSetter;
+import io.javarig.util.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.lang.reflect.Type;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.InstanceOfAssertFactories.*;
 
 
@@ -128,10 +134,7 @@ public class JavaRIGTests {
         assertThat(generated).isInstanceOf(List.class);
 
         //asserting type
-        assertThat(generated)
-                .asInstanceOf(LIST)
-                .first()
-                .isInstanceOf(type);
+        assertThat(generated).asInstanceOf(LIST).first().isInstanceOf(type);
     }
 
     @Test
@@ -148,10 +151,7 @@ public class JavaRIGTests {
         assertThat(generated).asInstanceOf(LIST).hasSize(size);
 
         //asserting type
-        assertThat(generated)
-                .asInstanceOf(LIST)
-                .first()
-                .isInstanceOf(type);
+        assertThat(generated).asInstanceOf(LIST).first().isInstanceOf(type);
     }
 
     @Test
@@ -169,10 +169,7 @@ public class JavaRIGTests {
         assertThat(generated).asInstanceOf(LIST).hasSizeBetween(minSize, maxSize);
 
         //asserting type
-        assertThat(generated)
-                .asInstanceOf(LIST)
-                .first()
-                .isInstanceOf(type);
+        assertThat(generated).asInstanceOf(LIST).first().isInstanceOf(type);
     }
 
     @ParameterizedTest
@@ -190,16 +187,10 @@ public class JavaRIGTests {
         assertThat(generated).isInstanceOf(mapClass);
 
         //asserting keys type
-        assertThat(generated)
-                .asInstanceOf(MAP)
-                .extracting((map) -> map.keySet().toArray()[0])
-                .isInstanceOf(keyType);
+        assertThat(generated).asInstanceOf(MAP).extracting((map) -> map.keySet().toArray()[0]).isInstanceOf(keyType);
 
         //asserting values type
-        assertThat(generated)
-                .asInstanceOf(MAP)
-                .extracting((map) -> map.values().toArray()[0])
-                .isInstanceOf(valueType);
+        assertThat(generated).asInstanceOf(MAP).extracting((map) -> map.values().toArray()[0]).isInstanceOf(valueType);
 
     }
 
@@ -220,16 +211,10 @@ public class JavaRIGTests {
         assertThat(generated).asInstanceOf(MAP).hasSize(size);
 
         //asserting keys type
-        assertThat(generated)
-                .asInstanceOf(MAP)
-                .extracting((map) -> map.keySet().toArray()[0])
-                .isInstanceOf(keyType);
+        assertThat(generated).asInstanceOf(MAP).extracting((map) -> map.keySet().toArray()[0]).isInstanceOf(keyType);
 
         //asserting values type
-        assertThat(generated)
-                .asInstanceOf(MAP)
-                .extracting((map) -> map.values().toArray()[0])
-                .isInstanceOf(valueType);
+        assertThat(generated).asInstanceOf(MAP).extracting((map) -> map.values().toArray()[0]).isInstanceOf(valueType);
 
     }
 
@@ -251,16 +236,10 @@ public class JavaRIGTests {
         assertThat(generated).asInstanceOf(MAP).hasSizeBetween(minSize, maxSize);
 
         //asserting keys type
-        assertThat(generated)
-                .asInstanceOf(MAP)
-                .extracting((map) -> map.keySet().toArray()[0])
-                .isInstanceOf(keyType);
+        assertThat(generated).asInstanceOf(MAP).extracting((map) -> map.keySet().toArray()[0]).isInstanceOf(keyType);
 
         //asserting values type
-        assertThat(generated)
-                .asInstanceOf(MAP)
-                .extracting((map) -> map.values().toArray()[0])
-                .isInstanceOf(valueType);
+        assertThat(generated).asInstanceOf(MAP).extracting((map) -> map.values().toArray()[0]).isInstanceOf(valueType);
 
     }
 
@@ -344,5 +323,34 @@ public class JavaRIGTests {
         log.info("shouldReturnAnObjectInstance : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(TestClass.class);
+    }
+
+    @Test
+    public void shouldThrowNoDefaultConstructorExceptionWhenGivenAClassWithNoDefaultConstructor() {
+        //given
+        Class<?> type = ClassWithNoDefaultConstructor.class;
+
+        //then
+        assertThatThrownBy(() -> {//when
+            randomGenerator.generate(type);
+        })
+                .isInstanceOf(NoDefaultConstructorException.class)
+                .hasMessage("Class %s does not have default constructor, please create a default constructor for it".formatted(type.getName()));
+    }
+
+    @Test
+    public void shouldThrowNoFieldAssociatedToSetterExceptionWhenGivenAClassWithASetterWithNoFieldAssociatedToIt() {
+        //given
+        String setterName = "setString";
+        String fieldName = Utils.getFieldNameFromSetterMethodName(setterName);
+        Type type = ClassWithNoFieldAssociatedToSetter.class;
+
+        //then
+        assertThatThrownBy(() -> {//when
+            randomGenerator.generate(type);
+        })
+                .isInstanceOf(NoFieldAssociatedToSetter.class)
+                .hasMessage("No field with name %s associated to setter with name %s".formatted(fieldName, setterName))
+                .hasCauseInstanceOf(NoSuchFieldException.class);
     }
 }
