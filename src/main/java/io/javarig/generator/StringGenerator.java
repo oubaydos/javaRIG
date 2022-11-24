@@ -6,7 +6,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 @Setter
 @Getter
-public class StringGenerator extends AbstractGenerator implements CollectionGenerator {
+public class StringGenerator extends AbstractTypeGenerator implements CollectionGenerator {
     private int minSizeInclusive = 5;
     private int maxSizeExclusive = 15;
 

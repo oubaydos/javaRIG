@@ -2,6 +2,6 @@ package io.javarig.generator;
 
 import io.javarig.exception.InstanceGenerationException;
 
-public interface Generator {
+public interface TypeGenerator {
     Object generate() throws InstanceGenerationException;
 }

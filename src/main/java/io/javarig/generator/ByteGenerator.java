@@ -1,6 +1,6 @@
 package io.javarig.generator;
 
-public class ByteGenerator extends AbstractGenerator {
+public class ByteGenerator extends AbstractTypeGenerator {
 
     @Override
     public Byte generate() {

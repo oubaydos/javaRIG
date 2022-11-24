@@ -7,7 +7,7 @@ import java.lang.reflect.Type;
 
 @Getter
 @Setter
-public class EnumGenerator extends AbstractGenerator implements TypeBasedGenerator {
+public class EnumGenerator extends AbstractTypeGenerator implements TypeBasedGenerator {
     private Type type;
 
     @Override
@@ -16,6 +16,6 @@ public class EnumGenerator extends AbstractGenerator implements TypeBasedGenerat
         if (enumConstants.length == 0) {
             return null;
         }
-        return enumConstants[getRandom().nextInt(enumConstants.length)];
+        return enumConstants[getRandom().nextInt(0,enumConstants.length)];
     }
 }

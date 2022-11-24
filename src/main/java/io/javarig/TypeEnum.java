@@ -4,6 +4,7 @@ import io.javarig.generator.*;
 import io.javarig.generator.list.ArrayListGenerator;
 import io.javarig.generator.map.HashMapGenerator;
 import io.javarig.generator.map.TreeMapGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -36,35 +37,38 @@ public enum TypeEnum {
     OBJECT(List.of(), new ObjectGenerator());
 
     final List<Type> values;
-    final AbstractGenerator generator;
+    final AbstractTypeGenerator generator;
 
-    TypeEnum(List<Type> values, AbstractGenerator generator) {
+    TypeEnum(List<Type> values, AbstractTypeGenerator generator) {
         this.values = values;
         this.generator = generator;
     }
 
-    public static TypeEnum getTypeEnum(Type type, RandomGenerator randomGenerator) {
+    public static TypeEnum getTypeEnum(Type type, RandomInstanceGenerator randomGenerator) {
         Type rawType = type;
         if (type instanceof ParameterizedType parameterizedType) rawType = parameterizedType.getRawType();
         Class<?> finalType = (Class<?>) rawType;
         TypeEnum typeEnum = Arrays.stream(TypeEnum.values())
                 .filter(tEnum -> tEnum.values.contains(finalType))
                 .findFirst()
-                .orElseGet(() -> {
-                    if (finalType.isEnum())
-                        return ENUM;
-                    return OBJECT;
-                });
+                .orElseGet(() -> getObjectIfNotEnum(finalType));
         typeEnum.setType(type);
         typeEnum.setRandomGenerator(randomGenerator);
         return typeEnum;
     }
 
-    private void setRandomGenerator(RandomGenerator randomGenerator) {
-        this.generator.setRandomGenerator(randomGenerator);
+    @NotNull
+    private static TypeEnum getObjectIfNotEnum(Class<?> finalType) {
+        if (finalType.isEnum())
+            return ENUM;
+        return OBJECT;
     }
 
-    public Generator generator() {
+    private void setRandomGenerator(RandomInstanceGenerator randomGenerator) {
+        this.generator.setRandomInstanceGenerator(randomGenerator);
+    }
+
+    public TypeGenerator generator() {
         return this.generator;
     }
 

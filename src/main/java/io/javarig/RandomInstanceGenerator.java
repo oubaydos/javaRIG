@@ -3,13 +3,13 @@ package io.javarig;
 import io.javarig.exception.InstanceGenerationException;
 import io.javarig.exception.NestedObjectRecursionException;
 import io.javarig.generator.CollectionGenerator;
-import io.javarig.generator.Generator;
+import io.javarig.generator.TypeGenerator;
 
 import java.lang.reflect.Type;
 import java.util.Stack;
 import java.util.function.Consumer;
 
-public class RandomGenerator {
+public class RandomInstanceGenerator {
 
     private final Stack<Type> objectStack = new Stack<>();
 
@@ -18,7 +18,7 @@ public class RandomGenerator {
         checkForRecursion(type);
         objectStack.push(type);
         TypeEnum typeEnum = TypeEnum.getTypeEnum(type, this);
-        Generator generator = typeEnum.generator();
+        TypeGenerator generator = typeEnum.generator();
         generator = setCollectionSize(generator, collectionSizeSetter);
         T generated = (T) generator.generate();
         objectStack.pop();
@@ -69,7 +69,7 @@ public class RandomGenerator {
         }
     }
 
-    private Generator setCollectionSize(Generator generator, Consumer<CollectionGenerator> collectionSizeSetter) {
+    private TypeGenerator setCollectionSize(TypeGenerator generator, Consumer<CollectionGenerator> collectionSizeSetter) {
         if (generator instanceof CollectionGenerator collectionGenerator) {
             collectionSizeSetter.accept(collectionGenerator);
             return collectionGenerator;

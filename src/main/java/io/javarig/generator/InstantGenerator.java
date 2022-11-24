@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 import static java.time.ZoneOffset.UTC;
 
-public class InstantGenerator extends AbstractGenerator {
+public class InstantGenerator extends AbstractTypeGenerator {
 
     private final Instant MIN_INSTANT = Instant.ofEpochMilli(0);
     private final Instant MAX_INSTANT = LocalDate.of(2100, 12, 31).atStartOfDay(UTC).toInstant();

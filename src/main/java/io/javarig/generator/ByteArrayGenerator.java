@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ByteArrayGenerator extends AbstractGenerator implements CollectionGenerator {
+public class ByteArrayGenerator extends AbstractTypeGenerator implements CollectionGenerator {
     private int maxSizeExclusive = 15;
     private int minSizeInclusive = 5;
 

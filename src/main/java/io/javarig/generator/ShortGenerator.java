@@ -1,8 +1,8 @@
 package io.javarig.generator;
 
-public class ShortGenerator extends AbstractGenerator {
+public class ShortGenerator extends AbstractTypeGenerator {
     @Override
     public Short generate() {
-        return (short) getRandom().nextInt(0, Short.MAX_VALUE + 1);
+        return (short) getRandom().nextInt(Short.MIN_VALUE, Short.MAX_VALUE + 1);
     }
 }

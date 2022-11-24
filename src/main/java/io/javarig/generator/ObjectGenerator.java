@@ -17,7 +17,8 @@ import java.util.List;
 @Getter
 @Setter
 @Slf4j
-public class ObjectGenerator extends AbstractGenerator implements TypeBasedGenerator {
+public class ObjectGenerator extends AbstractTypeGenerator implements TypeBasedGenerator {
+    private static final String SETTER_PREFIX = "set";
     private Type type;
     private Object generatedObject;
 
@@ -33,29 +34,29 @@ public class ObjectGenerator extends AbstractGenerator implements TypeBasedGener
 
     private void generateFields(Class<?> objectClass) throws InstanceGenerationException {
         List<Method> setters = getSetters(objectClass);
-        setters.forEach((setter) -> generateWithSetter(objectClass, setter));
+        setters.forEach((setter) -> generateFieldWithSetter(objectClass, setter));
     }
 
     @NotNull
     private static List<Method> getSetters(Class<?> objectClass) {
         return Arrays.stream(objectClass.getDeclaredMethods())
-                .filter(method -> method.getName().startsWith("set"))
+                .filter(method -> method.getName().startsWith(SETTER_PREFIX))
                 .toList();
     }
 
-    private void generateWithSetter(Class<?> objectClass, Method setter) {
+    private void generateFieldWithSetter(Class<?> objectClass, Method setter) {
         String fieldName = Utils.getFieldNameFromSetterMethodName(setter.getName());
         try {
             Field field = objectClass.getDeclaredField(fieldName);
             generateField(setter, field);
-        } catch (NoSuchFieldException e) {
-            throw new NoFieldAssociatedToSetter(fieldName, setter.getName(), e);
+        } catch (NoSuchFieldException ignore) {
+            log.warn("no such field with name {} for setter {}", fieldName, setter.getName());
         }
     }
 
     private void generateField(Method setter, Field field) throws InstanceGenerationException {
         Type type = field.getGenericType();
-        Object generatedField = getRandomGenerator().generate(type);
+        Object generatedField = getRandomInstanceGenerator().generate(type);
         try {
             setter.invoke(generatedObject, generatedField);
         } catch (IllegalAccessException ignore) {

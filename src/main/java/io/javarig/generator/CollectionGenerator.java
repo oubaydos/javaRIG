@@ -1,6 +1,6 @@
 package io.javarig.generator;
 
-public interface CollectionGenerator extends Generator{
+public interface CollectionGenerator extends TypeGenerator {
     default int getMaxSizeExclusive(){
         return 15;
     }
