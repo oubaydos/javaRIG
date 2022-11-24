@@ -1,11 +1,11 @@
 package io.javarig.generator;
 
-public class ByteGenerator implements Generator {
+public class ByteGenerator extends AbstractTypeGenerator {
 
     @Override
     public Byte generate() {
         byte[] bytes = new byte[1];
-        random.nextBytes(bytes);
+        getRandom().nextBytes(bytes);
         return bytes[0];
     }
 }

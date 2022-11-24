@@ -5,15 +5,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ByteArrayGenerator implements CollectionGenerator {
+public class ByteArrayGenerator extends AbstractTypeGenerator implements CollectionGenerator {
     private int maxSizeExclusive = 15;
     private int minSizeInclusive = 5;
 
     @Override
     public byte[] generate() {
-        int size = random.nextInt(getMinSizeInclusive(), getMaxSizeExclusive());
+        int size = getRandom().nextInt(getMinSizeInclusive(), getMaxSizeExclusive());
         byte[] bytes = new byte[size];
-        random.nextBytes(bytes);
+        getRandom().nextBytes(bytes);
         return bytes;
     }
 }

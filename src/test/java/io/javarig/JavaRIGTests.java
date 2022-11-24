@@ -1,31 +1,39 @@
 package io.javarig;
 
+import io.javarig.exception.AbstractClassInstantiationException;
+import io.javarig.exception.InvocationSetterException;
+import io.javarig.exception.NoAccessibleDefaultConstructorException;
+import io.javarig.testclasses.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.InstanceOfAssertFactories.*;
 
 
 @Slf4j
 public class JavaRIGTests {
-    private RandomGenerator randomGenerator;
+    private RandomInstanceGenerator randomInstanceGenerator;
 
     @BeforeEach
     public void setUp() {
-        randomGenerator = RandomGenerator.getInstance();
+        randomInstanceGenerator = new RandomInstanceGenerator();
     }
 
     @Test
     public void shouldGenerateString() {
-        Object generated = randomGenerator.generate(String.class);
+        Object generated = randomInstanceGenerator.generate(String.class);
         log.info("shouldGenerateString : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(String.class);
@@ -34,7 +42,7 @@ public class JavaRIGTests {
     @Test
     public void shouldGenerateStringWithExactSize() {
         int size = 20;
-        Object generated = randomGenerator.generate(String.class, size);
+        Object generated = randomInstanceGenerator.generate(String.class, size);
         log.info("shouldGenerateString : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(String.class);
@@ -45,7 +53,7 @@ public class JavaRIGTests {
     public void shouldGenerateStringWithSizeBetween() {
         int minSize = 20;
         int maxSize = 40;
-        Object generated = randomGenerator.generate(String.class, minSize, maxSize);
+        Object generated = randomInstanceGenerator.generate(String.class, minSize, maxSize);
         log.info("shouldGenerateString : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(String.class);
@@ -54,7 +62,7 @@ public class JavaRIGTests {
 
     @Test
     public void shouldGenerateInteger() {
-        Object generated = randomGenerator.generate(Integer.class);
+        Object generated = randomInstanceGenerator.generate(Integer.class);
         log.info("shouldGenerateInteger : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(Integer.class);
@@ -62,7 +70,7 @@ public class JavaRIGTests {
 
     @Test
     public void shouldReturnBoolean() {
-        Object generated = randomGenerator.generate(Boolean.class);
+        Object generated = randomInstanceGenerator.generate(Boolean.class);
         log.info("shouldReturnBoolean : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(Boolean.class);
@@ -70,7 +78,7 @@ public class JavaRIGTests {
 
     @Test
     public void shouldReturnFloat() {
-        Object generated = randomGenerator.generate(Float.class);
+        Object generated = randomInstanceGenerator.generate(Float.class);
         log.info("shouldReturnFloat : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(Float.class);
@@ -78,7 +86,7 @@ public class JavaRIGTests {
 
     @Test
     public void shouldReturnLong() {
-        Object generated = randomGenerator.generate(Long.class);
+        Object generated = randomInstanceGenerator.generate(Long.class);
         log.info("shouldReturnLong : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(Long.class);
@@ -86,7 +94,7 @@ public class JavaRIGTests {
 
     @Test
     public void shouldReturnShort() {
-        Object generated = randomGenerator.generate(Short.class);
+        Object generated = randomInstanceGenerator.generate(Short.class);
         log.info("shouldReturnShort : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(Short.class);
@@ -94,7 +102,7 @@ public class JavaRIGTests {
 
     @Test
     public void shouldReturnChar() {
-        Object generated = randomGenerator.generate(Character.class);
+        Object generated = randomInstanceGenerator.generate(Character.class);
         log.info("shouldReturnChar : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(Character.class);
@@ -102,7 +110,7 @@ public class JavaRIGTests {
 
     @Test
     public void shouldReturnDouble() {
-        Object generated = randomGenerator.generate(Double.class);
+        Object generated = randomInstanceGenerator.generate(Double.class);
         log.info("shouldReturnDouble : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(Double.class);
@@ -110,7 +118,7 @@ public class JavaRIGTests {
 
     @Test
     public void shouldReturnByte() {
-        Object generated = randomGenerator.generate(Byte.class);
+        Object generated = randomInstanceGenerator.generate(Byte.class);
         log.info("shouldReturnByte : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(Byte.class);
@@ -121,17 +129,14 @@ public class JavaRIGTests {
         //given
         Class<?> type = String.class;
         //when
-        Object generated = randomGenerator.generate(List.class, type);
+        Object generated = randomInstanceGenerator.generate(List.class, type);
         //then
         log.info("shouldReturnList : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(List.class);
 
         //asserting type
-        assertThat(generated)
-                .asInstanceOf(LIST)
-                .first()
-                .isInstanceOf(type);
+        assertThat(generated).asInstanceOf(LIST).first().isInstanceOf(type);
     }
 
     @Test
@@ -140,7 +145,7 @@ public class JavaRIGTests {
         int size = 20;
         Class<?> type = String.class;
         //when
-        Object generated = randomGenerator.generate(List.class, size, type);
+        Object generated = randomInstanceGenerator.generate(List.class, size, type);
         //then
         log.info("shouldReturnListWithExactSize : {}", generated);
         assertThat(generated).isNotNull();
@@ -148,10 +153,7 @@ public class JavaRIGTests {
         assertThat(generated).asInstanceOf(LIST).hasSize(size);
 
         //asserting type
-        assertThat(generated)
-                .asInstanceOf(LIST)
-                .first()
-                .isInstanceOf(type);
+        assertThat(generated).asInstanceOf(LIST).first().isInstanceOf(type);
     }
 
     @Test
@@ -161,7 +163,7 @@ public class JavaRIGTests {
         int maxSize = 40;
         Class<?> type = String.class;
         //when
-        Object generated = randomGenerator.generate(List.class, minSize, maxSize, type);
+        Object generated = randomInstanceGenerator.generate(List.class, minSize, maxSize, type);
         //then
         log.info("shouldReturnListWithSizeBetween : {}", generated);
         assertThat(generated).isNotNull();
@@ -169,95 +171,83 @@ public class JavaRIGTests {
         assertThat(generated).asInstanceOf(LIST).hasSizeBetween(minSize, maxSize);
 
         //asserting type
-        assertThat(generated)
-                .asInstanceOf(LIST)
-                .first()
-                .isInstanceOf(type);
+        assertThat(generated).asInstanceOf(LIST).first().isInstanceOf(type);
     }
 
-    @Test
-    public void shouldReturnMap() {
+    @ParameterizedTest
+    @ValueSource(classes = {Map.class, TreeMap.class, HashMap.class})
+    public void shouldReturnMap(Class<?> mapClass) {
         //given
         Class<?> keyType = String.class;
         Class<?> valueType = Integer.class;
+
         //when
-        Object generated = randomGenerator.generate(Map.class, keyType, valueType);
+        Object generated = randomInstanceGenerator.generate(mapClass, keyType, valueType);
         //then
-        log.info("shouldReturnMap : {}", generated);
+        log.info("shouldReturnMap of type {} : {}", mapClass.getName(), generated);
         assertThat(generated).isNotNull();
-        assertThat(generated).isInstanceOf(Map.class);
+        assertThat(generated).isInstanceOf(mapClass);
 
         //asserting keys type
-        assertThat(generated)
-                .asInstanceOf(MAP)
-                .extracting((map) -> map.keySet().toArray()[0])
-                .isInstanceOf(keyType);
+        assertThat(generated).asInstanceOf(MAP).extracting((map) -> map.keySet().toArray()[0]).isInstanceOf(keyType);
 
         //asserting values type
-        assertThat(generated)
-                .asInstanceOf(MAP)
-                .extracting((map) -> map.values().toArray()[0])
-                .isInstanceOf(valueType);
+        assertThat(generated).asInstanceOf(MAP).extracting((map) -> map.values().toArray()[0]).isInstanceOf(valueType);
+
     }
 
-    @Test
-    public void shouldReturnMapWithExactSize() {
+    @ParameterizedTest
+    @ValueSource(classes = {Map.class, TreeMap.class, HashMap.class})
+    public void shouldReturnMapWithExactSize(Class<?> mapClass) {
         //given
         int size = 20;
         Class<?> keyType = String.class;
         Class<?> valueType = Integer.class;
+
         //when
-        Object generated = randomGenerator.generate(Map.class, size, keyType, valueType);
+        Object generated = randomInstanceGenerator.generate(mapClass, size, keyType, valueType);
         //then
-        log.info("shouldReturnMapWithExactSize : {}", generated);
+        log.info("shouldReturnMapWithExactSize of type {} : {}", mapClass.getName(), generated);
         assertThat(generated).isNotNull();
-        assertThat(generated).isInstanceOf(Map.class);
+        assertThat(generated).isInstanceOf(mapClass);
         assertThat(generated).asInstanceOf(MAP).hasSize(size);
 
         //asserting keys type
-        assertThat(generated)
-                .asInstanceOf(MAP)
-                .extracting((map) -> map.keySet().toArray()[0])
-                .isInstanceOf(keyType);
+        assertThat(generated).asInstanceOf(MAP).extracting((map) -> map.keySet().toArray()[0]).isInstanceOf(keyType);
 
         //asserting values type
-        assertThat(generated)
-                .asInstanceOf(MAP)
-                .extracting((map) -> map.values().toArray()[0])
-                .isInstanceOf(valueType);
+        assertThat(generated).asInstanceOf(MAP).extracting((map) -> map.values().toArray()[0]).isInstanceOf(valueType);
+
     }
 
-    @Test
-    public void shouldReturnMapWithSizeBetween() {
+    @ParameterizedTest
+    @ValueSource(classes = {Map.class, TreeMap.class, HashMap.class})
+    public void shouldReturnMapWithSizeBetween(Class<?> mapClass) {
         //given
         int minSize = 20;
         int maxSize = 40;
         Class<?> keyType = String.class;
         Class<?> valueType = Integer.class;
+
         //when
-        Object generated = randomGenerator.generate(Map.class, minSize, maxSize, keyType, valueType);
+        Object generated = randomInstanceGenerator.generate(mapClass, minSize, maxSize, keyType, valueType);
         //then
-        log.info("shouldReturnMapWithSizeBetween : {}", generated);
+        log.info("shouldReturnMapWithSizeBetween of type {} : {}", mapClass.getName(), generated);
         assertThat(generated).isNotNull();
-        assertThat(generated).isInstanceOf(Map.class);
+        assertThat(generated).isInstanceOf(mapClass);
         assertThat(generated).asInstanceOf(MAP).hasSizeBetween(minSize, maxSize);
 
         //asserting keys type
-        assertThat(generated)
-                .asInstanceOf(MAP)
-                .extracting((map) -> map.keySet().toArray()[0])
-                .isInstanceOf(keyType);
+        assertThat(generated).asInstanceOf(MAP).extracting((map) -> map.keySet().toArray()[0]).isInstanceOf(keyType);
 
         //asserting values type
-        assertThat(generated)
-                .asInstanceOf(MAP)
-                .extracting((map) -> map.values().toArray()[0])
-                .isInstanceOf(valueType);
+        assertThat(generated).asInstanceOf(MAP).extracting((map) -> map.values().toArray()[0]).isInstanceOf(valueType);
+
     }
 
     @Test
     public void shouldReturnInstant() {
-        Object generated = randomGenerator.generate(Instant.class);
+        Object generated = randomInstanceGenerator.generate(Instant.class);
         log.info("shouldReturnInstant : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(Instant.class);
@@ -265,7 +255,7 @@ public class JavaRIGTests {
 
     @Test
     public void shouldReturnDate() {
-        Object generated = randomGenerator.generate(Date.class);
+        Object generated = randomInstanceGenerator.generate(Date.class);
         log.info("shouldReturnDate : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(Date.class);
@@ -273,7 +263,7 @@ public class JavaRIGTests {
 
     @Test
     public void shouldReturnLocalDate() {
-        Object generated = randomGenerator.generate(LocalDate.class);
+        Object generated = randomInstanceGenerator.generate(LocalDate.class);
         log.info("shouldReturnLocalDate : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(LocalDate.class);
@@ -281,7 +271,7 @@ public class JavaRIGTests {
 
     @Test
     public void shouldReturnByteArray() {
-        Object generated = randomGenerator.generate(byte[].class);
+        Object generated = randomInstanceGenerator.generate(byte[].class);
         log.info("shouldReturnByteArray : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(byte[].class);
@@ -290,7 +280,7 @@ public class JavaRIGTests {
     @Test
     public void shouldReturnByteArrayWithExactSize() {
         int size = 20;
-        Object generated = randomGenerator.generate(byte[].class, size);
+        Object generated = randomInstanceGenerator.generate(byte[].class, size);
         log.info("shouldGenerateString : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(byte[].class);
@@ -301,37 +291,110 @@ public class JavaRIGTests {
     public void shouldReturnByteArrayWithSizeBetween() {
         int minSize = 20;
         int maxSize = 40;
-        Object generated = randomGenerator.generate(byte[].class, minSize, maxSize);
+        Object generated = randomInstanceGenerator.generate(byte[].class, minSize, maxSize);
         log.info("shouldGenerateString : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(byte[].class);
         assertThat(generated).asInstanceOf(BYTE_ARRAY).hasSizeBetween(minSize, maxSize);
     }
+
     @Test
-    public void shouldReturnEnum(){
+    public void shouldReturnEnum() {
         //when
-        Object generated = randomGenerator.generate(TestEnum.class);
+        Object generated = randomInstanceGenerator.generate(TestEnum.class);
         //then
         log.info("shouldReturnEnum : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(TestEnum.class);
     }
+
     @Test
-    public void shouldReturnNullEnum(){
+    public void shouldReturnNullEnum() {
         //when
-        Object generated = randomGenerator.generate(NullTestEnum.class);
+        Object generated = randomInstanceGenerator.generate(NullTestEnum.class);
         //then
         log.info("shouldReturnEnum : {}", generated);
         assertThat(generated).isNull();
     }
 
     @Test
-    public void shouldReturnAnObjectInstance(){
+    public void shouldReturnAnObjectInstance() {
         //when
-        Object generated = randomGenerator.generate(TestClass.class);
+        Object generated = randomInstanceGenerator.generate(TestClass.class);
         //then
         log.info("shouldReturnAnObjectInstance : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(TestClass.class);
+    }
+
+    @Test
+    public void shouldThrowNoDefaultConstructorExceptionWhenGivenAClassWithNoDefaultConstructor() {
+        //given
+        Class<?> type = ClassWithNoDefaultConstructor.class;
+
+        //then
+        assertThatThrownBy(() -> {//when
+            randomInstanceGenerator.generate(type);
+        })
+                .isInstanceOf(NoAccessibleDefaultConstructorException.class)
+                .hasMessage("Class %s does not have default constructor, or it's not accessible".formatted(type.getName()));
+    }
+
+    @Test
+    public void shouldLetFieldNullWhenGivenAClassWithASetterWithNoFieldAssociatedToIt() {
+        //given
+        Type type = ClassWithNoFieldAssociatedToSetter.class;
+        //when
+        ClassWithNoFieldAssociatedToSetter generated = randomInstanceGenerator.generate(type);
+        //then
+        assertThat(generated)
+                .isNotNull()
+                .extracting(ClassWithNoFieldAssociatedToSetter::getS)
+                .isNull();
+        assertThat(generated.getA())
+                .isNotNull();
+    }
+
+    @Test
+    public void shouldThrowNoAccessibleDefaultConstructorExceptionWhenGivenAClassWithAPrivateConstructor() {
+        //given
+        Type type = ClassWithPrivateDefaultConstructor.class;
+
+        //then
+        assertThatThrownBy(() -> {//when
+            randomInstanceGenerator.generate(type);
+        })
+                .isInstanceOf(NoAccessibleDefaultConstructorException.class)
+                .hasMessage("Class %s does not have default constructor, or it's not accessible".formatted(type.getTypeName()))
+                .hasCauseInstanceOf(NoSuchMethodException.class);
+    }
+
+    @Test
+    public void shouldThrowAbstractClassInstantiationExceptionWhenGivenAnAbstractClass() {
+        //given
+        Type type = AbstractClass.class;
+
+        //then
+        assertThatThrownBy(() -> {//when
+            randomInstanceGenerator.generate(type);
+        })
+                .isInstanceOf(AbstractClassInstantiationException.class)
+                .hasMessage("%s is abstract. Can't instantiate an abstract class".formatted(type.getTypeName()))
+                .hasCauseInstanceOf(InstantiationException.class);
+    }
+
+    @Test
+    public void shouldThrowInvocationSetterExceptionWhenSetterThrowsAnException() {
+        //given
+        Type type = ClassWithSetterThatThrowsAnException.class;
+        String setterName = "setA";
+
+        //then
+        assertThatThrownBy(() -> {//when
+            randomInstanceGenerator.generate(type);
+        })
+                .isInstanceOf(InvocationSetterException.class)
+                .hasMessage("got an exception while invoking setter %s in class %s".formatted(setterName, type.getTypeName()))
+                .hasCauseInstanceOf(InvocationTargetException.class);
     }
 }

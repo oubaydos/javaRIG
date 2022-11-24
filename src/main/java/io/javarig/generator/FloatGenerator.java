@@ -1,8 +1,8 @@
 package io.javarig.generator;
 
-public class FloatGenerator implements Generator {
+public class FloatGenerator extends AbstractTypeGenerator {
     @Override
     public Float generate() {
-        return random.nextFloat(0, Float.MAX_VALUE + 1);
+        return getRandom().nextFloat(0, Float.MAX_VALUE + 1);
     }
 }

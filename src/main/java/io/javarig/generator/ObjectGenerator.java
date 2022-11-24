@@ -1,9 +1,11 @@
 package io.javarig.generator;
 
+import io.javarig.exception.*;
 import io.javarig.util.Utils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -15,41 +17,65 @@ import java.util.List;
 @Getter
 @Setter
 @Slf4j
-public class ObjectGenerator implements TypeBasedGenerator {
+public class ObjectGenerator extends AbstractTypeGenerator implements TypeBasedGenerator {
+    private static final String SETTER_PREFIX = "set";
     private Type type;
+    private Object generatedObject;
 
     @Override
-    public Object generate() {
-        try {
-            Class<?> objectClass = (Class<?>) getType();
-            Object object = objectClass.getConstructor().newInstance();
-            log.info("generating object of type {} ...", objectClass.getName());
-            generateFields(object, objectClass);
-            log.info("created object {}", object);
-            return object;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Object generate() throws InstanceGenerationException {
+        Class<?> objectClass = (Class<?>) getType();
+        createNewInstance(objectClass);
+        log.info("generating object of type {} ...", objectClass.getName());
+        generateFields(objectClass);
+        log.info("created object {}", generatedObject);
+        return generatedObject;
     }
 
-    private void generateFields(Object object, Class<?> objectClass) throws NoSuchFieldException, InvocationTargetException, IllegalAccessException {
+    private void generateFields(Class<?> objectClass) throws InstanceGenerationException {
+        List<Method> setters = getSetters(objectClass);
+        setters.forEach((setter) -> generateFieldWithSetter(objectClass, setter));
+    }
 
-        List<Method> setters = Arrays.stream(objectClass.getDeclaredMethods())
-                .filter(method -> method.getName().startsWith("set"))
+    @NotNull
+    private static List<Method> getSetters(Class<?> objectClass) {
+        return Arrays.stream(objectClass.getDeclaredMethods())
+                .filter(method -> method.getName().startsWith(SETTER_PREFIX))
                 .toList();
-
-        for (Method setter : setters) {
-            String fieldName = Utils.getFieldNameFromSetterMethodName(setter.getName());
-            Field field = objectClass.getDeclaredField(fieldName);
-            generateField(object, setter, field);
-        }
-
     }
 
-    private void generateField(Object object, Method setter, Field field) throws InvocationTargetException, IllegalAccessException {
+    private void generateFieldWithSetter(Class<?> objectClass, Method setter) {
+        String fieldName = Utils.getFieldNameFromSetterMethodName(setter.getName());
+        try {
+            Field field = objectClass.getDeclaredField(fieldName);
+            generateField(setter, field);
+        } catch (NoSuchFieldException ignore) {
+            log.warn("no such field with name {} for setter {}", fieldName, setter.getName());
+        }
+    }
+
+    private void generateField(Method setter, Field field) throws InstanceGenerationException {
         Type type = field.getGenericType();
-        Object generated = randomGenerator.generate(type);
-        setter.invoke(object, generated);
+        Object generatedField = getRandomInstanceGenerator().generate(type);
+        try {
+            setter.invoke(generatedObject, generatedField);
+        } catch (IllegalAccessException ignore) {
+            //this will be ignored because if the setter is not accessible, we don't want to do anything
+            log.warn("setter {} in class {} is not accessible", setter.getName(), generatedObject.getClass().getName());
+        } catch (InvocationTargetException e) {
+            throw new InvocationSetterException(setter.getName(), generatedObject.getClass().getName(), e);
+        }
+    }
+
+    private void createNewInstance(Class<?> objectClass) throws InstanceGenerationException {
+        try {
+            setGeneratedObject(objectClass.getConstructor().newInstance());
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            throw new InstanceGenerationException(e);
+        } catch (NoSuchMethodException e) {
+            throw new NoAccessibleDefaultConstructorException(objectClass, e);
+        } catch (InstantiationException e) {
+            throw new AbstractClassInstantiationException(objectClass.getName(), e);
+        }
     }
 }

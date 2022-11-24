@@ -1,8 +1,8 @@
 package io.javarig.generator;
 
-public class DoubleGenerator implements Generator{
+public class DoubleGenerator extends AbstractTypeGenerator {
     @Override
     public Double generate() {
-        return random.nextDouble(0, Double.MAX_VALUE);
+        return getRandom().nextDouble(0, Double.MAX_VALUE);
     }
 }

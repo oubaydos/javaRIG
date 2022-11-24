@@ -8,12 +8,6 @@ public class ParameterizedTypeImpl implements ParameterizedType {
     private final Class<?>  rawType;
     private final Type   ownerType;
 
-    public ParameterizedTypeImpl(Type[] actualTypeArguments, Class<?> rawType, Type ownerType) {
-        this.actualTypeArguments = actualTypeArguments;
-        this.rawType = rawType;
-        this.ownerType = ownerType;
-    }
-
     public ParameterizedTypeImpl(Type[] actualTypeArguments, Class<?> rawType) {
         this.actualTypeArguments = actualTypeArguments;
         this.rawType = rawType;

@@ -1,4 +1,4 @@
-package io.javarig;
+package io.javarig.testclasses;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -6,8 +6,8 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
 
 /**
  * this is the test class for which we will be trying to generate random objects
@@ -22,12 +22,10 @@ import java.util.TreeSet;
 @ToString
 @Slf4j
 public class TestClass {
-    public static void main(String[] args) {
-
-    }
-    //    private TestClass2 testClass2;
+    private boolean b;
+    private short s;
+    private int i;
     private Map<String, String> m;
-    //    private List<String> s;
-    //    private TestEnum e;
+    private List<String> l;
 }
 
