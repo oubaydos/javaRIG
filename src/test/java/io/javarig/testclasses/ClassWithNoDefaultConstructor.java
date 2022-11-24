@@ -1,4 +1,4 @@
-package io.javarig;
+package io.javarig.testclasses;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

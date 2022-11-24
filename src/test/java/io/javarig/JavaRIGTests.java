@@ -1,8 +1,10 @@
 package io.javarig;
 
-import io.javarig.exception.InstanceGenerationException;
-import io.javarig.exception.NoDefaultConstructorException;
+import io.javarig.exception.AbstractClassInstantiationException;
+import io.javarig.exception.InvocationSetterException;
+import io.javarig.exception.NoAccessibleDefaultConstructorException;
 import io.javarig.exception.NoFieldAssociatedToSetter;
+import io.javarig.testclasses.*;
 import io.javarig.util.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -334,8 +337,8 @@ public class JavaRIGTests {
         assertThatThrownBy(() -> {//when
             randomGenerator.generate(type);
         })
-                .isInstanceOf(NoDefaultConstructorException.class)
-                .hasMessage("Class %s does not have default constructor, please create a default constructor for it".formatted(type.getName()));
+                .isInstanceOf(NoAccessibleDefaultConstructorException.class)
+                .hasMessage("Class %s does not have default constructor, or it's not accessible".formatted(type.getName()));
     }
 
     @Test
@@ -352,5 +355,48 @@ public class JavaRIGTests {
                 .isInstanceOf(NoFieldAssociatedToSetter.class)
                 .hasMessage("No field with name %s associated to setter with name %s".formatted(fieldName, setterName))
                 .hasCauseInstanceOf(NoSuchFieldException.class);
+    }
+
+    @Test
+    public void shouldThrowNoAccessibleDefaultConstructorExceptionWhenGivenAClassWithAPrivateConstructor() {
+        //given
+        Type type = ClassWithPrivateDefaultConstructor.class;
+
+        //then
+        assertThatThrownBy(() -> {//when
+            randomGenerator.generate(type);
+        })
+                .isInstanceOf(NoAccessibleDefaultConstructorException.class)
+                .hasMessage("Class %s does not have default constructor, or it's not accessible".formatted(type.getTypeName()))
+                .hasCauseInstanceOf(NoSuchMethodException.class);
+    }
+
+    @Test
+    public void shouldThrowAbstractClassInstantiationExceptionWhenGivenAnAbstractClass() {
+        //given
+        Type type = AbstractClass.class;
+
+        //then
+        assertThatThrownBy(() -> {//when
+            randomGenerator.generate(type);
+        })
+                .isInstanceOf(AbstractClassInstantiationException.class)
+                .hasMessage("%s is abstract. Can't instantiate an abstract class".formatted(type.getTypeName()))
+                .hasCauseInstanceOf(InstantiationException.class);
+    }
+
+    @Test
+    public void shouldThrowInvocationSetterExceptionWhenSetterThrowsAnException() {
+        //given
+        Type type = ClassWithSetterThatThrowsAnException.class;
+        String setterName = "setA";
+
+        //then
+        assertThatThrownBy(() -> {//when
+            randomGenerator.generate(type);
+        })
+                .isInstanceOf(InvocationSetterException.class)
+                .hasMessage("got an exception while invoking setter %s in class %s".formatted(setterName, type.getTypeName()))
+                .hasCauseInstanceOf(InvocationTargetException.class);
     }
 }

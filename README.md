@@ -29,7 +29,7 @@ Project Structure
         ├── ...    
             ├── io.javarig.Main              # the playground for testing our code
             ├── io.javarig.OldRandomGenerator   # the instance generator
-            ├── io.javarig.TestClass         # the test class for which we will be trying to generate random objects
+            ├── io.javarig.testclasses.TestClass         # the test class for which we will be trying to generate random objects
     ├── README.md, LICENSE...   # other files
 
 To build sources locally follow these instructions.

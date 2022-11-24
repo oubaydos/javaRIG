@@ -1,4 +1,4 @@
-package io.javarig;
+package io.javarig.testclasses;
 
 public class ClassWithNoFieldAssociatedToSetter {
     String s;
