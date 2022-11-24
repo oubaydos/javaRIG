@@ -341,7 +341,6 @@ public class JavaRIGTests {
     }
 
     @Test
-    @Disabled
     public void shouldLetFieldNullWhenGivenAClassWithASetterWithNoFieldAssociatedToIt() {
         //given
         Type type = ClassWithNoFieldAssociatedToSetter.class;
