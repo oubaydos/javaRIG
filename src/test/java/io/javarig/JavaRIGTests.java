@@ -2,9 +2,11 @@ package io.javarig;
 
 import io.javarig.exception.AbstractClassInstantiationException;
 import io.javarig.exception.InvocationSetterException;
+import io.javarig.exception.NestedObjectRecursionException;
 import io.javarig.exception.NoAccessibleDefaultConstructorException;
 import io.javarig.testclasses.*;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -396,5 +398,13 @@ public class JavaRIGTests {
                 .isInstanceOf(InvocationSetterException.class)
                 .hasMessage("got an exception while invoking setter %s in class %s".formatted(setterName, type.getTypeName()))
                 .hasCauseInstanceOf(InvocationTargetException.class);
+    }
+    @Test
+    public void shouldThrowNestedObjectException() {
+        //when
+        assertThatThrownBy(
+                () -> randomInstanceGenerator.generate(NestedClassTest.class)
+        ).isInstanceOf(NestedObjectRecursionException.class);
+        // then
     }
 }
