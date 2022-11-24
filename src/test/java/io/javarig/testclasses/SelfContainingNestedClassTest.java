@@ -7,7 +7,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Setter
 @ToString
-public class NestedClassTest {
+public class SelfContainingNestedClassTest {
     private String tempString;
-    private NestedClassTest nestedClassTest;
+    private SelfContainingNestedClassTest selfContainingNestedClassTest;
 }
