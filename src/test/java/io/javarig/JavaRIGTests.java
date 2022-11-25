@@ -6,7 +6,6 @@ import io.javarig.exception.NestedObjectRecursionException;
 import io.javarig.exception.NoAccessibleDefaultConstructorException;
 import io.javarig.testclasses.*;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -417,9 +416,10 @@ public class JavaRIGTests {
         assertThat(generated)
                 .isNotNull()
                 .isInstanceOf(NestedClass.class);
-        NestedClass nestedClass = (NestedClass) generated;
-        assertThat(nestedClass)
-                .extracting(NestedClass::getTestClasses)
-                .isNotNull();
+        assertThat(generated)
+                .extracting("testClass")
+                .isNotNull()
+                .isInstanceOf(TestClass.class);
+
     }
 }

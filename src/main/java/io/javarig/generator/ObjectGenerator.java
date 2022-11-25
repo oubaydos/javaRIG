@@ -20,21 +20,20 @@ import java.util.List;
 public class ObjectGenerator extends AbstractTypeGenerator implements TypeBasedGenerator {
     private static final String SETTER_PREFIX = "set";
     private Type type;
-    private Object generatedObject;
 
     @Override
     public Object generate() throws InstanceGenerationException {
         Class<?> objectClass = (Class<?>) getType();
-        createNewInstance(objectClass);
+        Object generatedObject = createNewInstance(objectClass);
         log.info("generating object of type {} ...", objectClass.getName());
-        generateFields(objectClass);
+        generateFields(generatedObject, objectClass);
         log.info("created object {}", generatedObject);
         return generatedObject;
     }
 
-    private void generateFields(Class<?> objectClass) throws InstanceGenerationException {
+    private void generateFields(Object generatedObject, Class<?> objectClass) throws InstanceGenerationException {
         List<Method> setters = getSetters(objectClass);
-        setters.forEach((setter) -> generateFieldWithSetter(objectClass, setter));
+        setters.forEach((setter) -> generateFieldWithSetter(generatedObject, objectClass, setter));
     }
 
     @NotNull
@@ -44,17 +43,17 @@ public class ObjectGenerator extends AbstractTypeGenerator implements TypeBasedG
                 .toList();
     }
 
-    private void generateFieldWithSetter(Class<?> objectClass, Method setter) {
+    private void generateFieldWithSetter(Object generatedObject, Class<?> objectClass, Method setter) {
         String fieldName = Utils.getFieldNameFromSetterMethodName(setter.getName());
         try {
             Field field = objectClass.getDeclaredField(fieldName);
-            generateField(setter, field);
+            generateField(generatedObject, setter, field);
         } catch (NoSuchFieldException ignore) {
             log.warn("no such field with name {} for setter {}", fieldName, setter.getName());
         }
     }
 
-    private void generateField(Method setter, Field field) throws InstanceGenerationException {
+    private void generateField(Object generatedObject, Method setter, Field field) throws InstanceGenerationException {
         Type type = field.getGenericType();
         Object generatedField = getRandomInstanceGenerator().generate(type);
         try {
@@ -67,9 +66,9 @@ public class ObjectGenerator extends AbstractTypeGenerator implements TypeBasedG
         }
     }
 
-    private void createNewInstance(Class<?> objectClass) throws InstanceGenerationException {
+    private Object createNewInstance(Class<?> objectClass) throws InstanceGenerationException {
         try {
-            setGeneratedObject(objectClass.getConstructor().newInstance());
+            return objectClass.getConstructor().newInstance();
         } catch (InvocationTargetException | IllegalAccessException e) {
             throw new InstanceGenerationException(e);
         } catch (NoSuchMethodException e) {
