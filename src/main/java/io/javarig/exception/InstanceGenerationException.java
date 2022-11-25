@@ -1,5 +1,8 @@
 package io.javarig.exception;
 
+/**
+ * Base exception for all javaRIG exceptions
+ */
 public class InstanceGenerationException extends RuntimeException{
     public InstanceGenerationException(Throwable cause) {
         super(cause);
