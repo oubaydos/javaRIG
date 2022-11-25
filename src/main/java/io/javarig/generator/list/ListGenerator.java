@@ -15,8 +15,8 @@ import java.util.List;
 
 /**
  * a type generator that generates a list instance,
- *
- * @implNote generates an ArrayList if not given otherwise
+ * <p>
+ * note: generates an ArrayList if not given otherwise
  */
 @Setter
 @Getter

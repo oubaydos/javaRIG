@@ -13,8 +13,8 @@ import java.util.Map;
 
 /**
  * a type generator that generates a map instance,
- *
- * @implNote generates a hashmap if not given otherwise
+ * <p>
+ * Note: generates a hashmap if not given otherwise
  */
 @Getter
 @Setter
@@ -38,9 +38,9 @@ public abstract class MapGenerator extends AbstractTypeGenerator implements Type
     }
 
     /**
-     * generates a map of random <key,values>
+     * generates a map of random key,value pairs
      *
-     * @param type the actual type of the map that contains the types of the <key, value>
+     * @param type the actual type of the map that contains the types of the key,value pairs
      */
     public Map<Object, Object> generate(ParameterizedType type, int size) throws InstanceGenerationException {
         Type keyType = type.getActualTypeArguments()[0];
