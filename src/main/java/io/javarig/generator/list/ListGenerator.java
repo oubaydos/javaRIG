@@ -13,6 +13,11 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 
+/**
+ * a type generator that generates a list instance,
+ *
+ * @implNote generates an ArrayList if not given otherwise
+ */
 @Setter
 @Getter
 @SuppressWarnings({"rawtypes", "unchecked"})
@@ -32,6 +37,11 @@ public abstract class ListGenerator extends AbstractTypeGenerator implements Col
         return generate(listParameterType, randomSize);
     }
 
+    /**
+     * generates a list of random values
+     *
+     * @param listParameterType the type of the values inside the list
+     */
     @NotNull
     public List<Object> generate(Type listParameterType, int size) throws InstanceGenerationException {
         List<Object> outputList = getNewListInstance(size);
@@ -46,7 +56,7 @@ public abstract class ListGenerator extends AbstractTypeGenerator implements Col
         try {
             return getImplementationType().getConstructor(int.class).newInstance(size);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                 NoSuchMethodException e) {
+                NoSuchMethodException e) {
             throw new InstanceGenerationException(e);
         }
     }
