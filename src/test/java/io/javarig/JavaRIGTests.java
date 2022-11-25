@@ -6,9 +6,7 @@ import io.javarig.exception.NestedObjectRecursionException;
 import io.javarig.exception.NoAccessibleDefaultConstructorException;
 import io.javarig.testclasses.*;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -399,12 +397,29 @@ public class JavaRIGTests {
                 .hasMessage("got an exception while invoking setter %s in class %s".formatted(setterName, type.getTypeName()))
                 .hasCauseInstanceOf(InvocationTargetException.class);
     }
+
     @Test
-    public void shouldThrowNestedObjectException() {
+    public void shouldThrowNestedObjectExceptionWhenGivenSelfContainingClass() {
         //when
         assertThatThrownBy(
-                () -> randomInstanceGenerator.generate(NestedClassTest.class)
+                () -> randomInstanceGenerator.generate(SelfContainingNestedClassTest.class)
         ).isInstanceOf(NestedObjectRecursionException.class);
         // then
+    }
+
+    @Test
+    public void shouldReturnObjectForNestedClasses() {
+        //when
+        Object generated = randomInstanceGenerator.generate(NestedClass.class);
+        //then
+        log.info("shouldReturnAnObjectInstance : {}", generated);
+        assertThat(generated)
+                .isNotNull()
+                .isInstanceOf(NestedClass.class);
+        assertThat(generated)
+                .extracting("testClass")
+                .isNotNull()
+                .isInstanceOf(TestClass.class);
+
     }
 }
