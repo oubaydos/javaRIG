@@ -15,5 +15,5 @@ import java.util.Random;
 @Getter
 public abstract class AbstractTypeGenerator implements TypeGenerator {
     private Random random = new Random();
-    private RandomInstanceGenerator randomInstanceGenerator;
+    private RandomInstanceGenerator randomInstanceGenerator = new RandomInstanceGenerator();
 }

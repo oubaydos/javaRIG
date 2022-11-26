@@ -1,9 +1,6 @@
 package io.javarig;
 
-import io.javarig.exception.AbstractClassInstantiationException;
-import io.javarig.exception.InvocationSetterException;
-import io.javarig.exception.NestedObjectRecursionException;
-import io.javarig.exception.NoAccessibleDefaultConstructorException;
+import io.javarig.exception.*;
 import io.javarig.testclasses.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +20,7 @@ import static org.assertj.core.api.InstanceOfAssertFactories.*;
 
 
 @Slf4j
-public class JavaRIGTests {
+public class RandomInstanceGeneratorTest {
     private RandomInstanceGenerator randomInstanceGenerator;
 
     @BeforeEach
@@ -335,9 +332,7 @@ public class JavaRIGTests {
         //then
         assertThatThrownBy(() -> {//when
             randomInstanceGenerator.generate(type);
-        })
-                .isInstanceOf(NoAccessibleDefaultConstructorException.class)
-                .hasMessage("Class %s does not have default constructor, or it's not accessible".formatted(type.getName()));
+        }).isInstanceOf(NoAccessibleDefaultConstructorException.class).hasMessage("Class %s does not have default constructor, or it's not accessible".formatted(type.getName()));
     }
 
     @Test
@@ -347,12 +342,8 @@ public class JavaRIGTests {
         //when
         ClassWithNoFieldAssociatedToSetter generated = randomInstanceGenerator.generate(type);
         //then
-        assertThat(generated)
-                .isNotNull()
-                .extracting(ClassWithNoFieldAssociatedToSetter::getS)
-                .isNull();
-        assertThat(generated.getA())
-                .isNotNull();
+        assertThat(generated).isNotNull().extracting(ClassWithNoFieldAssociatedToSetter::getS).isNull();
+        assertThat(generated).extracting(ClassWithNoFieldAssociatedToSetter::getA).isNotNull();
     }
 
     @Test
@@ -363,10 +354,7 @@ public class JavaRIGTests {
         //then
         assertThatThrownBy(() -> {//when
             randomInstanceGenerator.generate(type);
-        })
-                .isInstanceOf(NoAccessibleDefaultConstructorException.class)
-                .hasMessage("Class %s does not have default constructor, or it's not accessible".formatted(type.getTypeName()))
-                .hasCauseInstanceOf(NoSuchMethodException.class);
+        }).isInstanceOf(NoAccessibleDefaultConstructorException.class).hasMessage("Class %s does not have default constructor, or it's not accessible".formatted(type.getTypeName())).hasCauseInstanceOf(NoSuchMethodException.class);
     }
 
     @Test
@@ -377,10 +365,7 @@ public class JavaRIGTests {
         //then
         assertThatThrownBy(() -> {//when
             randomInstanceGenerator.generate(type);
-        })
-                .isInstanceOf(AbstractClassInstantiationException.class)
-                .hasMessage("%s is abstract. Can't instantiate an abstract class".formatted(type.getTypeName()))
-                .hasCauseInstanceOf(InstantiationException.class);
+        }).isInstanceOf(AbstractClassInstantiationException.class).hasMessage("%s is abstract. Can't instantiate an abstract class".formatted(type.getTypeName())).hasCauseInstanceOf(InstantiationException.class);
     }
 
     @Test
@@ -392,19 +377,12 @@ public class JavaRIGTests {
         //then
         assertThatThrownBy(() -> {//when
             randomInstanceGenerator.generate(type);
-        })
-                .isInstanceOf(InvocationSetterException.class)
-                .hasMessage("got an exception while invoking setter %s in class %s".formatted(setterName, type.getTypeName()))
-                .hasCauseInstanceOf(InvocationTargetException.class);
+        }).isInstanceOf(InvocationSetterException.class).hasMessage("got an exception while invoking setter %s in class %s".formatted(setterName, type.getTypeName())).hasCauseInstanceOf(InvocationTargetException.class);
     }
 
     @Test
     public void shouldThrowNestedObjectExceptionWhenGivenSelfContainingClass() {
-        //when
-        assertThatThrownBy(
-                () -> randomInstanceGenerator.generate(SelfContainingNestedClassTest.class)
-        ).isInstanceOf(NestedObjectRecursionException.class);
-        // then
+        assertThatThrownBy(() -> randomInstanceGenerator.generate(SelfContainingNestedClassTest.class)).isInstanceOf(NestedObjectRecursionException.class);
     }
 
     @Test
@@ -413,13 +391,44 @@ public class JavaRIGTests {
         Object generated = randomInstanceGenerator.generate(NestedClass.class);
         //then
         log.info("shouldReturnAnObjectInstance : {}", generated);
-        assertThat(generated)
-                .isNotNull()
-                .isInstanceOf(NestedClass.class);
-        assertThat(generated)
-                .extracting("testClass")
-                .isNotNull()
-                .isInstanceOf(TestClass.class);
+        assertThat(generated).isNotNull().isInstanceOf(NestedClass.class);
+        assertThat(generated).extracting("testClass").isNotNull().isInstanceOf(TestClass.class);
 
+    }
+
+    @Test
+    public void shouldThrowInvalidGenericParamsNumberExceptionWhenTryingToGenerateAListWithAZeroGenericParams() {
+        int required = 1;
+        assertThatThrownBy(() -> randomInstanceGenerator.generate(List.class))
+                .isInstanceOf(InvalidGenericParamsNumberException.class)
+                .hasMessage("invalid number of generic parameters, required %d and 0 was found".formatted(required));
+    }
+
+    @Test
+    public void shouldThrowInvalidGenericParamsNumberExceptionWhenTryingToGenerateAListWithAMoreThanOneGenericParams() {
+        int required = 1;
+        Type[] genericParams = new Type[]{String.class, Integer.class};
+        assertThatThrownBy(() -> randomInstanceGenerator.generate(List.class, genericParams))
+                .isInstanceOf(InvalidGenericParamsNumberException.class)
+                .hasMessage("invalid number of generic parameters, required %d and %d was found".formatted(required, genericParams.length));
+    }
+
+    @Test
+    public void shouldThrowInvalidGenericParamsNumberExceptionWhenTryingToGenerateAMapWithAZeroGenericParams() {
+        int required = 2;
+        assertThatThrownBy(() -> randomInstanceGenerator.generate(Map.class))
+                .isInstanceOf(InvalidGenericParamsNumberException.class)
+                .hasMessage("invalid number of generic parameters, required %d and 0 was found".formatted(required));
+    }
+
+
+    @Test
+    public void shouldThrowInvalidGenericParamsNumberExceptionWhenTryingToGenerateAMapWithAMoreThanTwoGenericParams() {
+        int required = 2;
+        Type[] genericParams = new Type[]{String.class, Integer.class, Character.class};
+
+        assertThatThrownBy(() -> randomInstanceGenerator.generate(Map.class, genericParams))
+                .isInstanceOf(InvalidGenericParamsNumberException.class)
+                .hasMessage("invalid number of generic parameters, required %d and %d was found".formatted(required, genericParams.length));
     }
 }

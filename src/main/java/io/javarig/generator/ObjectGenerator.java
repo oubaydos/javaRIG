@@ -24,7 +24,7 @@ public class ObjectGenerator extends AbstractTypeGenerator implements TypeBasedG
     @Override
     public Object generate() throws InstanceGenerationException {
         Class<?> objectClass = (Class<?>) getType();
-        Object generatedObject = createNewInstance(objectClass);
+        Object generatedObject = getNewObjectInstance(objectClass);
         log.info("generating object of type {} ...", objectClass.getName());
         generateFields(generatedObject, objectClass);
         log.info("created object {}", generatedObject);
@@ -44,7 +44,7 @@ public class ObjectGenerator extends AbstractTypeGenerator implements TypeBasedG
     }
 
     private void generateFieldWithSetter(Object generatedObject, Class<?> objectClass, Method setter) {
-        String fieldName = Utils.getFieldNameFromSetterMethodName(setter.getName());
+        String fieldName = Utils.getFieldNameFromSetterMethodName(setter.getName(),SETTER_PREFIX);
         try {
             Field field = objectClass.getDeclaredField(fieldName);
             generateField(generatedObject, setter, field);
@@ -66,7 +66,7 @@ public class ObjectGenerator extends AbstractTypeGenerator implements TypeBasedG
         }
     }
 
-    private Object createNewInstance(Class<?> objectClass) throws InstanceGenerationException {
+    private Object getNewObjectInstance(Class<?> objectClass) throws InstanceGenerationException {
         try {
             return objectClass.getConstructor().newInstance();
         } catch (InvocationTargetException | IllegalAccessException e) {

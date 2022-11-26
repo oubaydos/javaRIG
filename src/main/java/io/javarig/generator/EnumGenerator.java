@@ -12,7 +12,7 @@ public class EnumGenerator extends AbstractTypeGenerator implements TypeBasedGen
 
     @Override
     public Object generate() {
-        Object[] enumConstants = ((Class<?>) type).getEnumConstants();
+        Object[] enumConstants = ((Class<?>) getType()).getEnumConstants();
         if (enumConstants.length == 0) {
             return null;
         }
