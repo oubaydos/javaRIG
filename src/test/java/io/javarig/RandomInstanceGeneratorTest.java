@@ -23,7 +23,7 @@ import static org.assertj.core.api.InstanceOfAssertFactories.*;
 
 
 @Slf4j
-public class JavaRIGTests {
+public class RandomInstanceGeneratorTest {
     private RandomInstanceGenerator randomInstanceGenerator;
 
     @BeforeEach
@@ -351,7 +351,8 @@ public class JavaRIGTests {
                 .isNotNull()
                 .extracting(ClassWithNoFieldAssociatedToSetter::getS)
                 .isNull();
-        assertThat(generated.getA())
+        assertThat(generated)
+                .extracting(ClassWithNoFieldAssociatedToSetter::getA)
                 .isNotNull();
     }
 

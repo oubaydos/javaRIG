@@ -11,4 +11,8 @@ public class InstanceGenerationException extends RuntimeException{
     public InstanceGenerationException(String message, Throwable cause) {
         super(message, cause);
     }
+
+    public InstanceGenerationException(String message) {
+        super(message);
+    }
 }
