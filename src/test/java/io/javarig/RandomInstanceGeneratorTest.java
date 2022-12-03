@@ -399,7 +399,7 @@ public class RandomInstanceGeneratorTest {
     public void shouldThrowInvalidGenericParamsNumberExceptionWhenTryingToGenerateAListWithAZeroGenericParams() {
         int required = 1;
         assertThatThrownBy(() -> randomInstanceGenerator.generate(List.class))
-                .isInstanceOf(InvalidGenericParamsNumberException.class)
+                .isInstanceOf(InvalidGenericParametersNumberException.class)
                 .hasMessage("invalid number of generic parameters, required %d and 0 was found".formatted(required));
     }
 
@@ -408,7 +408,7 @@ public class RandomInstanceGeneratorTest {
         int required = 1;
         Type[] genericParams = new Type[]{String.class, Integer.class};
         assertThatThrownBy(() -> randomInstanceGenerator.generate(List.class, genericParams))
-                .isInstanceOf(InvalidGenericParamsNumberException.class)
+                .isInstanceOf(InvalidGenericParametersNumberException.class)
                 .hasMessage("invalid number of generic parameters, required %d and %d was found".formatted(required, genericParams.length));
     }
 
@@ -416,7 +416,7 @@ public class RandomInstanceGeneratorTest {
     public void shouldThrowInvalidGenericParamsNumberExceptionWhenTryingToGenerateAMapWithAZeroGenericParams() {
         int required = 2;
         assertThatThrownBy(() -> randomInstanceGenerator.generate(Map.class))
-                .isInstanceOf(InvalidGenericParamsNumberException.class)
+                .isInstanceOf(InvalidGenericParametersNumberException.class)
                 .hasMessage("invalid number of generic parameters, required %d and 0 was found".formatted(required));
     }
 
@@ -427,7 +427,20 @@ public class RandomInstanceGeneratorTest {
         Type[] genericParams = new Type[]{String.class, Integer.class, Character.class};
 
         assertThatThrownBy(() -> randomInstanceGenerator.generate(Map.class, genericParams))
-                .isInstanceOf(InvalidGenericParamsNumberException.class)
+                .isInstanceOf(InvalidGenericParametersNumberException.class)
                 .hasMessage("invalid number of generic parameters, required %d and %d was found".formatted(required, genericParams.length));
     }
+    @Test
+    public void shouldThrowInstanceGenerationExceptionWhenConstructorThrowsAnException(){
+        //given
+        Class<?> type = ClassWithDefaultConstructorThrowingException.class;
+
+        //then
+        assertThatThrownBy(() -> {//when
+            randomInstanceGenerator.generate(type);
+        }).isInstanceOf(InstanceGenerationException.class)
+                .hasCauseInstanceOf(InvocationTargetException.class);
+
+    }
+
 }

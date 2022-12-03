@@ -2,7 +2,6 @@ package io.javarig.generator.list;
 
 import io.javarig.exception.InstanceGenerationException;
 import io.javarig.exception.NewInstanceCreationException;
-import io.javarig.exception.InvalidGenericParamsNumberException;
 import io.javarig.generator.AbstractTypeGenerator;
 import io.javarig.generator.CollectionGenerator;
 import io.javarig.generator.GenericTypeGenerator;

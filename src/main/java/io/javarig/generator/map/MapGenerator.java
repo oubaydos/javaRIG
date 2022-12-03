@@ -1,7 +1,6 @@
 package io.javarig.generator.map;
 
 import io.javarig.exception.InstanceGenerationException;
-import io.javarig.exception.InvalidGenericParamsNumberException;
 import io.javarig.exception.NewInstanceCreationException;
 import io.javarig.generator.AbstractTypeGenerator;
 import io.javarig.generator.CollectionGenerator;
