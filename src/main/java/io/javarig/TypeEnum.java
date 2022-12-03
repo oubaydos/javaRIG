@@ -32,7 +32,6 @@ public enum TypeEnum {
     TREE_MAP(List.of(TreeMap.class), new TreeMapGenerator()),
     LIST(List.of(List.class), new ArrayListGenerator()),
     ARRAY_LIST(List.of(ArrayList.class), new ArrayListGenerator()),
-
     ENUM(List.of(), new EnumGenerator()),
     OBJECT(List.of(), new ObjectGenerator());
 
