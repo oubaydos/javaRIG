@@ -17,9 +17,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 /**
- * a type generator that generates a list instance,
- * <p>
- * note: generates an ArrayList if not given otherwise
+ * a type generator that generates a list instance
  */
 @Setter
 @Getter

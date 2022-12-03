@@ -177,7 +177,6 @@ public class RandomInstanceGeneratorTest {
         //given
         Class<?> keyType = String.class;
         Class<?> valueType = Integer.class;
-
         //when
         Object generated = randomInstanceGenerator.generate(mapClass, keyType, valueType);
         //then

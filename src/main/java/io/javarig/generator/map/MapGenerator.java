@@ -17,9 +17,7 @@ import java.lang.reflect.Type;
 import java.util.Map;
 
 /**
- * a type generator that generates a map instance,
- * <p>
- * Note: generates a hashmap if not given otherwise
+ * a type generator that generates a map instance
  */
 @Getter
 @Setter
