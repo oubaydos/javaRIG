@@ -59,7 +59,8 @@ public class ObjectGenerator extends AbstractTypeGenerator implements TypeBasedG
         try {
             setter.invoke(generatedObject, generatedField);
         } catch (IllegalAccessException ignore) {
-            //this will be ignored because if the setter is not accessible, we don't want to do anything
+            // this will be ignored because if the setter is not accessible (i.e. has a non-public access modifier)
+            // we don't want to do anything
             log.warn("setter {} in class {} is not accessible", setter.getName(), generatedObject.getClass().getName());
         } catch (InvocationTargetException e) {
             throw new InvocationSetterException(setter.getName(), generatedObject.getClass().getName(), e);
