@@ -445,17 +445,26 @@ public class RandomInstanceGeneratorTest {
     }
 
     @Test
-    public void test() {
+    public void shouldGenerateObjectIgnoringFieldsWithNonPublicSetters() {
         //given
-        Object generatedObject = randomInstanceGenerator.generate(ClassWithPrivateSetter.class);
+        Object generatedObject = randomInstanceGenerator.generate(ClassWithSomeNonPublicSetters.class);
         // then
         assertThat(generatedObject)
                 .isNotNull()
-                .isInstanceOf(ClassWithPrivateSetter.class);
-        ClassWithPrivateSetter generatedClassWithPrivateSetter = (ClassWithPrivateSetter) generatedObject;
-        assertThat(generatedClassWithPrivateSetter)
-                .extracting(ClassWithPrivateSetter::getA)
+                .isInstanceOf(ClassWithSomeNonPublicSetters.class);
+        ClassWithSomeNonPublicSetters generatedClassWithSomeNonPublicSetters = (ClassWithSomeNonPublicSetters) generatedObject;
+        assertThat(generatedClassWithSomeNonPublicSetters)
+                .extracting(ClassWithSomeNonPublicSetters::getIntegerWithPrivateSetter)
                 .isNull();
+        assertThat(generatedClassWithSomeNonPublicSetters)
+                .extracting(ClassWithSomeNonPublicSetters::getIntegerWithProtectedSetter)
+                .isNull();
+        assertThat(generatedClassWithSomeNonPublicSetters)
+                .extracting(ClassWithSomeNonPublicSetters::getFloatWithDefaultAccessModifierSetter)
+                .isNull();
+        assertThat(generatedClassWithSomeNonPublicSetters)
+                .extracting(ClassWithSomeNonPublicSetters::getDoubleWithPublicSetter)
+                .isNotNull();
     }
 
 }
