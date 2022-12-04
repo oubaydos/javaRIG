@@ -430,8 +430,9 @@ public class RandomInstanceGeneratorTest {
                 .isInstanceOf(InvalidGenericParametersNumberException.class)
                 .hasMessage("invalid number of generic parameters, required %d and %d was found".formatted(required, genericParams.length));
     }
+
     @Test
-    public void shouldThrowInstanceGenerationExceptionWhenConstructorThrowsAnException(){
+    public void shouldThrowInstanceGenerationExceptionWhenConstructorThrowsAnException() {
         //given
         Class<?> type = ClassWithDefaultConstructorThrowingException.class;
 
@@ -441,6 +442,20 @@ public class RandomInstanceGeneratorTest {
         }).isInstanceOf(InstanceGenerationException.class)
                 .hasCauseInstanceOf(InvocationTargetException.class);
 
+    }
+
+    @Test
+    public void test() {
+        //given
+        Object generatedObject = randomInstanceGenerator.generate(ClassWithPrivateSetter.class);
+        // then
+        assertThat(generatedObject)
+                .isNotNull()
+                .isInstanceOf(ClassWithPrivateSetter.class);
+        ClassWithPrivateSetter generatedClassWithPrivateSetter = (ClassWithPrivateSetter) generatedObject;
+        assertThat(generatedClassWithPrivateSetter)
+                .extracting(ClassWithPrivateSetter::getA)
+                .isNull();
     }
 
 }
