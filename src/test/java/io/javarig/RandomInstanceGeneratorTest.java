@@ -14,9 +14,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.InstanceOfAssertFactories.*;
+import static org.assertj.core.api.Assertions.*;
 
 
 @Slf4j
@@ -465,6 +463,26 @@ public class RandomInstanceGeneratorTest {
         assertThat(generatedClassWithSomeNonPublicSetters)
                 .extracting(ClassWithSomeNonPublicSetters::getDoubleWithPublicSetter)
                 .isNotNull();
+    }
+
+    @Test
+    public void shouldGenerateObjectWithFieldsContainingSetterPrefix() {
+        //given
+        Object generatedObject = randomInstanceGenerator.generate(ClassWithFieldContainingSetterPrefix.class);
+        // then
+        assertThat(generatedObject)
+                .isNotNull()
+                .isInstanceOf(ClassWithFieldContainingSetterPrefix.class);
+        ClassWithFieldContainingSetterPrefix generatedObjectWithFieldContainingSetterPrefix = (ClassWithFieldContainingSetterPrefix) generatedObject;
+        assertThat(generatedObjectWithFieldContainingSetterPrefix)
+                .extracting(ClassWithFieldContainingSetterPrefix::getSettersList)
+                .asList()
+                .isNotNull()
+                .hasSizeBetween(5, 15)// could be better if we had access to collectionGenerator defaultMin defaultMax size as public static fields
+                .element(0)
+                .isNotNull()
+                .asString()
+                .isNotEmpty();
     }
 
 }
