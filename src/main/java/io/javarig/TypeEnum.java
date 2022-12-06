@@ -44,28 +44,65 @@ public enum TypeEnum {
         this.generator = generator;
     }
 
-    public static TypeEnum getTypeEnum(Type type, RandomInstanceGenerator randomGenerator) {
-        Type rawType = type;
-        if (type instanceof ParameterizedType parameterizedType) rawType = parameterizedType.getRawType();
-        Class<?> finalType = (Class<?>) rawType;
-        TypeEnum typeEnum = Arrays.stream(TypeEnum.values())
-                .filter(tEnum -> tEnum.values.contains(finalType))
-                .findFirst()
-                .orElseGet(() -> getObjectIfNotEnum(finalType));
-        typeEnum.setType(type);
-        typeEnum.setRandomGenerator(randomGenerator);
+    /**
+     * gets a TypeEnum instance and prepare its generator
+     *
+     * @param type                    Type instance to get its associated TypeEnum
+     * @param randomInstanceGenerator instance that will be used to generate nested objects
+     * @return TypeEnum instance associated to the type object with generator prepared with necessary objects
+     */
+    public static TypeEnum getTypeEnum(Type type, RandomInstanceGenerator randomInstanceGenerator) {
+        Type rawType = getRawType(type);
+        TypeEnum typeEnum = getTypeEnumFromType(rawType);
+        prepareGenerator(type, randomInstanceGenerator, typeEnum);
         return typeEnum;
     }
 
+    /**
+     * prepare the generator with setting its randomInstanceGenerator and type fields
+     *
+     * @param type                    Type instance
+     * @param randomInstanceGenerator RandomInstanceGenerator that will be used in generating nested objects
+     * @param typeEnum                TypeEnum instance that we prepare its generator
+     */
+    private static void prepareGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator, TypeEnum typeEnum) {
+        typeEnum.setType(type);
+        typeEnum.setRandomInstanceGenerator(randomInstanceGenerator);
+    }
+
+    /**
+     * gets the rawType if type is instance of parameterizedType, returns type otherwise
+     *
+     * @param type Type instance
+     * @return the rawType of the type object
+     */
+    private static Type getRawType(Type type) {
+        if (type instanceof ParameterizedType parameterizedType) {
+            return parameterizedType.getRawType();
+        }
+        return type;
+    }
+
+    /**
+     * gets the TypeEnum associated to the type object
+     */
     @NotNull
-    private static TypeEnum getObjectIfNotEnum(Class<?> finalType) {
-        if (finalType.isEnum())
+    private static TypeEnum getTypeEnumFromType(Type type) {
+        return Arrays.stream(TypeEnum.values())
+                .filter(tEnum -> tEnum.values.contains(type))
+                .findFirst()
+                .orElseGet(() -> getObjectIfNotEnum(type));
+    }
+
+    @NotNull
+    private static TypeEnum getObjectIfNotEnum(Type type) {
+        if (((Class<?>) type).isEnum())
             return ENUM;
         return OBJECT;
     }
 
-    private void setRandomGenerator(RandomInstanceGenerator randomGenerator) {
-        this.generator.setRandomInstanceGenerator(randomGenerator);
+    private void setRandomInstanceGenerator(RandomInstanceGenerator randomInstanceGenerator) {
+        this.generator.setRandomInstanceGenerator(randomInstanceGenerator);
     }
 
     public TypeGenerator generator() {
