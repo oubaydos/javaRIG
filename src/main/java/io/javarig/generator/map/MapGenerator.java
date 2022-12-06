@@ -1,7 +1,6 @@
 package io.javarig.generator.map;
 
 import io.javarig.exception.InstanceGenerationException;
-import io.javarig.exception.InvalidGenericParamsNumberException;
 import io.javarig.exception.NewInstanceCreationException;
 import io.javarig.generator.AbstractTypeGenerator;
 import io.javarig.generator.CollectionGenerator;
@@ -17,9 +16,7 @@ import java.lang.reflect.Type;
 import java.util.Map;
 
 /**
- * a type generator that generates a map instance,
- * <p>
- * Note: generates a hashmap if not given otherwise
+ * a type generator that generates a map instance
  */
 @Getter
 @Setter

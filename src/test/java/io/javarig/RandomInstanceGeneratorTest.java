@@ -177,7 +177,6 @@ public class RandomInstanceGeneratorTest {
         //given
         Class<?> keyType = String.class;
         Class<?> valueType = Integer.class;
-
         //when
         Object generated = randomInstanceGenerator.generate(mapClass, keyType, valueType);
         //then
@@ -400,7 +399,7 @@ public class RandomInstanceGeneratorTest {
     public void shouldThrowInvalidGenericParamsNumberExceptionWhenTryingToGenerateAListWithAZeroGenericParams() {
         int required = 1;
         assertThatThrownBy(() -> randomInstanceGenerator.generate(List.class))
-                .isInstanceOf(InvalidGenericParamsNumberException.class)
+                .isInstanceOf(InvalidGenericParametersNumberException.class)
                 .hasMessage("invalid number of generic parameters, required %d and 0 was found".formatted(required));
     }
 
@@ -409,7 +408,7 @@ public class RandomInstanceGeneratorTest {
         int required = 1;
         Type[] genericParams = new Type[]{String.class, Integer.class};
         assertThatThrownBy(() -> randomInstanceGenerator.generate(List.class, genericParams))
-                .isInstanceOf(InvalidGenericParamsNumberException.class)
+                .isInstanceOf(InvalidGenericParametersNumberException.class)
                 .hasMessage("invalid number of generic parameters, required %d and %d was found".formatted(required, genericParams.length));
     }
 
@@ -417,7 +416,7 @@ public class RandomInstanceGeneratorTest {
     public void shouldThrowInvalidGenericParamsNumberExceptionWhenTryingToGenerateAMapWithAZeroGenericParams() {
         int required = 2;
         assertThatThrownBy(() -> randomInstanceGenerator.generate(Map.class))
-                .isInstanceOf(InvalidGenericParamsNumberException.class)
+                .isInstanceOf(InvalidGenericParametersNumberException.class)
                 .hasMessage("invalid number of generic parameters, required %d and 0 was found".formatted(required));
     }
 
@@ -428,7 +427,44 @@ public class RandomInstanceGeneratorTest {
         Type[] genericParams = new Type[]{String.class, Integer.class, Character.class};
 
         assertThatThrownBy(() -> randomInstanceGenerator.generate(Map.class, genericParams))
-                .isInstanceOf(InvalidGenericParamsNumberException.class)
+                .isInstanceOf(InvalidGenericParametersNumberException.class)
                 .hasMessage("invalid number of generic parameters, required %d and %d was found".formatted(required, genericParams.length));
     }
+
+    @Test
+    public void shouldThrowInstanceGenerationExceptionWhenConstructorThrowsAnException() {
+        //given
+        Class<?> type = ClassWithDefaultConstructorThrowingException.class;
+
+        //then
+        assertThatThrownBy(() -> {//when
+            randomInstanceGenerator.generate(type);
+        }).isInstanceOf(InstanceGenerationException.class)
+                .hasCauseInstanceOf(InvocationTargetException.class);
+
+    }
+
+    @Test
+    public void shouldGenerateObjectIgnoringFieldsWithNonPublicSetters() {
+        //given
+        Object generatedObject = randomInstanceGenerator.generate(ClassWithSomeNonPublicSetters.class);
+        // then
+        assertThat(generatedObject)
+                .isNotNull()
+                .isInstanceOf(ClassWithSomeNonPublicSetters.class);
+        ClassWithSomeNonPublicSetters generatedClassWithSomeNonPublicSetters = (ClassWithSomeNonPublicSetters) generatedObject;
+        assertThat(generatedClassWithSomeNonPublicSetters)
+                .extracting(ClassWithSomeNonPublicSetters::getIntegerWithPrivateSetter)
+                .isNull();
+        assertThat(generatedClassWithSomeNonPublicSetters)
+                .extracting(ClassWithSomeNonPublicSetters::getIntegerWithProtectedSetter)
+                .isNull();
+        assertThat(generatedClassWithSomeNonPublicSetters)
+                .extracting(ClassWithSomeNonPublicSetters::getFloatWithDefaultAccessModifierSetter)
+                .isNull();
+        assertThat(generatedClassWithSomeNonPublicSetters)
+                .extracting(ClassWithSomeNonPublicSetters::getDoubleWithPublicSetter)
+                .isNotNull();
+    }
+
 }
