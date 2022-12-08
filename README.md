@@ -55,7 +55,7 @@ this project is _in progress_, many things are not yet started
 License
 -------
 
-Copyright (c) 2021 {Obaydah Bouifadene, Hamza Ben Yazid, Ismail Mosleh, Ibrahim Mestadi}
+Copyright (c) 2022 {Obaydah Bouifadene, Hamza Ben Yazid, Ismail Mosleh, Ibrahim Mestadi}
 
 Licensed under
 the [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
