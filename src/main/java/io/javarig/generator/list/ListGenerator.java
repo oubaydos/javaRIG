@@ -23,8 +23,8 @@ import java.util.List;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class ListGenerator extends AbstractTypeGenerator implements CollectionGenerator, TypeBasedGenerator, GenericTypeGenerator {
     private final static int NUMBER_OF_GENERIC_PARAMS = 1;
-    private int minSizeInclusive = 5;
-    private int maxSizeExclusive = 15;
+    private int minSizeInclusive = DEFAULT_MIN_SIZE_INCLUSIVE;
+    private int maxSizeExclusive = DEFAULT_MAX_SIZE_INCLUSIVE;
     private Type type;
 
     protected abstract Class<? extends List> getImplementationType();

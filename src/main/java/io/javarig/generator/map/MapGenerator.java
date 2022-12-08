@@ -23,8 +23,8 @@ import java.util.Map;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class MapGenerator extends AbstractTypeGenerator implements TypeBasedGenerator, CollectionGenerator, GenericTypeGenerator {
     private final static int NUMBER_OF_GENERIC_PARAMS = 2;
-    private int minSizeInclusive = 5;
-    private int maxSizeExclusive = 15;
+    private int minSizeInclusive = DEFAULT_MIN_SIZE_INCLUSIVE;
+    private int maxSizeExclusive = DEFAULT_MAX_SIZE_INCLUSIVE;
     private Type type;
 
     /**

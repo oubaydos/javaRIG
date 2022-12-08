@@ -6,6 +6,8 @@ package io.javarig.generator;
  */
 public interface CollectionGenerator extends TypeGenerator {
 
+    int DEFAULT_MIN_SIZE_INCLUSIVE = 5;
+    int DEFAULT_MAX_SIZE_INCLUSIVE = 15;
     int getMaxSizeExclusive();
 
     int getMinSizeInclusive();
@@ -17,5 +19,9 @@ public interface CollectionGenerator extends TypeGenerator {
     default void setSize(int size) {
         this.setMinSizeInclusive(size);
         this.setMaxSizeExclusive(size + 1);
+    }
+    default void resetSize(){
+        this.setMinSizeInclusive(DEFAULT_MIN_SIZE_INCLUSIVE);
+        this.setMaxSizeExclusive(DEFAULT_MAX_SIZE_INCLUSIVE);
     }
 }
