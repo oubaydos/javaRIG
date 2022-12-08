@@ -35,8 +35,7 @@ public class RandomInstanceGenerator {
      * default constructor , class have a non-public default constructor , setter cannot be invoked ... )
      */
     public <T> T generate(Type type) throws InstanceGenerationException {
-        return generate(type, ignore -> {
-        });
+        return generate(type, CollectionGenerator::resetSize);
     }
 
     /**
