@@ -1,9 +1,9 @@
 package io.javarig;
 
 import io.javarig.generator.*;
-import io.javarig.generator.list.ArrayListGenerator;
-import io.javarig.generator.map.HashMapGenerator;
-import io.javarig.generator.map.TreeMapGenerator;
+import io.javarig.generator.collection.list.ArrayListGenerator;
+import io.javarig.generator.collection.map.HashMapGenerator;
+import io.javarig.generator.collection.map.TreeMapGenerator;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.ParameterizedType;

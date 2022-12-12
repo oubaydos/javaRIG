@@ -1,4 +1,4 @@
-package io.javarig.generator.map;
+package io.javarig.generator.collection.map;
 
 import java.util.Map;
 import java.util.TreeMap;

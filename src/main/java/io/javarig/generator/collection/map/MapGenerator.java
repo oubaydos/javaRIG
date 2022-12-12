@@ -1,8 +1,10 @@
-package io.javarig.generator.map;
+package io.javarig.generator.collection.map;
 
 import io.javarig.exception.InstanceGenerationException;
 import io.javarig.exception.NewInstanceCreationException;
-import io.javarig.generator.*;
+import io.javarig.generator.AbstractTypeGenerator;
+import io.javarig.generator.TypeBasedGenerator;
+import io.javarig.generator.collection.GenericCollectionGenerator;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;

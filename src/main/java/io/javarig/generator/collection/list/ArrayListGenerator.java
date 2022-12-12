@@ -1,4 +1,4 @@
-package io.javarig.generator.list;
+package io.javarig.generator.collection.list;
 
 import java.util.ArrayList;
 import java.util.List;
