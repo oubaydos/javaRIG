@@ -1,5 +1,6 @@
 package io.javarig.generator;
 
+import io.javarig.RandomInstanceGenerator;
 import io.javarig.exception.*;
 import io.javarig.util.Utils;
 import lombok.Getter;
@@ -17,9 +18,11 @@ import java.util.List;
 @Getter
 @Setter
 @Slf4j
-public class ObjectGenerator extends AbstractTypeGenerator implements TypeBasedGenerator {
-    private static final String SETTER_PREFIX = "set";
-    private Type type;
+public class ObjectGenerator extends AbstractTypeGenerator {
+    private static final String SETTER_PREFIX = "set";  
+    public ObjectGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
+        super(type, randomInstanceGenerator);
+    }
 
     @Override
     public Object generate() throws InstanceGenerationException {

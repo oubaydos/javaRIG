@@ -1,11 +1,11 @@
 package io.javarig.generator.map;
 
+import io.javarig.RandomInstanceGenerator;
 import io.javarig.exception.InstanceGenerationException;
 import io.javarig.exception.NewInstanceCreationException;
 import io.javarig.generator.AbstractTypeGenerator;
 import io.javarig.generator.CollectionGenerator;
 import io.javarig.generator.GenericTypeGenerator;
-import io.javarig.generator.TypeBasedGenerator;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -21,11 +21,14 @@ import java.util.Map;
 @Getter
 @Setter
 @SuppressWarnings({"rawtypes", "unchecked"})
-public abstract class MapGenerator extends AbstractTypeGenerator implements TypeBasedGenerator, CollectionGenerator, GenericTypeGenerator {
+public abstract class MapGenerator extends AbstractTypeGenerator implements CollectionGenerator, GenericTypeGenerator {
     private final static int NUMBER_OF_GENERIC_PARAMS = 2;
     private int minSizeInclusive = 5;
     private int maxSizeExclusive = 15;
-    private Type type;
+
+    public MapGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
+        super(type, randomInstanceGenerator);
+    }
 
     /**
      * @return the implementation type of the map
@@ -39,7 +42,7 @@ public abstract class MapGenerator extends AbstractTypeGenerator implements Type
 
     @Override
     public Map<Object, Object> generate() throws InstanceGenerationException {
-        checkIfValidNumberOfGenericArguments(type);
+        checkIfValidNumberOfGenericArguments(getType());
         int size = getRandom().nextInt(getMinSizeInclusive(), getMaxSizeExclusive());
         ParameterizedType parameterizedType = (ParameterizedType) getType();
         return generate(parameterizedType, size);

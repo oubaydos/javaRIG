@@ -1,5 +1,8 @@
 package io.javarig.generator;
 
+import io.javarig.RandomInstanceGenerator;
+
+import java.lang.reflect.Type;
 import java.time.Instant;
 import java.time.LocalDate;
 
@@ -9,6 +12,10 @@ public class InstantGenerator extends AbstractTypeGenerator {
 
     private final Instant MIN_INSTANT = Instant.ofEpochMilli(0);
     private final Instant MAX_INSTANT = LocalDate.of(2100, 12, 31).atStartOfDay(UTC).toInstant();
+
+    public InstantGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
+        super(type, randomInstanceGenerator);
+    }
 
     @Override
     public Instant generate() {

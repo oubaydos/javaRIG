@@ -1,6 +1,7 @@
 package io.javarig.generator;
 
 import io.javarig.ParameterizedTypeImpl;
+import io.javarig.RandomInstanceGenerator;
 import io.javarig.exception.NewInstanceCreationException;
 import io.javarig.generator.list.ListGenerator;
 import org.junit.jupiter.api.Test;
@@ -16,14 +17,13 @@ public class ListGeneratorTest {
     @Test
     public void shouldThrowNewInstanceCreationExceptionIfAListGeneratorImplementationDoesNotHaveADefaultConstructor() {
         final Class<? extends List> fakeListClass = FakeList.class;
-        ListGenerator fakeListGenerator = new ListGenerator() {
+        ParameterizedTypeImpl typeToGenerate = new ParameterizedTypeImpl(new Type[]{String.class}, fakeListClass);
+        ListGenerator fakeListGenerator = new ListGenerator(typeToGenerate, new RandomInstanceGenerator()) {
             @Override
             protected Class<? extends List> getImplementationType() {
                 return fakeListClass;
             }
         };
-        ParameterizedTypeImpl typeToGenerate = new ParameterizedTypeImpl(new Type[]{String.class}, fakeListClass);
-        fakeListGenerator.setType(typeToGenerate);
 
         assertThatThrownBy(fakeListGenerator::generate)
                 .isInstanceOf(NewInstanceCreationException.class)

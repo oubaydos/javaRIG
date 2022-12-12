@@ -1,11 +1,11 @@
 package io.javarig.generator.list;
 
+import io.javarig.RandomInstanceGenerator;
 import io.javarig.exception.InstanceGenerationException;
 import io.javarig.exception.NewInstanceCreationException;
 import io.javarig.generator.AbstractTypeGenerator;
 import io.javarig.generator.CollectionGenerator;
 import io.javarig.generator.GenericTypeGenerator;
-import io.javarig.generator.TypeBasedGenerator;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -21,11 +21,14 @@ import java.util.List;
 @Setter
 @Getter
 @SuppressWarnings({"rawtypes", "unchecked"})
-public abstract class ListGenerator extends AbstractTypeGenerator implements CollectionGenerator, TypeBasedGenerator, GenericTypeGenerator {
+public abstract class ListGenerator extends AbstractTypeGenerator implements CollectionGenerator, GenericTypeGenerator {
     private final static int NUMBER_OF_GENERIC_PARAMS = 1;
     private int minSizeInclusive = 5;
     private int maxSizeExclusive = 15;
-    private Type type;
+
+    public ListGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
+        super(type, randomInstanceGenerator);
+    }
 
     protected abstract Class<? extends List> getImplementationType();
 
@@ -37,11 +40,12 @@ public abstract class ListGenerator extends AbstractTypeGenerator implements Col
     @Override
     public List<Object> generate() throws InstanceGenerationException {
         int randomSize = getRandom().nextInt(getMinSizeInclusive(), getMaxSizeExclusive());
-        checkIfValidNumberOfGenericArguments(type);
+        checkIfValidNumberOfGenericArguments(getType());
         ParameterizedType parameterizedType = (ParameterizedType) getType();
         Type listParameterType = parameterizedType.getActualTypeArguments()[0];
         return generate(listParameterType, randomSize);
     }
+
     /**
      * generates a list of random values
      *

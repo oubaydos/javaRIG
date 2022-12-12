@@ -4,6 +4,7 @@ import io.javarig.RandomInstanceGenerator;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.lang.reflect.Type;
 import java.util.Random;
 
 /**
@@ -14,6 +15,12 @@ import java.util.Random;
 @Setter
 @Getter
 public abstract class AbstractTypeGenerator implements TypeGenerator {
-    private Random random = new Random();
-    private RandomInstanceGenerator randomInstanceGenerator = new RandomInstanceGenerator();
+    private final Random random = new Random();
+    private final Type type;
+    private final RandomInstanceGenerator randomInstanceGenerator;
+
+    public AbstractTypeGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
+        this.type = type;
+        this.randomInstanceGenerator = randomInstanceGenerator;
+    }
 }

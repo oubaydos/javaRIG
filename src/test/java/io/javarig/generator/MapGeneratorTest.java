@@ -1,6 +1,7 @@
 package io.javarig.generator;
 
 import io.javarig.ParameterizedTypeImpl;
+import io.javarig.RandomInstanceGenerator;
 import io.javarig.exception.NewInstanceCreationException;
 import io.javarig.generator.map.MapGenerator;
 import org.junit.jupiter.api.Test;
@@ -16,14 +17,13 @@ public class MapGeneratorTest {
     @Test
     public void shouldThrowNewInstanceCreationExceptionIfAMapGeneratorImplementationDoesNotHaveDefaultConstructor() {
         final Class<? extends Map> fakeMapClass = FakeMap.class;
-        MapGenerator fakeMapGenerator = new MapGenerator() {
+        ParameterizedTypeImpl typeToGenerate = new ParameterizedTypeImpl(new Type[]{String.class,String.class}, fakeMapClass);
+        MapGenerator fakeMapGenerator = new MapGenerator(typeToGenerate,new RandomInstanceGenerator()) {
             @Override
             protected Class<? extends Map> getImplementationType() {
                 return fakeMapClass;
             }
         };
-        ParameterizedTypeImpl typeToGenerate = new ParameterizedTypeImpl(new Type[]{String.class,String.class}, fakeMapClass);
-        fakeMapGenerator.setType(typeToGenerate);
 
         assertThatThrownBy(fakeMapGenerator::generate)
                 .isInstanceOf(NewInstanceCreationException.class)
