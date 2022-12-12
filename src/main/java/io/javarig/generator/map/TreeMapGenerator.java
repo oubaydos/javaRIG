@@ -7,7 +7,7 @@ public class TreeMapGenerator extends MapGenerator {
 
     @Override
     @SuppressWarnings({"rawtypes"})
-    protected Class<? extends Map> getImplementationType() {
+    public Class<? extends Map> getImplementationType() {
         return TreeMap.class;
     }
 }

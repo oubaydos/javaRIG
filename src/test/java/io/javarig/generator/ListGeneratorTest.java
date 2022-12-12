@@ -18,7 +18,7 @@ public class ListGeneratorTest {
         final Class<? extends List> fakeListClass = FakeList.class;
         ListGenerator fakeListGenerator = new ListGenerator() {
             @Override
-            protected Class<? extends List> getImplementationType() {
+            public Class<? extends List> getImplementationType() {
                 return fakeListClass;
             }
         };

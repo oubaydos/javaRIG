@@ -6,7 +6,7 @@ import java.util.List;
 public class ArrayListGenerator extends ListGenerator {
     @Override
     @SuppressWarnings("rawtypes")
-    protected Class<? extends List> getImplementationType() {
+    public Class<? extends List> getImplementationType() {
         return ArrayList.class;
     }
 }
