@@ -2,10 +2,7 @@ package io.javarig.generator.list;
 
 import io.javarig.exception.InstanceGenerationException;
 import io.javarig.exception.NewInstanceCreationException;
-import io.javarig.generator.AbstractTypeGenerator;
-import io.javarig.generator.CollectionGenerator;
-import io.javarig.generator.GenericTypeGenerator;
-import io.javarig.generator.TypeBasedGenerator;
+import io.javarig.generator.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -21,13 +18,12 @@ import java.util.List;
 @Setter
 @Getter
 @SuppressWarnings({"rawtypes", "unchecked"})
-public abstract class ListGenerator extends AbstractTypeGenerator implements CollectionGenerator, TypeBasedGenerator, GenericTypeGenerator {
+public abstract class ListGenerator extends AbstractTypeGenerator implements GenericCollectionGenerator<List>, TypeBasedGenerator {
     private final static int NUMBER_OF_GENERIC_PARAMS = 1;
-    private int minSizeInclusive = 5;
-    private int maxSizeExclusive = 15;
+    private int minSizeInclusive = DEFAULT_MIN_SIZE_INCLUSIVE;
+    private int maxSizeExclusive = DEFAULT_MAX_SIZE_EXCLUSIVE;
     private Type type;
 
-    protected abstract Class<? extends List> getImplementationType();
 
     @Override
     public int getNumberOfGenericParams() {

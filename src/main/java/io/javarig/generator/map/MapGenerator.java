@@ -2,10 +2,7 @@ package io.javarig.generator.map;
 
 import io.javarig.exception.InstanceGenerationException;
 import io.javarig.exception.NewInstanceCreationException;
-import io.javarig.generator.AbstractTypeGenerator;
-import io.javarig.generator.CollectionGenerator;
-import io.javarig.generator.GenericTypeGenerator;
-import io.javarig.generator.TypeBasedGenerator;
+import io.javarig.generator.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -21,16 +18,11 @@ import java.util.Map;
 @Getter
 @Setter
 @SuppressWarnings({"rawtypes", "unchecked"})
-public abstract class MapGenerator extends AbstractTypeGenerator implements TypeBasedGenerator, CollectionGenerator, GenericTypeGenerator {
+public abstract class MapGenerator extends AbstractTypeGenerator implements TypeBasedGenerator, GenericCollectionGenerator<Map> {
     private final static int NUMBER_OF_GENERIC_PARAMS = 2;
-    private int minSizeInclusive = 5;
-    private int maxSizeExclusive = 15;
+    private int minSizeInclusive = DEFAULT_MIN_SIZE_INCLUSIVE;
+    private int maxSizeExclusive = DEFAULT_MAX_SIZE_EXCLUSIVE;
     private Type type;
-
-    /**
-     * @return the implementation type of the map
-     */
-    protected abstract Class<? extends Map> getImplementationType();
 
     @Override
     public int getNumberOfGenericParams() {

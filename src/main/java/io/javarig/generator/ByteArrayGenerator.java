@@ -6,8 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ByteArrayGenerator extends AbstractTypeGenerator implements CollectionGenerator {
-    private int maxSizeExclusive = 15;
-    private int minSizeInclusive = 5;
+    private int maxSizeExclusive = DEFAULT_MAX_SIZE_EXCLUSIVE;
+    private int minSizeInclusive = DEFAULT_MIN_SIZE_INCLUSIVE;
 
     @Override
     public byte[] generate() {

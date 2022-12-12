@@ -18,7 +18,7 @@ public class MapGeneratorTest {
         final Class<? extends Map> fakeMapClass = FakeMap.class;
         MapGenerator fakeMapGenerator = new MapGenerator() {
             @Override
-            protected Class<? extends Map> getImplementationType() {
+            public Class<? extends Map> getImplementationType() {
                 return fakeMapClass;
             }
         };
