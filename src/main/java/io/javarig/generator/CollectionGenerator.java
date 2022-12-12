@@ -5,6 +5,8 @@ package io.javarig.generator;
  * aka the classes that accept a "size"
  */
 public interface CollectionGenerator extends TypeGenerator {
+    int DEFAULT_MIN_SIZE_INCLUSIVE = 5;
+    int DEFAULT_MAX_SIZE_EXCLUSIVE = 15;
 
     int getMaxSizeExclusive();
 

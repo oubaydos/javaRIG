@@ -25,35 +25,82 @@ public class RandomInstanceGenerator {
         return generated;
     }
 
-    public <T> T generate(Type type) throws InstanceGenerationException {
-        return generate(type, ignore -> {
+    /**
+     * generate a random instance of the given type
+     *
+     * @return the generated object
+     * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
+     *                                     default constructor , class have a non-public default constructor , setter cannot be invoked ... )
+     */
+    public <T> T generate(Type objectType) throws InstanceGenerationException {
+        return generate(objectType, ignore -> {
         });
     }
 
-    public <T> T generate(Type type, int size) throws InstanceGenerationException {
-        return generate(type, collectionGenerator -> collectionGenerator.setSize(size));
+    /**
+     * generate a random instance for a collection, with a fixed size
+     *
+     * @param collectionSize the size of the collection to generate
+     * @return the generated object
+     * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
+     *                                     default constructor , class have a non-public default constructor , setter cannot be invoked ... )
+     */
+    public <T> T generate(Type type, int collectionSize) throws InstanceGenerationException {
+        return generate(type, collectionGenerator -> collectionGenerator.setSize(collectionSize));
     }
 
-    public <T> T generate(Type type, int minSizeInclusive, int maxSizeExclusive) throws InstanceGenerationException {
-        return generate(type, collectionGenerator -> {
+    /**
+     * generate a random instance for a collection, with size between a range
+     *
+     * @param <T> the generic type of the object to generate
+     * @return the generated object
+     * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
+     *                                     default constructor , class have a non-public default constructor , setter cannot be invoked ... )
+     */
+    public <T> T generate(Type objectType, int minSizeInclusive, int maxSizeExclusive) throws InstanceGenerationException {
+        return generate(objectType, collectionGenerator -> {
             collectionGenerator.setMinSizeInclusive(minSizeInclusive);
             collectionGenerator.setMaxSizeExclusive(maxSizeExclusive);
         });
     }
 
-    public <T> T generate(Type type, Type... genericTypes) throws InstanceGenerationException {
-        Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type);
+    /**
+     * generate a random instance of a generic type
+     *
+     * @param genericTypes types of generic parameters
+     * @return the generated object
+     * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
+     *                                     default constructor , class have a non-public default constructor , setter cannot be invoked ... )
+     */
+    public <T> T generate(Type objectType, Type... genericTypes) throws InstanceGenerationException {
+        Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) objectType);
         return generate(parameterizedType);
     }
 
-    public <T> T generate(Type type, int size, Type... genericTypes) throws InstanceGenerationException {
+    /**
+     * generate a random instance of a generic collection with a fixed size
+     *
+     * @param genericTypes types of generic parameters
+     * @return the generated object
+     * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
+     *                                     default constructor , class have a non-public default constructor , setter cannot be invoked ... )
+     */
+    public <T> T generate(Type type, int collectionSize, Type... genericTypes) throws InstanceGenerationException {
         Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type);
-        return generate(parameterizedType, size);
+        return generate(parameterizedType, collectionSize);
     }
 
-    public <T> T generate(Type type, int minSize, int maxSize, Type... genericTypes) throws InstanceGenerationException {
+    /**
+     * generate a random instance of a generic collection with a size between a range
+     *
+     * @param genericTypes types of generic parameters
+     * @return the generated object
+     * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
+     *                                     default constructor , class have a non-public default constructor , setter cannot be invoked ... )
+     */
+    public <T> T generate(Type type, int minSizeInclusive, int maxSizeExclusive, Type... genericTypes) throws InstanceGenerationException {
         Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type);
-        return generate(parameterizedType, minSize, maxSize);
+        return generate(parameterizedType, minSizeInclusive, maxSizeExclusive);
     }
 
     /**

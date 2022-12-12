@@ -2,7 +2,7 @@ package io.javarig.generator;
 
 import io.javarig.ParameterizedTypeImpl;
 import io.javarig.exception.NewInstanceCreationException;
-import io.javarig.generator.list.ListGenerator;
+import io.javarig.generator.collection.list.ListGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Type;
@@ -18,7 +18,7 @@ public class ListGeneratorTest {
         final Class<? extends List> fakeListClass = FakeList.class;
         ListGenerator fakeListGenerator = new ListGenerator() {
             @Override
-            protected Class<? extends List> getImplementationType() {
+            public Class<? extends List> getImplementationType() {
                 return fakeListClass;
             }
         };

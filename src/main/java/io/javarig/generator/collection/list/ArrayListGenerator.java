@@ -1,4 +1,4 @@
-package io.javarig.generator.list;
+package io.javarig.generator.collection.list;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 public class ArrayListGenerator extends ListGenerator {
     @Override
     @SuppressWarnings("rawtypes")
-    protected Class<? extends List> getImplementationType() {
+    public Class<? extends List> getImplementationType() {
         return ArrayList.class;
     }
 }

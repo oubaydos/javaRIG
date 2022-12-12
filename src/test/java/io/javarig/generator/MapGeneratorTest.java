@@ -2,7 +2,7 @@ package io.javarig.generator;
 
 import io.javarig.ParameterizedTypeImpl;
 import io.javarig.exception.NewInstanceCreationException;
-import io.javarig.generator.map.MapGenerator;
+import io.javarig.generator.collection.map.MapGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Type;
@@ -18,7 +18,7 @@ public class MapGeneratorTest {
         final Class<? extends Map> fakeMapClass = FakeMap.class;
         MapGenerator fakeMapGenerator = new MapGenerator() {
             @Override
-            protected Class<? extends Map> getImplementationType() {
+            public Class<? extends Map> getImplementationType() {
                 return fakeMapClass;
             }
         };
