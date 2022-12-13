@@ -487,12 +487,12 @@ public class RandomInstanceGeneratorTest {
     }
 
     @Test
+    @SuppressWarnings("all")
     public void shouldThrowIllegalArgumentExceptionWhenGivenANullType() {
         Type type= null;
         assertThatThrownBy(() -> {//when
             randomInstanceGenerator.generate(type);
-        }).isInstanceOf(NullPointerException.class)
-                .hasMessage("Type must not be null");
+        }).isInstanceOf(NullPointerException.class);
     }
 }
 
