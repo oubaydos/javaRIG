@@ -19,12 +19,12 @@
             <version>1.18.24</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>23.0.0</version>
-            <scope>compile</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.jetbrains</groupId>-->
+<!--            <artifactId>annotations</artifactId>-->
+<!--            <version>23.0.0</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
