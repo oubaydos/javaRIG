@@ -147,7 +147,7 @@ public class RandomInstanceGenerator {
     }
 
     private void validateSize(int minSizeInclusive, int maxSizeExclusive) {
-        Validate.isTrue(maxSizeExclusive >= minSizeInclusive, "Start value must be smaller or equal to end value.");
+        Validate.isTrue(maxSizeExclusive > minSizeInclusive, "Start value must be smaller than end value.");
         Validate.isTrue(minSizeInclusive >= 0, "Both range values must be non-negative.");
     }
 

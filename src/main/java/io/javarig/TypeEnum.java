@@ -4,6 +4,7 @@ import io.javarig.generator.*;
 import io.javarig.generator.collection.list.ArrayListGenerator;
 import io.javarig.generator.collection.map.HashMapGenerator;
 import io.javarig.generator.collection.map.TreeMapGenerator;
+import lombok.NonNull;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -91,6 +92,7 @@ public enum TypeEnum {
                 .orElseGet(() -> getObjectIfNotEnum(type));
     }
 
+    @NonNull
     private static TypeEnum getObjectIfNotEnum(Type type) {
         if (((Class<?>) type).isEnum())
             return ENUM;

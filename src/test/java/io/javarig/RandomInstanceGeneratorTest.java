@@ -468,13 +468,30 @@ public class RandomInstanceGeneratorTest {
     }
 
     @Test
-    public void shouldThrowIllegalArgumentExceptionGivenMinSizeGreaterThanMaxSize() {
+    public void shouldThrowIllegalArgumentExceptionGivenStringHavingMinSizeGreaterThanMaxSize() {
         int minSize = 40;
         int maxSize = 20;
         assertThatThrownBy(() -> {//when
             randomInstanceGenerator.generate(String.class, minSize, maxSize);
         }).isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Start value must be smaller or equal to end value.");
+                .hasMessage("Start value must be smaller than end value.");
+    }
+
+    @Test
+    public void shouldThrowIllegalArgumentExceptionGivenStringHavingMinSizeSameASMaxSize() {
+        int size = 30;
+        assertThatThrownBy(() -> {//when
+            randomInstanceGenerator.generate(String.class, size, size);
+        }).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Start value must be smaller than end value.");
+    }
+    @Test
+    public void shouldThrowIllegalArgumentExceptionGivenMinSizeEqualsMaxSize() {
+        int size = 30;
+        assertThatThrownBy(() -> {//when
+            randomInstanceGenerator.generate(ArrayList.class, size, size);
+        }).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Start value must be smaller than end value.");
     }
 
     @Test
@@ -489,7 +506,7 @@ public class RandomInstanceGeneratorTest {
     @Test
     @SuppressWarnings("ConstantConditions")
     public void shouldThrowIllegalArgumentExceptionWhenGivenANullType() {
-        Type type= null;
+        Type type = null;
         assertThatThrownBy(() -> {//when
             randomInstanceGenerator.generate(type);
         }).isInstanceOf(NullPointerException.class);
