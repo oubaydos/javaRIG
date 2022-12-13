@@ -1,4 +1,4 @@
-package io.javarig.generator.map;
+package io.javarig.generator.collection.map;
 
 import io.javarig.RandomInstanceGenerator;
 
@@ -13,7 +13,7 @@ public class HashMapGenerator extends MapGenerator {
 
     @Override
     @SuppressWarnings({"rawtypes"})
-    protected Class<? extends Map> getImplementationType() {
+    public Class<? extends Map> getImplementationType() {
         return HashMap.class ;
     }
 }

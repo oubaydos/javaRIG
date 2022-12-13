@@ -1,4 +1,4 @@
-package io.javarig.generator.list;
+package io.javarig.generator.collection.list;
 
 import io.javarig.RandomInstanceGenerator;
 
@@ -14,7 +14,7 @@ public class ArrayListGenerator extends ListGenerator {
 
     @Override
     @SuppressWarnings("rawtypes")
-    protected Class<? extends List> getImplementationType() {
+    public Class<? extends List> getImplementationType() {
         return ArrayList.class;
     }
 }

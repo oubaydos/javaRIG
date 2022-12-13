@@ -3,7 +3,7 @@ package io.javarig.generator;
 import io.javarig.ParameterizedTypeImpl;
 import io.javarig.RandomInstanceGenerator;
 import io.javarig.exception.NewInstanceCreationException;
-import io.javarig.generator.list.ListGenerator;
+import io.javarig.generator.collection.list.ListGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Type;
@@ -20,7 +20,7 @@ public class ListGeneratorTest {
         ParameterizedTypeImpl typeToGenerate = new ParameterizedTypeImpl(new Type[]{String.class}, fakeListClass);
         ListGenerator fakeListGenerator = new ListGenerator(typeToGenerate, new RandomInstanceGenerator()) {
             @Override
-            protected Class<? extends List> getImplementationType() {
+            public Class<? extends List> getImplementationType() {
                 return fakeListClass;
             }
         };
