@@ -487,7 +487,7 @@ public class RandomInstanceGeneratorTest {
     }
 
     @Test
-    @SuppressWarnings("all")
+    @SuppressWarnings("ConstantConditions")
     public void shouldThrowIllegalArgumentExceptionWhenGivenANullType() {
         Type type= null;
         assertThatThrownBy(() -> {//when
