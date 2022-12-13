@@ -467,4 +467,23 @@ public class RandomInstanceGeneratorTest {
                 .isNotNull();
     }
 
+    @Test
+    public void shouldThrowInvalidSizeExceptionWhenGivenMinSizeGreaterThanMaxSize() {
+        int minSize = 40;
+        int maxSize = 20;
+        assertThatThrownBy(() -> {//when
+            randomInstanceGenerator.generate(String.class, minSize, maxSize);
+        }).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("minSizeInclusive must be less than maxSizeExclusive");
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenGivenNegativeSize() {
+        int size = -20;
+        assertThatThrownBy(() -> {//when
+            randomInstanceGenerator.generate(String.class, size);
+        }).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Both range values must be non-negative.");
+    }
 }
+

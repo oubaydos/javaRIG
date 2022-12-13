@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="io.javarig.RandomInstanceGeneratorTest" time="0.827" tests="47" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="17"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/media/hamza/ENSIAS1/side-projects/java-random-instances-generator/target/test-classes:/media/hamza/ENSIAS1/side-projects/java-random-instances-generator/target/classes:/home/hamza/.m2/repository/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar:/home/hamza/.m2/repository/org/projectlombok/lombok/1.18.24/lombok-1.18.24.jar:/home/hamza/.m2/repository/org/jetbrains/annotations/23.0.0/annotations-23.0.0.jar:/home/hamza/.m2/repository/jakarta/validation/jakarta.validation-api/3.0.2/jakarta.validation-api-3.0.2.jar:/home/hamza/.m2/repository/ch/qos/logback/logback-classic/1.3.0-beta0/logback-classic-1.3.0-beta0.jar:/home/hamza/.m2/repository/ch/qos/logback/logback-core/1.3.0-beta0/logback-core-1.3.0-beta0.jar:/home/hamza/.m2/repository/org/slf4j/slf4j-api/2.0.0-beta1/slf4j-api-2.0.0-beta1.jar:/home/hamza/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.9.1/junit-jupiter-api-5.9.1.jar:/home/hamza/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/hamza/.m2/repository/org/junit/platform/junit-platform-commons/1.9.1/junit-platform-commons-1.9.1.jar:/home/hamza/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/hamza/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.9.1/junit-jupiter-engine-5.9.1.jar:/home/hamza/.m2/repository/org/junit/platform/junit-platform-engine/1.9.1/junit-platform-engine-1.9.1.jar:/home/hamza/.m2/repository/org/assertj/assertj-core/3.23.1/assertj-core-3.23.1.jar:/home/hamza/.m2/repository/net/bytebuddy/byte-buddy/1.12.10/byte-buddy-1.12.10.jar:/home/hamza/.m2/repository/com/google/guava/guava/31.1-jre/guava-31.1-jre.jar:/home/hamza/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/home/hamza/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/home/hamza/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/home/hamza/.m2/repository/org/checkerframework/checker-qual/3.12.0/checker-qual-3.12.0.jar:/home/hamza/.m2/repository/com/google/errorprone/error_prone_annotations/2.11.0/error_prone_annotations-2.11.0.jar:/home/hamza/.m2/repository/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3.jar:/home/hamza/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.jar:"/>
+    <property name="java.vm.vendor" value="Private Build"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="Unknown"/>
+    <property name="user.timezone" value="Africa/Casablanca"/>
+    <property name="os.name" value="Linux"/>
+    <property name="java.vm.specification.version" value="17"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-17-openjdk-amd64/lib"/>
+    <property name="sun.java.command" value="/media/hamza/ENSIAS1/side-projects/java-random-instances-generator/target/surefire/surefirebooter11653765541422859168.jar /media/hamza/ENSIAS1/side-projects/java-random-instances-generator/target/surefire 2022-12-13T16-13-15_837-jvmRun1 surefire3935005136217350069tmp surefire_03984999498817818153tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/media/hamza/ENSIAS1/side-projects/java-random-instances-generator/target/test-classes:/media/hamza/ENSIAS1/side-projects/java-random-instances-generator/target/classes:/home/hamza/.m2/repository/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar:/home/hamza/.m2/repository/org/projectlombok/lombok/1.18.24/lombok-1.18.24.jar:/home/hamza/.m2/repository/org/jetbrains/annotations/23.0.0/annotations-23.0.0.jar:/home/hamza/.m2/repository/jakarta/validation/jakarta.validation-api/3.0.2/jakarta.validation-api-3.0.2.jar:/home/hamza/.m2/repository/ch/qos/logback/logback-classic/1.3.0-beta0/logback-classic-1.3.0-beta0.jar:/home/hamza/.m2/repository/ch/qos/logback/logback-core/1.3.0-beta0/logback-core-1.3.0-beta0.jar:/home/hamza/.m2/repository/org/slf4j/slf4j-api/2.0.0-beta1/slf4j-api-2.0.0-beta1.jar:/home/hamza/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.9.1/junit-jupiter-api-5.9.1.jar:/home/hamza/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/hamza/.m2/repository/org/junit/platform/junit-platform-commons/1.9.1/junit-platform-commons-1.9.1.jar:/home/hamza/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/hamza/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.9.1/junit-jupiter-engine-5.9.1.jar:/home/hamza/.m2/repository/org/junit/platform/junit-platform-engine/1.9.1/junit-platform-engine-1.9.1.jar:/home/hamza/.m2/repository/org/assertj/assertj-core/3.23.1/assertj-core-3.23.1.jar:/home/hamza/.m2/repository/net/bytebuddy/byte-buddy/1.12.10/byte-buddy-1.12.10.jar:/home/hamza/.m2/repository/com/google/guava/guava/31.1-jre/guava-31.1-jre.jar:/home/hamza/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/home/hamza/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/home/hamza/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/home/hamza/.m2/repository/org/checkerframework/checker-qual/3.12.0/checker-qual-3.12.0.jar:/home/hamza/.m2/repository/com/google/errorprone/error_prone_annotations/2.11.0/error_prone_annotations-2.11.0.jar:/home/hamza/.m2/repository/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3.jar:/home/hamza/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/home/hamza"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2022-10-18"/>
+    <property name="java.home" value="/usr/lib/jvm/java-17-openjdk-amd64"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/media/hamza/ENSIAS1/side-projects/java-random-instances-generator"/>
+    <property name="java.vm.compressedOopsMode" value="32-bit"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="surefire.real.class.path" value="/media/hamza/ENSIAS1/side-projects/java-random-instances-generator/target/surefire/surefirebooter11653765541422859168.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="17.0.5+8-Ubuntu-2ubuntu120.04"/>
+    <property name="user.name" value="hamza"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="5.15.0-56-generic"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="localRepository" value="/home/hamza/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="Unknown"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="java.version" value="17.0.5"/>
+    <property name="user.dir" value="/media/hamza/ENSIAS1/side-projects/java-random-instances-generator"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="native.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib"/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="java.vendor" value="Private Build"/>
+    <property name="java.vm.version" value="17.0.5+8-Ubuntu-2ubuntu120.04"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="61.0"/>
+  </properties>
+  <testcase name="shouldReturnInstant" classname="io.javarig.RandomInstanceGeneratorTest" time="0.025">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.435&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnInstant : 2020-09-11T22:24:15.045Z
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnListWithSizeBetween" classname="io.javarig.RandomInstanceGeneratorTest" time="0.094">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.449&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnListWithSizeBetween : [I2d8mdjahkTbk, gmUBqu, qgJ6TZ5G7o4nP, 7I2nw, crRg2, WVJLM36JR, lhSyqczAD7CDX3, aCoWz4Bt, eXMty1njPg, xpyyhFnAoCnyGB, H0i8f9EVZsOtqb, jKy3Bcy8pCAi, dhsOL, AlaCf7AsbdoR, HbEJ5FwNn, v2RZCHKVGWF, rOvT898peP, xJMSs, V6eR6AzT4KA, 42YuYelwFmZn0h, ibFyaA847dO]
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnDouble" classname="io.javarig.RandomInstanceGeneratorTest" time="0.002">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.537&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnDouble : 9.505367338878454E307
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnMapWithSizeBetween(Class)[1]" classname="io.javarig.RandomInstanceGeneratorTest" time="0.027">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.590&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnMapWithSizeBetween of type java.util.Map : {JnhtbOVkGa=279727679, MEj1xGZpzud=-1677602572, VE5q8P=1749772784, 7RZ3049mL3th37=-909673563, 6gys333dXI8=768314377, 0EZJEs1pLk=-976700364, GyEp5Tz=926334139, joxzfRexi3=-31045503, IKs7j=-239740185, ZtiVTlru=-812872830, 9d4Xih=51820664, FHP4Zwm71DDOh7=-963199909, qV3WIBVV=-367647534, 3j2xudic=2051516697, vO943YS1vwKg=-2405197, TdEkvLijFOkSP=-370077416, dxC4ceC=-1327935835, 7v9Tv0672L5uQb=1876027052, iEHAtIIigSp4k=1195967387, FIG4CqvS=716766802, D8wfb=-2065431109, p85RG=874631519, Cowtu1cA=-310815744, ooTwH=1715303196, UVdPv0ms1Kpw=450448146, bSMEI=2023354643, XopLz=-914188769, v6XEvbNtH2Es=332146545, A6nk627l9t=165731321, O2SsID1mVy1=911442365, 6QnG3vE1=1648326276, tyb68qaRnZ3Jv=1233961596, LcM7UN=-1212515631, b2lMT=-1319693249, Zb4k0vk=2008744500}
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnMapWithSizeBetween(Class)[2]" classname="io.javarig.RandomInstanceGeneratorTest" time="0.002">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.601&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnMapWithSizeBetween of type java.util.TreeMap : {3sDjovK=-2023699651, 6ka8ABZ=587847439, 8M2cVbpNzwip=-1866818370, 9Lg6G5Hp1EEv3=-1071602064, D4lWWzSJT=1769006788, E4oT60z6bMAS=-767689969, FdqwmwY3HXlv=-1285876696, FsgwbTOYgsmoWL=141818387, Iy9RqUR2A31rs=-384711126, Jdq3JYU=-1566486070, Jht2VBtzmVOa=850058769, OnSTR1=-1275482612, OzUmBr8rj=-1184655375, Pcu7KxIpNcurb1=-974289029, eiTXdn=-271073177, j6N3XTH4X=-1564506428, kB3Up93fH=459646882, nnriaqjK11R=-345096886, rznMw=-564478976, x4HU8Kso4VaPUb=371103857}
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnMapWithSizeBetween(Class)[3]" classname="io.javarig.RandomInstanceGeneratorTest" time="0.008">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.611&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnMapWithSizeBetween of type java.util.HashMap : {ophjxY=-158673460, O7hIxFJy=-1891579185, nxhZz9S8atf=1452660283, TL2QoJVy=-1573138330, jYRnf=1385597568, XLtKBqJG=-1368299577, hWndcsQKZ=2021153911, Bwi5CMu=-1016328171, QKxDMbQkn=781199192, 6di3x=405692612, g2UCh0VJHs5u=1206660041, oXUdz2Zm=2144385564, pP5JT=244558213, 2y2S6rTYJ=-1461386334, LZBZ0=1873651973, LTPyv7eYNlwZ5=1717889337, cGi8Pfm=126241559, lUCTQ0Kf=-120692038, voqcqy8QBBtzRX=-177610950, bnZXAL4THph0dx=1845933328, cEnphh0aGQrZF=-1431146889, CqnfCD=685846746, Xq8yI8W8SglAB=-2143078130, eZvDy18U8M=-610376147, gB1idt0Er=1018879550, S2f7Z8aCR=1030328002, 4JfbPsWXnU=-213027843, ZDbL7ciJ=1125015143, EHJ8J=166639450, HU7y0QEo=-1804728309, kor7nSRvZ=13445560, bLDIf8aUAcnaf=1620805934}
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnMap(Class)[1]" classname="io.javarig.RandomInstanceGeneratorTest" time="0.004">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.620&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnMap of type java.util.Map : {lUNSdlWiC2GiG=-1764342, lnGqp=54161338, 9Qq6UD=632062745, jJfQGNO=1050100708, GA50XY7Rj6H=937908688, 7MSEiodCHqbynx=164909817, jWodPMrqxzMQUR=899929363, yFBDR28=-1596893030, SYDJr72qy=-1116232397, iQJQFgvPvJZ=1703255730, qvZHqq9fb8=-499060489, d7xAAXfjCW=-752110915, GFDyszskxitdW=1247115463, Q8Ojg8QsKZ=910143263, 2l1T5YeZ=34567879, 7yPMX=1069509719, IJDyb9=268266289, vvhSjFW=921392191, Dzjby5N743xyIx=1528164898, bGuLz4KVO=323174988, VqQVC4a2rk7aed=-1262384250, ymfQTVgxFm=-1396543794, U0cF6EDHc=821585196, 6IBMnbo=2098916776, kjABaq=1623655006}
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnMap(Class)[2]" classname="io.javarig.RandomInstanceGeneratorTest" time="0.016">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.648&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnMap of type java.util.TreeMap : {0AfOw75Hdf7gW=-1974885794, 0NClqEGPT=1343637592, 1emjZedg=1166614783, 4jXgVDtTstw4V=1047395669, 52zB86WjGjq8v=-609141146, 8fMZQ4=-1199160021, 9UJ8cDbqXkm6=1984632801, ChDAbk3=1040692399, EV2dnhNd4o=923653839, FTbhZ2nCkFbZG1=-456547037, Hdky1s=-1086697282, IIcSLnm2L4g=-2074572181, JZRBpQm=-1861845928, KQk4P7Mij4kDwJ=1892093271, MbrWajq=-1237880072, UnByFz4pc7=-268173214, VdQTO5IrXvad=1063441874, WozvYwPd3hUbo=662340448, XOPrv=-861092467, aCdIDq4ey7l=768591918, dIWVV9JOp4Dw=2029284403, dRgKL=123246494, fRGvxQflKP=-797757851, fvGyD=-463893320, fwzbr=-1069575062, gWGQJdBQu=754539335, j1ZRtG7NG=-1134979339, lmJz7sDmITMci=1437456017, m5h2dQ=-1184056237, q3i5i=-626967009, tBl2M3bK=-1653914053, uEWSOQ=-297629125, vXNgG9=-1286178930, wPKMa67eK2Q=684806785, xPbT5uz=-579749030, xkX3chm4rswd3I=-757460001}
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnMap(Class)[3]" classname="io.javarig.RandomInstanceGeneratorTest" time="0.003">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.654&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnMap of type java.util.HashMap : {fCrjF4M7cpQ=1858186545, l9dnrhUsZSlO9=2025445236, fn0cr=-216644706, KnKHq1ky1Pcukm=268164310, 0UfnO=1248053424, VFtOZFtnkoi=817643741, UE9U0vx6RLF3=-765900628, rUSwNxaqJQ01=-716378311, Ca01b=-736426713, nWD0K=301492196, c6SqUsrG=-1979045273, 97rx6mz=-1576959264, h9a64DtP4gDjL=32309740, 6HzMLNXh=1847812578, nAKPBuMKxt4i=-423231513, hxw3D=-1686404972, 1nqY1BT1=-1367694333, SIeYQr5O=-1149239967, XrDX3YMGJQ=-302783844, Q8t1B41LAjW=15765253, mTrFzGaeyy2=1308995330, 0Xny6HZ=-1550409328, tXr5EHr=1057520617, HmL7qUv2kTW6w5=108042814, 4FJgcce1cZ=784807890, AHzphBjTZ=1693701964, 5dxuZzQv6umX=-980567342, s87LX4nZUTC8=1103952123}
+]]></system-out>
+  </testcase>
+  <testcase name="shouldThrowInvalidGenericParamsNumberExceptionWhenTryingToGenerateAListWithAMoreThanOneGenericParams" classname="io.javarig.RandomInstanceGeneratorTest" time="0.002"/>
+  <testcase name="shouldThrowExceptionWhenGivenNegativeSize" classname="io.javarig.RandomInstanceGeneratorTest" time="0.003"/>
+  <testcase name="shouldReturnByteArray" classname="io.javarig.RandomInstanceGeneratorTest" time="0.007">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.677&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnByteArray : [56, 30, -117, 118, -103, -105, 69, 126]
+]]></system-out>
+  </testcase>
+  <testcase name="shouldGenerateStringWithExactSize" classname="io.javarig.RandomInstanceGeneratorTest" time="0.022">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.699&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldGenerateString : y89wVpnnKeJ7QL963oW0
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnFloat" classname="io.javarig.RandomInstanceGeneratorTest" time="0.002">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.713&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnFloat : 1.3217889E38
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnShort" classname="io.javarig.RandomInstanceGeneratorTest" time="0.001">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.716&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnShort : -14757
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnAnObjectInstance" classname="io.javarig.RandomInstanceGeneratorTest" time="0.033">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.720&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.javarig.generator.ObjectGenerator&amp#27;[0;39m - generating object of type io.javarig.testclasses.TestClass ...
+&amp#27;[36m16:13:17.737&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.javarig.generator.ObjectGenerator&amp#27;[0;39m - created object TestClass(b=true, s=-17957, i=2080291435, m={EquEYeisTsa0Wa76EYj6=lfdui7cJUeNcToriFNfo, 5LeJda7NLuIzsBCiqwGt=CZpPJxv7aYZa6GjTNSI0, WiP2sOPyTU24Gr1EUkAQ=glfwUl0OHAV5DF7q3SDY, FrtccKYMQ9G7zDM3WoVc=OgJ06uXANdwCj3CJ6tn3, Q4t60m74oMO2NDmEmzj0=DUYcaPta5eNOLm0P9tmw, hsaBmjKorilEr5tyfSC5=yHz3RH0x4bw14eW6MK0o, wpWiE2AoEK15OR09DRxK=HW5kY623tnpjy4NRZgx6, TDKTcIpV3aXUZPkRymt8=khYRFn4OXwkyXFbSjxjv, SbIDQ1torhJi6i2mOer0=RYdomT154sBwM8wD63an, jxJ9JIQ3THiXZev3BVei=rCvvRicRnf0bQDo1Ghy3, wEagjAJOFl03BF5q4yeT=xW5FIxWhlDrqJzg7sARF, ppuX0RaO63MPLetXJfgI=qoNz9A4K4qxZcQYGbIj5, VLOToWF4G2UARAuNdr7Y=1F12VEltBdgXHFoL2toO, GgmqqAWP8sFl4LDhxKnr=3kqNbk3DeMvgihYoYT9d, OdXsoEoN1uFZSOyN5WHn=I9rwTFEyya3q6M9n57wS, 76bNuigm2rG497CwiFvB=aDZs1KFGEGTQw3hDIrj3, hPjgcYHMFf5mvBh2fj4g=oOqEWtPIFhoQcgCeJnYl, MhcfZZrLLQwpdXnscJ9m=shmnmpTmeH2uyTsrej4e, Rh0Eg6PhCIdqVCdeS30s=7f2GiM4aR0d7wlhcygPO, M19HT8L2gFVfczqcy86p=GFL71keoo4Gxq5BeoL6Z, 15FFtQHDPlfgv4licdaD=Z8C8s0gBO7S7hvXYiCdh, UgnnZPBNUCY30OlbRtry=zBO2b3cjHSS7bufj3qWZ, giZZJm3J57stDaSdBwyx=WfQByRwDavfVLy3KtDNG, z8XwhkQlybf2SPlrfo7S=7relaSvLnbvw1aFTov4S}, l=[iMwyLxYfde6hEcd9SZbI, PESwrzmlfJQpaRR5hOdf, IsjnbEBgeRHVYjeXEC1w, VDM7h6kj6UeXT0FqjYko, 0CkFv62lylw25gIImlwn, JQQjHPrMFHVQQ11rHHU7, hA45QEOvVB72tajXvYEe, EJIYhp9Vwo2QuK1RCKCB, eOoNwKSYrTrYd6A18tbs, VymFyDmpb2T79n7O6yAT, PkfzR2xTjGf0JJpYzsKY, y6MgzFDmAp7wn4VjxeGQ, VOpPXVe1m1AwIJXTNRcs, pmeB5kf9zBubK3Shlrz0, i4DizyoEvEUFYpAd3dCB, WJ07MX8qwbzTeelVx4gu, 6FyXxhcy08O624oy5Vu8, 1apFqAd2Rr7DrjOnLGCv, TiaGVa48UQvFWpE145tU, ubPBXf7mk61rgnf3RTmt, neSE7qGMVPp5tyr6BHBX, H5OYihXfagFTDbpSDaRW, 6j2ZWf6OpONMvcNYylRx, ZxsZKKNsOGIjl5N5gdw7, 9ccU3VLFOTvpaSdFbv3B, RUIbrqm4lZjl9fqX6Swh, tx6NPg3LDwHmYpiHXWVg, Sj6NnDmlpVH6LCxexBoJ])
+&amp#27;[36m16:13:17.752&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnAnObjectInstance : TestClass(b=true, s=-17957, i=2080291435, m={EquEYeisTsa0Wa76EYj6=lfdui7cJUeNcToriFNfo, 5LeJda7NLuIzsBCiqwGt=CZpPJxv7aYZa6GjTNSI0, WiP2sOPyTU24Gr1EUkAQ=glfwUl0OHAV5DF7q3SDY, FrtccKYMQ9G7zDM3WoVc=OgJ06uXANdwCj3CJ6tn3, Q4t60m74oMO2NDmEmzj0=DUYcaPta5eNOLm0P9tmw, hsaBmjKorilEr5tyfSC5=yHz3RH0x4bw14eW6MK0o, wpWiE2AoEK15OR09DRxK=HW5kY623tnpjy4NRZgx6, TDKTcIpV3aXUZPkRymt8=khYRFn4OXwkyXFbSjxjv, SbIDQ1torhJi6i2mOer0=RYdomT154sBwM8wD63an, jxJ9JIQ3THiXZev3BVei=rCvvRicRnf0bQDo1Ghy3, wEagjAJOFl03BF5q4yeT=xW5FIxWhlDrqJzg7sARF, ppuX0RaO63MPLetXJfgI=qoNz9A4K4qxZcQYGbIj5, VLOToWF4G2UARAuNdr7Y=1F12VEltBdgXHFoL2toO, GgmqqAWP8sFl4LDhxKnr=3kqNbk3DeMvgihYoYT9d, OdXsoEoN1uFZSOyN5WHn=I9rwTFEyya3q6M9n57wS, 76bNuigm2rG497CwiFvB=aDZs1KFGEGTQw3hDIrj3, hPjgcYHMFf5mvBh2fj4g=oOqEWtPIFhoQcgCeJnYl, MhcfZZrLLQwpdXnscJ9m=shmnmpTmeH2uyTsrej4e, Rh0Eg6PhCIdqVCdeS30s=7f2GiM4aR0d7wlhcygPO, M19HT8L2gFVfczqcy86p=GFL71keoo4Gxq5BeoL6Z, 15FFtQHDPlfgv4licdaD=Z8C8s0gBO7S7hvXYiCdh, UgnnZPBNUCY30OlbRtry=zBO2b3cjHSS7bufj3qWZ, giZZJm3J57stDaSdBwyx=WfQByRwDavfVLy3KtDNG, z8XwhkQlybf2SPlrfo7S=7relaSvLnbvw1aFTov4S}, l=[iMwyLxYfde6hEcd9SZbI, PESwrzmlfJQpaRR5hOdf, IsjnbEBgeRHVYjeXEC1w, VDM7h6kj6UeXT0FqjYko, 0CkFv62lylw25gIImlwn, JQQjHPrMFHVQQ11rHHU7, hA45QEOvVB72tajXvYEe, EJIYhp9Vwo2QuK1RCKCB, eOoNwKSYrTrYd6A18tbs, VymFyDmpb2T79n7O6yAT, PkfzR2xTjGf0JJpYzsKY, y6MgzFDmAp7wn4VjxeGQ, VOpPXVe1m1AwIJXTNRcs, pmeB5kf9zBubK3Shlrz0, i4DizyoEvEUFYpAd3dCB, WJ07MX8qwbzTeelVx4gu, 6FyXxhcy08O624oy5Vu8, 1apFqAd2Rr7DrjOnLGCv, TiaGVa48UQvFWpE145tU, ubPBXf7mk61rgnf3RTmt, neSE7qGMVPp5tyr6BHBX, H5OYihXfagFTDbpSDaRW, 6j2ZWf6OpONMvcNYylRx, ZxsZKKNsOGIjl5N5gdw7, 9ccU3VLFOTvpaSdFbv3B, RUIbrqm4lZjl9fqX6Swh, tx6NPg3LDwHmYpiHXWVg, Sj6NnDmlpVH6LCxexBoJ])
+]]></system-out>
+  </testcase>
+  <testcase name="shouldThrowInvalidSizeExceptionWhenGivenMinSizeGreaterThanMaxSize" classname="io.javarig.RandomInstanceGeneratorTest" time="0.003"/>
+  <testcase name="shouldReturnObjectForNestedClasses" classname="io.javarig.RandomInstanceGeneratorTest" time="0.013">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.760&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.javarig.generator.ObjectGenerator&amp#27;[0;39m - generating object of type io.javarig.testclasses.NestedClass ...
+&amp#27;[36m16:13:17.761&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.javarig.generator.ObjectGenerator&amp#27;[0;39m - generating object of type io.javarig.testclasses.TestClass ...
+&amp#27;[36m16:13:17.763&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.javarig.generator.ObjectGenerator&amp#27;[0;39m - created object TestClass(b=false, s=12497, i=-1190614007, m={SzCpfBgruyRULh9qM374=gE5GkD6Q889DSqvDj16u, ZmoSJWoPdbQN3gBawvfE=UL2c1MIVEKHCWx4pJu4f, B7fO2A9kxHolos9uaM4W=RIahD8q11wsSg9QWndU7, JA9OHccS48XyMXnDLS5H=1a9fFCySzRbJFiB4Upkx, Impkg0A0X31JX3uy7VDA=rnhvrMLyLggUXZpHxDtI, aXHcHrQUHxT8wQhmOefB=ROS8OlYFJWDMpsN3p4UZ, SlvYRMMYF68hUNxDCGyg=kfOOSkSbaPzC1pTGzDps, 3gOUg5RJF9OEUvoBKKVE=rZ9ttNmfc89HZTuaC9a8, MtWpb8iWAFmRpXd9BFMV=ge3E84ddoIcD2LlZMHLh, zDCEyQTR8Isj02Ak0tTu=ewYn9AXs7bD0RpjGb0ft, 91nytSSUmiuGzK6wUFeg=6boa7ChIy9TSppH4UcWM, pxP3a5aVN9ffeJeJp10B=gHMbZdMcOOdBdwyREIH1, 8XwTS6he7fnrBUQ0BrXc=BtIAcWH8IELced8WPnM4, jSET0Wn6lnOjjjVVgN4y=MYVAhX5wQeQ9KgeWBilx, f1xFhi35aazo3EirZ30b=C8Ux4W8X8elP8KwjacGZ, fI5AWH8jz29niKpvedUc=gLfbe1cwyOxiAJaWAzzf, VZyGgkf8RqZrgQHRlZHD=ykeo7QVhh4y6QanjT4sI, 1A9mqd8YhPkOU5cJkZtT=EcWbxaoRNZ1qucxGBdjT, zubsRuPCBzyYPijkwa59=8sb390VAY8DXhmw5jjNU, liF9xHCGyhrKigAWkBdz=NvXHLxY18E27zacJlR8e, 7NCqPJWQrndd3LDP6B73=MXyD6JWJ7o8aOyL1oVXS, XFkSPIhCfqf49IhtIQmi=bX3Ts4oDcXVJjx3YkgQc, 19apUbCBagAzjY94zzUL=wJa7JIX4zG9YZ3ZmGaJT, OMrAzuLnvvY6gIctaaF2=FlbDd4cLWYzwxfTlFXmU}, l=[4ecfqukwhz6fuLWb1jb9, sTjXJ0zDiUTaXipJHZee, pBxnq88CEcbN0N8Tu09A, RWohVbgceClLZ0spAw8U, DYLgmTWrQD9RIpOSBzSC, cJ1QHW1Fv5SJTowulYZd, XWweuPlS2ysshhGpsqK7, 2Fr0XvqmD72FGmCoFy2z, 1aBBURynf7YUhea5luR1, lPyFj3fb89wfkItfDeoj, dFxU5m3pfxUbSl8oIfli, 0KYVoS6xoraO27EP8Zwj, 1ZitpPXPoKM3ozG1GbZx, B9UiG7XASMDE07Dchgdv, peIGGmngQyIHd151F4g6, Ue9t6nLenl1KvuB1PII7, rY0buPU5IyKZLYi1r315, mKASwSUT6RVqlvf8iYnA, atKTTev3bxMoaRNb6NEu, zcLDh1QTHSkqlcXTYmNU, dXkmRwXjWgUvD4QaaGG9, n2EFHE7PRG173n3Upm1j, fvH9Z5N5eNy1uBhXCaG0, RheHHn2VPEAjfO5NYysc, 4iium9jkXnVcs8c3487o, XoVrHIZtE2pvCQwyPjyp, JKpob81qhJvEyIiSKQGL, sVUVJ1iwfIQXNz7YA5vp, DhInSxrV87V7VHShB5Bn, DT5PiCj9BO2aKQVb9zec, POQVHUyesNTJ7bgR2lG5, Eog7dlZC5qkuCxyGZWcg, lE6uRE04lR69TSf50mbr, juRYqOzjeRQD3Fj3HG9m, q9V0wxPKqmQKsvxJ4C7e, TPAs2SrchTni2KdTL7id, 9fo5VdP9w4m6pMl5bweE])
+&amp#27;[36m16:13:17.763&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.javarig.generator.ObjectGenerator&amp#27;[0;39m - created object io.javarig.testclasses.NestedClass@2ea6e30c
+&amp#27;[36m16:13:17.764&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnAnObjectInstance : io.javarig.testclasses.NestedClass@2ea6e30c
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnByteArrayWithExactSize" classname="io.javarig.RandomInstanceGeneratorTest" time="0.007">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.775&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldGenerateString : [21, -101, 10, -2, 92, -24, 79, -97, 49, 100, 3, 59, 52, -47, 105, 49, -100, 9, -27, -59]
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnLocalDate" classname="io.javarig.RandomInstanceGeneratorTest" time="0.002">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.783&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnLocalDate : 2062-12-22
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnByte" classname="io.javarig.RandomInstanceGeneratorTest" time="0.002">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.790&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnByte : 79
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnChar" classname="io.javarig.RandomInstanceGeneratorTest" time="0.002">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.794&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnChar : ?
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnDate" classname="io.javarig.RandomInstanceGeneratorTest" time="0.027">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.799&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnDate : Wed Sep 17 14:05:49 WEST 2098
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnEnum" classname="io.javarig.RandomInstanceGeneratorTest" time="0.001">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.827&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnEnum : B
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnList" classname="io.javarig.RandomInstanceGeneratorTest" time="0.003">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.831&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnList : [Jux830TKHWHBgpri54rf, MBngEdg9onfsjMs8ez4v, wHz6JJrIebtloxcTyCID, LPo8OncX4Y1Pom0ndGkY, J1DzZH9P6ye96iGtoV95, dy895u3tmkau87f6uKkJ, vHYFD2qRjIOqrLy6oMdZ, ysLMbIXN35ugvre6EFAY, wUkCShokyJcEQmZs87FN, iFJQkfkBhnXprIYbPnGD, JYQANGW55xuseGft2tv0, laZ1cQqZSTqxM00SDjPF, RlzQADXL69Ikdec25qMH, gOKQSPzGTrtt8xuNhmGS, 0WafoKU9eSDJRm6K6ccX, DqGLMtBNLqG7GjCHgHqf, U1arKbP1V1bXbYPME0rP, MOQZc54VPoy1nLEaG1Po, pjW4oz6sDCcJH2MiYSjm, BISIfRKVc9Yhoe8odaTv, STNHdbw1BMAkMKIW9iXu, fU0cppm2nOSTMPHNzpPO, IlejbjYfiAI5s4Qze8mO, JZOzxL4eqJV1KHJsNjEd, rozPLw1znXGGqeqNvnbG, S1pTlMdHN4dQnejN1nxU, hlcumjSGyx6GsoY2k7Vs, wkqFTDIcDYXuSZJrpnA7, I22Q84siwJngTGrNZdjz, RT7MySeiu8ThZyXwWJRR, iSaqGjattVkwSnQU7TfM, 9BwGXl4PZS5GN9lRpYEG, 301iAoS5kS5H5TZuIl2L, XLF0kgPNCaDbyKsvJtjA, hQKvJXfFdI22ayfzPkhY, 0f2Y9wpy0fqWNcPpAZYq]
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnLong" classname="io.javarig.RandomInstanceGeneratorTest" time="0.003">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.834&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnLong : 4051509441285134240
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnByteArrayWithSizeBetween" classname="io.javarig.RandomInstanceGeneratorTest" time="0.003">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.840&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldGenerateString : [125, -81, 17, -123, -29, -24, 41, 29, -23, 11, -18, -67, 46, -32, 101, -43, -78, -90, -67, 67, -50, -32, -96, -98, 23, -60, 114, -35, -85, -96, -103, -124, 90, -42, 124]
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnNullEnum" classname="io.javarig.RandomInstanceGeneratorTest" time="0.004">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.846&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnEnum : null
+]]></system-out>
+  </testcase>
+  <testcase name="shouldThrowAbstractClassInstantiationExceptionWhenGivenAnAbstractClass" classname="io.javarig.RandomInstanceGeneratorTest" time="0.004"/>
+  <testcase name="shouldReturnBoolean" classname="io.javarig.RandomInstanceGeneratorTest" time="0.002">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.858&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnBoolean : false
+]]></system-out>
+  </testcase>
+  <testcase name="shouldThrowInvalidGenericParamsNumberExceptionWhenTryingToGenerateAListWithAZeroGenericParams" classname="io.javarig.RandomInstanceGeneratorTest" time="0.002"/>
+  <testcase name="shouldThrowInvalidGenericParamsNumberExceptionWhenTryingToGenerateAMapWithAMoreThanTwoGenericParams" classname="io.javarig.RandomInstanceGeneratorTest" time="0.002"/>
+  <testcase name="shouldThrowInvalidGenericParamsNumberExceptionWhenTryingToGenerateAMapWithAZeroGenericParams" classname="io.javarig.RandomInstanceGeneratorTest" time="0.003"/>
+  <testcase name="shouldReturnMapWithExactSize(Class)[1]" classname="io.javarig.RandomInstanceGeneratorTest" time="0.005">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.879&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnMapWithExactSize of type java.util.Map : {oFUUIMiNWJ4wz3jwa2lT=-123961411, mtJctMrnyPktQFwD3WfB=790949568, tMvLW54xbaw9yeaGr0u5=256891948, ZRlHNxUJktJpswgZsSMH=-495833005, JkH355qVpIfjzW8b9Ceg=1163606585, Q4Wjb46OOG1Q9JGhbnM8=778318076, uZ336fdIGF9gH4nOUp9b=-769106412, KM29QWOzZ5A3h1Ndj60m=883878586, IqFB0XhjS6N2MdEWHNOl=-1629660529, 7CyXjZIQ7qhWAsaYyTWX=662375982, Ok9KOKff08YSkaUqJu3K=948802673, yuwLECd81UnpO7uapxec=237627971, JvxzBRcU88Qj9lhdVxx4=-290926999, XbNKsGcy68VimeKRm305=1705452312, ugqhr84XQFbciNnBx12Y=-1666513117, K0sI98uk4YGXpZXla9az=166026008, vMenLMiz0WpAYt58YMCX=1089793756, EkAYYZt2Nn3QPmi6RWxO=1915859994, W1SJUDeMHOcVTlxO7x8y=-412945975, Kb6k7vHVPpBgjsU4pbyK=-1409556275}
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnMapWithExactSize(Class)[2]" classname="io.javarig.RandomInstanceGeneratorTest" time="0.005">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.888&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnMapWithExactSize of type java.util.TreeMap : {720rwxPcV1HAHxx4AcJ5=1197910919, AAqTvQ2K41qUldxku1q7=1367800194, CcgDte8VaCzoIFmhGU9y=-489178999, Ejcj1WV0NlXTvjFWwvIk=1453756948, G0HefXGD2PbfptNzdHHH=-1633437498, GeRQ0lXvcfoFfYd8gsca=-484745472, LWmUzWdzu8ilfK240tKb=1586240444, NvINCzmD3H30jrbsiNSP=492135344, PByIwG7BrfN7lgIqL5e7=1615157138, PDYxLSp4xdwgO46pgGHY=-675033033, RUtBpWEbR8Z5ElF0Lqis=2039034881, UMeB8Nn0SMk26HOiXx36=1108924493, XFUH5TmiB3UPVTvjUpgR=-355717422, aCNknS7CQdpwEgqEewYq=-329705095, dG9G38WpXAizY83COTNb=756584188, ePD15P62YmBUQPpLOgQL=1248704275, kViLYQj1HustCgdy0e3k=-1655404417, mKyAsegC9PS9ucFRQNT4=-1642400631, rYsXYyymQSARZGk7kgn2=1897009807, tJFQ3S2JvA11zBo0R1zQ=-1437080030}
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnMapWithExactSize(Class)[3]" classname="io.javarig.RandomInstanceGeneratorTest" time="0.005">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.898&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnMapWithExactSize of type java.util.HashMap : {Ovilkby9QtDNGv6HF3rG=-1064662083, zTStEov9MoW5oLxQI0XR=2056134901, OnCERgEW0i3sPzdmHnL2=-910355589, iQhm45cpwQ80ZKYfJiGZ=-1831018081, GSWJoMniGO7rqRM9FJHr=-2058918336, URd5UUX0ExAMfxNySzvn=-1988880666, afUhp1RBOMrkv04y7ZLN=-1139391308, lUQvGrLKB4HxMBwkZE33=89086878, s5IDgEwWoHEZbFpMPnqU=1979996563, prI47oaif1urbrPnFbbf=2084380495, kW1wteQvc5Zq7igdQ56Y=-1498303013, xsQubqUriU3jKQPFPpuo=1428986476, zjhjFzhXjRJDINCobFkB=-334611854, RUoURRBhekUNIJX4ZAgc=-894285763, y3nGHZZF96y64eLIsYXp=-1083111953, GTNKNBy4tInpdvlNpVkT=-1803220320, xMBibuGJciFNvz2QBMvo=-1932668488, oPDnQwRcFsFusxmTYF4n=-124925538, Y3hFi67ca37ZKUIzFxPz=983741776, EHiUDvjy2aJIFq5mYi7T=1260691156}
+]]></system-out>
+  </testcase>
+  <testcase name="shouldThrowNoAccessibleDefaultConstructorExceptionWhenGivenAClassWithAPrivateConstructor" classname="io.javarig.RandomInstanceGeneratorTest" time="0.004"/>
+  <testcase name="shouldReturnListWithExactSize" classname="io.javarig.RandomInstanceGeneratorTest" time="0.003">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.911&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldReturnListWithExactSize : [6WjZEkhceLw2PRTCdvbU, LUJRfH2tjIyvxe3ISd0Y, zvRVSbnk5bnt1U2Sfkvg, bfya4tS54aoySd4tJCCt, 614FsEtCYUQGl0pyy004, AZa7OrC41udh9MvwDLwg, 71PmUhZbWScJiEXZV7FH, LsxnwG4Qst1wXZwLpicT, UqyCtAIJCkU2LfyQkQmM, PZZGsNg0s7yadjjIJEXt, BofSeZKCUSo6WUI3ueXB, iU7fSPJ78CU6yMeNA5lZ, TcahuLvlMOyLsqssHiQZ, fcuN8oOLalNwnveaGExD, Z8lRTkV0NVuDM42nY1Va, oaRCt8JDfLuA8ZemnMBs, fNmKYRHRi39ZDEL82Vqg, 3n5QC3LRtz9aGSNsKQZN, CqPLFqR01zg0na95VsRb, UyiOfl2a0SwbCjhUAA7a]
+]]></system-out>
+  </testcase>
+  <testcase name="shouldGenerateString" classname="io.javarig.RandomInstanceGeneratorTest" time="0.003">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.917&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldGenerateString : F2EfdHUyvXWMjIBk5ZQK
+]]></system-out>
+  </testcase>
+  <testcase name="shouldThrowInstanceGenerationExceptionWhenConstructorThrowsAnException" classname="io.javarig.RandomInstanceGeneratorTest" time="0.004"/>
+  <testcase name="shouldGenerateStringWithSizeBetween" classname="io.javarig.RandomInstanceGeneratorTest" time="0.001">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.925&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldGenerateString : jyDo5mktivmh0vKcxpVfGZag1o5aCr
+]]></system-out>
+  </testcase>
+  <testcase name="shouldGenerateObjectIgnoringFieldsWithNonPublicSetters" classname="io.javarig.RandomInstanceGeneratorTest" time="0.023">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.929&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.javarig.generator.ObjectGenerator&amp#27;[0;39m - generating object of type io.javarig.testclasses.ClassWithSomeNonPublicSetters ...
+&amp#27;[36m16:13:17.930&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[31mWARN &amp#27;[0;39m &amp#27;[35mi.javarig.generator.ObjectGenerator&amp#27;[0;39m - setter setIntegerWithPrivateSetter in class io.javarig.testclasses.ClassWithSomeNonPublicSetters is not accessible
+&amp#27;[36m16:13:17.930&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[31mWARN &amp#27;[0;39m &amp#27;[35mi.javarig.generator.ObjectGenerator&amp#27;[0;39m - setter setIntegerWithProtectedSetter in class io.javarig.testclasses.ClassWithSomeNonPublicSetters is not accessible
+&amp#27;[36m16:13:17.930&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[31mWARN &amp#27;[0;39m &amp#27;[35mi.javarig.generator.ObjectGenerator&amp#27;[0;39m - setter setFloatWithDefaultAccessModifierSetter in class io.javarig.testclasses.ClassWithSomeNonPublicSetters is not accessible
+&amp#27;[36m16:13:17.931&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.javarig.generator.ObjectGenerator&amp#27;[0;39m - created object ClassWithSomeNonPublicSetters(integerWithPrivateSetter=null, integerWithProtectedSetter=null, floatWithDefaultAccessModifierSetter=null, doubleWithPublicSetter=3.0110297829737007E307)
+]]></system-out>
+  </testcase>
+  <testcase name="shouldGenerateInteger" classname="io.javarig.RandomInstanceGeneratorTest" time="0.002">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.952&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.j.RandomInstanceGeneratorTest&amp#27;[0;39m - shouldGenerateInteger : -235285867
+]]></system-out>
+  </testcase>
+  <testcase name="shouldLetFieldNullWhenGivenAClassWithASetterWithNoFieldAssociatedToIt" classname="io.javarig.RandomInstanceGeneratorTest" time="0.008">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.957&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.javarig.generator.ObjectGenerator&amp#27;[0;39m - generating object of type io.javarig.testclasses.ClassWithNoFieldAssociatedToSetter ...
+&amp#27;[36m16:13:17.958&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[31mWARN &amp#27;[0;39m &amp#27;[35mi.javarig.generator.ObjectGenerator&amp#27;[0;39m - no such field with name string for setter setString
+&amp#27;[36m16:13:17.960&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.javarig.generator.ObjectGenerator&amp#27;[0;39m - created object io.javarig.testclasses.ClassWithNoFieldAssociatedToSetter@5adb0db3
+]]></system-out>
+  </testcase>
+  <testcase name="shouldThrowInvocationSetterExceptionWhenSetterThrowsAnException" classname="io.javarig.RandomInstanceGeneratorTest" time="0.003">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.965&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.javarig.generator.ObjectGenerator&amp#27;[0;39m - generating object of type io.javarig.testclasses.ClassWithSetterThatThrowsAnException ...
+]]></system-out>
+  </testcase>
+  <testcase name="shouldThrowNoDefaultConstructorExceptionWhenGivenAClassWithNoDefaultConstructor" classname="io.javarig.RandomInstanceGeneratorTest" time="0.002"/>
+  <testcase name="shouldThrowNestedObjectExceptionWhenGivenSelfContainingClass" classname="io.javarig.RandomInstanceGeneratorTest" time="0.003">
+    <system-out><![CDATA[&amp#27;[36m16:13:17.971&amp#27;[0;39m &amp#27;[33m[main]&amp#27;[0;39m &amp#27;[34mINFO &amp#27;[0;39m &amp#27;[35mi.javarig.generator.ObjectGenerator&amp#27;[0;39m - generating object of type io.javarig.testclasses.SelfContainingNestedClassTest ...
+]]></system-out>
+  </testcase>
+</testsuite>
