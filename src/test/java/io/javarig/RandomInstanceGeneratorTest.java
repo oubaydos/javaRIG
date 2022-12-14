@@ -467,4 +467,49 @@ public class RandomInstanceGeneratorTest {
                 .isNotNull();
     }
 
+    @Test
+    public void shouldThrowIllegalArgumentExceptionGivenStringHavingMinSizeGreaterThanMaxSize() {
+        int minSize = 40;
+        int maxSize = 20;
+        assertThatThrownBy(() -> {//when
+            randomInstanceGenerator.generate(String.class, minSize, maxSize);
+        }).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Start value must be smaller than end value.");
+    }
+
+    @Test
+    public void shouldThrowIllegalArgumentExceptionGivenStringHavingMinSizeSameASMaxSize() {
+        int size = 30;
+        assertThatThrownBy(() -> {//when
+            randomInstanceGenerator.generate(String.class, size, size);
+        }).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Start value must be smaller than end value.");
+    }
+    @Test
+    public void shouldThrowIllegalArgumentExceptionGivenMinSizeEqualsMaxSize() {
+        int size = 30;
+        assertThatThrownBy(() -> {//when
+            randomInstanceGenerator.generate(ArrayList.class, size, size);
+        }).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Start value must be smaller than end value.");
+    }
+
+    @Test
+    public void shouldThrowIllegalArgumentExceptionWhenGivenNegativeSize() {
+        int size = -20;
+        assertThatThrownBy(() -> {//when
+            randomInstanceGenerator.generate(String.class, size);
+        }).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Size must be non-negative.");
+    }
+
+    @Test
+    @SuppressWarnings("ConstantConditions")
+    public void shouldThrowIllegalArgumentExceptionWhenGivenANullType() {
+        Type type = null;
+        assertThatThrownBy(() -> {//when
+            randomInstanceGenerator.generate(type);
+        }).isInstanceOf(NullPointerException.class);
+    }
 }
+

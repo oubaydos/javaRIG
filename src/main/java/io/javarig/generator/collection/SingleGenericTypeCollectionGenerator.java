@@ -6,7 +6,6 @@ import io.javarig.exception.NewInstanceCreationException;
 import io.javarig.generator.AbstractTypeGenerator;
 import lombok.Getter;
 import lombok.Setter;
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
@@ -44,7 +43,6 @@ public abstract class SingleGenericTypeCollectionGenerator<T extends Collection>
      *
      * @param collectionParameterType the type of the values inside the collection
      */
-    @NotNull
     public T generate(Type collectionParameterType, int size) throws InstanceGenerationException {
         T outputList = getNewCollectionInstance();
         for (int i = 0; i < size; i++) {
@@ -53,7 +51,6 @@ public abstract class SingleGenericTypeCollectionGenerator<T extends Collection>
         return outputList;
     }
 
-    @NotNull
     private T getNewCollectionInstance() {
         try {
             return getImplementationType().getConstructor().newInstance();

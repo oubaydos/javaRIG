@@ -7,7 +7,6 @@ import io.javarig.generator.AbstractTypeGenerator;
 import io.javarig.generator.collection.GenericCollectionGenerator;
 import lombok.Getter;
 import lombok.Setter;
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
@@ -58,7 +57,6 @@ public abstract class MapGenerator extends AbstractTypeGenerator implements Gene
         return resultedMap;
     }
 
-    @NotNull
     private Map<Object, Object> getNewMapInstance() {
         try {
             return getImplementationType().getConstructor().newInstance();

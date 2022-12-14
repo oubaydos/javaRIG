@@ -5,7 +5,7 @@ import io.javarig.generator.*;
 import io.javarig.generator.collection.list.ArrayListGenerator;
 import io.javarig.generator.collection.map.HashMapGenerator;
 import io.javarig.generator.collection.map.TreeMapGenerator;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -75,7 +75,6 @@ public enum TypeEnum {
     /**
      * gets the TypeEnum associated to the type object
      */
-    @NotNull
     private static TypeEnum getTypeEnumFromType(Type type) {
         //we only need the raw type, for example : if we have the type of List<Sting> we only need now the class of List
         Type rawType = getRawType(type);
@@ -85,7 +84,7 @@ public enum TypeEnum {
                 .orElseGet(() -> getObjectIfNotEnum(rawType));
     }
 
-    @NotNull
+    @NonNull
     private static TypeEnum getObjectIfNotEnum(Type type) {
         if (((Class<?>) type).isEnum())
             return ENUM;
