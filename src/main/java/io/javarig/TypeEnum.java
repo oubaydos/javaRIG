@@ -4,7 +4,7 @@ import io.javarig.generator.*;
 import io.javarig.generator.collection.list.ArrayListGenerator;
 import io.javarig.generator.collection.map.HashMapGenerator;
 import io.javarig.generator.collection.map.TreeMapGenerator;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -85,7 +85,6 @@ public enum TypeEnum {
     /**
      * gets the TypeEnum associated to the type object
      */
-    @NotNull
     private static TypeEnum getTypeEnumFromType(Type type) {
         return Arrays.stream(TypeEnum.values())
                 .filter(tEnum -> tEnum.values.contains(type))
@@ -93,7 +92,7 @@ public enum TypeEnum {
                 .orElseGet(() -> getObjectIfNotEnum(type));
     }
 
-    @NotNull
+    @NonNull
     private static TypeEnum getObjectIfNotEnum(Type type) {
         if (((Class<?>) type).isEnum())
             return ENUM;

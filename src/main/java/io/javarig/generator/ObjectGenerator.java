@@ -5,7 +5,6 @@ import io.javarig.util.Utils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -36,7 +35,6 @@ public class ObjectGenerator extends AbstractTypeGenerator implements TypeBasedG
         setters.forEach((setter) -> generateFieldWithSetter(generatedObject, objectClass, setter));
     }
 
-    @NotNull
     private static List<Method> getSetters(Class<?> objectClass) {
         return Arrays.stream(objectClass.getDeclaredMethods())
                 .filter(method -> method.getName().startsWith(SETTER_PREFIX))
