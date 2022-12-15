@@ -1,6 +1,7 @@
 package io.javarig;
 
 import io.javarig.exception.*;
+import io.javarig.generator.CollectionGenerator;
 import io.javarig.testclasses.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -510,6 +511,25 @@ public class RandomInstanceGeneratorTest {
         assertThatThrownBy(() -> {//when
             randomInstanceGenerator.generate(type);
         }).isInstanceOf(NullPointerException.class);
+    }
+    @Test
+    public void shouldGenerateObjectWithFieldsContainingSetterPrefix() {
+        //given
+        Object generatedObject = randomInstanceGenerator.generate(ClassWithFieldContainingSetterPrefix.class);
+        // then
+        assertThat(generatedObject)
+                .isNotNull()
+                .isInstanceOf(ClassWithFieldContainingSetterPrefix.class);
+        ClassWithFieldContainingSetterPrefix generatedObjectWithFieldContainingSetterPrefix = (ClassWithFieldContainingSetterPrefix) generatedObject;
+        assertThat(generatedObjectWithFieldContainingSetterPrefix)
+                .extracting(ClassWithFieldContainingSetterPrefix::getSettersList)
+                .asList()
+                .isNotNull()
+                .hasSizeBetween(CollectionGenerator.DEFAULT_MIN_SIZE_INCLUSIVE, CollectionGenerator.DEFAULT_MAX_SIZE_EXCLUSIVE)// could be better if we had access to collectionGenerator defaultMin defaultMax size as public static fields
+                .element(0)
+                .isNotNull()
+                .asString()
+                .isNotEmpty();
     }
 }
 
