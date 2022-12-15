@@ -2,13 +2,12 @@ package io.javarig.generator.collection.map;
 
 import io.javarig.RandomInstanceGenerator;
 import io.javarig.exception.InstanceGenerationException;
-import io.javarig.exception.NewInstanceCreationException;
+import io.javarig.exception.JavaRIGInternalException;
 import io.javarig.generator.AbstractTypeGenerator;
 import io.javarig.generator.collection.GenericCollectionGenerator;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -60,9 +59,8 @@ public abstract class MapGenerator extends AbstractTypeGenerator implements Gene
     private Map<Object, Object> getNewMapInstance() {
         try {
             return getImplementationType().getConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                 NoSuchMethodException e) {
-            throw new NewInstanceCreationException(getImplementationType(), e);
+        } catch (ReflectiveOperationException e) {
+            throw new JavaRIGInternalException(e);
         }
     }
 }

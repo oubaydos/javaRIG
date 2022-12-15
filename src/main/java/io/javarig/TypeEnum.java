@@ -1,6 +1,7 @@
 package io.javarig;
 
 import com.google.common.primitives.Primitives;
+import io.javarig.exception.JavaRIGInternalException;
 import io.javarig.generator.*;
 import io.javarig.generator.collection.list.ArrayListGenerator;
 import io.javarig.generator.collection.map.HashMapGenerator;
@@ -96,7 +97,7 @@ public enum TypeEnum {
             return (AbstractTypeGenerator) this.generatorClass.getConstructor(Type.class, RandomInstanceGenerator.class)
                     .newInstance(type, randomInstanceGenerator);
         } catch (ReflectiveOperationException e) {
-            throw new RuntimeException(e);
+            throw new JavaRIGInternalException(e);
         }
     }
 }

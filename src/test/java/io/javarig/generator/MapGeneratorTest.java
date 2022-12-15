@@ -2,7 +2,7 @@ package io.javarig.generator;
 
 import io.javarig.ParameterizedTypeImpl;
 import io.javarig.RandomInstanceGenerator;
-import io.javarig.exception.NewInstanceCreationException;
+import io.javarig.exception.JavaRIGInternalException;
 import io.javarig.generator.collection.map.MapGenerator;
 import org.junit.jupiter.api.Test;
 
@@ -17,8 +17,8 @@ public class MapGeneratorTest {
     @Test
     public void shouldThrowNewInstanceCreationExceptionIfAMapGeneratorImplementationDoesNotHaveDefaultConstructor() {
         final Class<? extends Map> fakeMapClass = FakeMap.class;
-        ParameterizedTypeImpl typeToGenerate = new ParameterizedTypeImpl(new Type[]{String.class,String.class}, fakeMapClass);
-        MapGenerator fakeMapGenerator = new MapGenerator(typeToGenerate,new RandomInstanceGenerator()) {
+        ParameterizedTypeImpl typeToGenerate = new ParameterizedTypeImpl(new Type[]{String.class, String.class}, fakeMapClass);
+        MapGenerator fakeMapGenerator = new MapGenerator(typeToGenerate, new RandomInstanceGenerator()) {
             @Override
             public Class<? extends Map> getImplementationType() {
                 return fakeMapClass;
@@ -26,10 +26,10 @@ public class MapGeneratorTest {
         };
 
         assertThatThrownBy(fakeMapGenerator::generate)
-                .isInstanceOf(NewInstanceCreationException.class)
+                .isInstanceOf(JavaRIGInternalException.class)
                 .hasMessage("""
-                        Error invoking the default constructor for this implementation class %s,
-                        please make sure that the default constructor exists and it's accessible.
-                        """.formatted(fakeMapClass));
+                        JavaRIG Internal Error : if you get this error,
+                        please create an issue in the github repository
+                        """);
     }
 }

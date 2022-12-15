@@ -2,12 +2,11 @@ package io.javarig.generator.collection;
 
 import io.javarig.RandomInstanceGenerator;
 import io.javarig.exception.InstanceGenerationException;
-import io.javarig.exception.NewInstanceCreationException;
+import io.javarig.exception.JavaRIGInternalException;
 import io.javarig.generator.AbstractTypeGenerator;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
@@ -51,12 +50,11 @@ public abstract class SingleGenericTypeCollectionGenerator<T extends Collection>
         return outputList;
     }
 
-    private T getNewCollectionInstance() {
+    private T getNewCollectionInstance() throws JavaRIGInternalException {
         try {
             return getImplementationType().getConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                 NoSuchMethodException e) {
-            throw new NewInstanceCreationException(getImplementationType(), e);
+        } catch (ReflectiveOperationException e) {
+            throw new JavaRIGInternalException(e);
         }
     }
 }

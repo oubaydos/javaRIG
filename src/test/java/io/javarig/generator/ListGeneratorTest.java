@@ -2,7 +2,7 @@ package io.javarig.generator;
 
 import io.javarig.ParameterizedTypeImpl;
 import io.javarig.RandomInstanceGenerator;
-import io.javarig.exception.NewInstanceCreationException;
+import io.javarig.exception.JavaRIGInternalException;
 import io.javarig.generator.collection.list.ListGenerator;
 import org.junit.jupiter.api.Test;
 
@@ -26,10 +26,10 @@ public class ListGeneratorTest {
         };
 
         assertThatThrownBy(fakeListGenerator::generate)
-                .isInstanceOf(NewInstanceCreationException.class)
+                .isInstanceOf(JavaRIGInternalException.class)
                 .hasMessage("""
-                        Error invoking the default constructor for this implementation class %s,
-                        please make sure that the default constructor exists and it's accessible.
-                        """.formatted(fakeListClass));
+                         JavaRIG Internal Error : if you get this error,
+                         please create an issue in the github repository
+                         """);
     }
 }
