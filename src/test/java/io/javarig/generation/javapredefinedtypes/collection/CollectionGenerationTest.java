@@ -1,4 +1,4 @@
-package io.javarig.generation.javapredefinedtypes;
+package io.javarig.generation.javapredefinedtypes.collection;
 
 import io.javarig.RandomInstanceGenerator;
 import lombok.extern.slf4j.Slf4j;
