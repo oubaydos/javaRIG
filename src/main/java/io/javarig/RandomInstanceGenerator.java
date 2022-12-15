@@ -19,8 +19,7 @@ public class RandomInstanceGenerator {
     private synchronized <T> T generate(Type type, Consumer<CollectionGenerator> collectionSizeSetter) throws InstanceGenerationException {
         checkForRecursion(type);
         objectStack.push(type);
-        TypeEnum typeEnum = TypeEnum.getTypeEnum(type, this);
-        TypeGenerator generator = typeEnum.generator();
+        TypeGenerator generator = TypeEnum.getGenerator(type, this);
         generator = setCollectionSize(generator, collectionSizeSetter);
         T generated = (T) generator.generate();
         objectStack.pop();

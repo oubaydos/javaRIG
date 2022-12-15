@@ -1,12 +1,12 @@
 package io.javarig.generator.collection;
 
+import io.javarig.RandomInstanceGenerator;
 import io.javarig.exception.InstanceGenerationException;
-import io.javarig.exception.NewInstanceCreationException;
+import io.javarig.exception.JavaRIGInternalException;
 import io.javarig.generator.AbstractTypeGenerator;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
@@ -18,7 +18,10 @@ public abstract class SingleGenericTypeCollectionGenerator<T extends Collection>
     private final static int NUMBER_OF_GENERIC_PARAMS = 1;
     private int minSizeInclusive = DEFAULT_MIN_SIZE_INCLUSIVE;
     private int maxSizeExclusive = DEFAULT_MAX_SIZE_EXCLUSIVE;
-    private Type type;
+
+    public SingleGenericTypeCollectionGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
+        super(type, randomInstanceGenerator);
+    }
 
     @Override
     public int getNumberOfGenericParams() {
@@ -28,7 +31,7 @@ public abstract class SingleGenericTypeCollectionGenerator<T extends Collection>
     @Override
     public T generate() throws InstanceGenerationException {
         int randomSize = getRandom().nextInt(getMinSizeInclusive(), getMaxSizeExclusive());
-        checkIfValidNumberOfGenericArguments(type);
+        checkIfValidNumberOfGenericArguments(getType());
         ParameterizedType parameterizedType = (ParameterizedType) getType();
         Type listParameterType = parameterizedType.getActualTypeArguments()[0];
         return generate(listParameterType, randomSize);
@@ -47,12 +50,11 @@ public abstract class SingleGenericTypeCollectionGenerator<T extends Collection>
         return outputList;
     }
 
-    private T getNewCollectionInstance() {
+    private T getNewCollectionInstance() throws JavaRIGInternalException {
         try {
             return getImplementationType().getConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                 NoSuchMethodException e) {
-            throw new NewInstanceCreationException(getImplementationType(), e);
+        } catch (ReflectiveOperationException e) {
+            throw new JavaRIGInternalException(e);
         }
     }
 }

@@ -1,5 +1,7 @@
 package io.javarig;
 
+import com.google.common.primitives.Primitives;
+import io.javarig.exception.JavaRIGInternalException;
 import io.javarig.generator.*;
 import io.javarig.generator.collection.list.ArrayListGenerator;
 import io.javarig.generator.collection.map.HashMapGenerator;
@@ -12,35 +14,37 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
 
+
 public enum TypeEnum {
 
-    INTEGER(List.of(Integer.class, int.class), new IntegerGenerator()),
-    STRING(List.of(String.class), new StringGenerator()),
-    BYTE(List.of(Byte.class, byte.class), new ByteGenerator()),
-    BYTE_ARRAY(List.of(Byte[].class, byte[].class), new ByteArrayGenerator()),
-    SHORT(List.of(Short.class, short.class), new ShortGenerator()),
-    LONG(List.of(Long.class, long.class), new LongGenerator()),
-    DOUBLE(List.of(Double.class, double.class), new DoubleGenerator()),
-    FLOAT(List.of(Float.class, float.class), new FloatGenerator()),
-    BOOLEAN(List.of(Boolean.class, boolean.class), new BooleanGenerator()),
-    CHAR(List.of(Character.class, char.class), new CharGenerator()),
-    INSTANT(List.of(Instant.class), new InstantGenerator()),
-    DATE(List.of(Date.class), new DateGenerator()),
-    LOCAL_DATE(List.of(LocalDate.class), new LocalDateGenerator()),
-    MAP(List.of(Map.class), new HashMapGenerator()),
-    HASH_MAP(List.of(HashMap.class), new HashMapGenerator()),
-    TREE_MAP(List.of(TreeMap.class), new TreeMapGenerator()),
-    LIST(List.of(List.class), new ArrayListGenerator()),
-    ARRAY_LIST(List.of(ArrayList.class), new ArrayListGenerator()),
-    ENUM(List.of(), new EnumGenerator()),
-    OBJECT(List.of(), new ObjectGenerator());
+    INTEGER(Integer.class, IntegerGenerator.class),
+    STRING(String.class, StringGenerator.class),
+    BYTE(Byte.class, ByteGenerator.class),
+    BYTE_ARRAY(Byte[].class, ByteArrayGenerator.class),
+    PRIMITIVE_BYTE_ARRAY(byte[].class, ByteArrayGenerator.class),
+    SHORT(Short.class, ShortGenerator.class),
+    LONG(Long.class, LongGenerator.class),
+    DOUBLE(Double.class, DoubleGenerator.class),
+    FLOAT(Float.class, FloatGenerator.class),
+    BOOLEAN(Boolean.class, BooleanGenerator.class),
+    CHAR(Character.class, CharGenerator.class),
+    INSTANT(Instant.class, InstantGenerator.class),
+    DATE(Date.class, DateGenerator.class),
+    LOCAL_DATE(LocalDate.class, LocalDateGenerator.class),
+    MAP(Map.class, HashMapGenerator.class),
+    HASH_MAP(HashMap.class, HashMapGenerator.class),
+    TREE_MAP(TreeMap.class, TreeMapGenerator.class),
+    LIST(List.class, ArrayListGenerator.class),
+    ARRAY_LIST(ArrayList.class, ArrayListGenerator.class),
+    ENUM(null, EnumGenerator.class),
+    OBJECT(null, ObjectGenerator.class);
 
-    final List<Type> values;
-    final AbstractTypeGenerator generator;
+    final Type type;
+    final Class<?> generatorClass;
 
-    TypeEnum(List<Type> values, AbstractTypeGenerator generator) {
-        this.values = values;
-        this.generator = generator;
+    TypeEnum(Type type, Class<?> generatorClass) {
+        this.type = type;
+        this.generatorClass = generatorClass;
     }
 
     /**
@@ -50,23 +54,9 @@ public enum TypeEnum {
      * @param randomInstanceGenerator instance that will be used to generate nested objects
      * @return TypeEnum instance associated to the type object with generator prepared with necessary objects
      */
-    public static TypeEnum getTypeEnum(Type type, RandomInstanceGenerator randomInstanceGenerator) {
-        Type rawType = getRawType(type);
-        TypeEnum typeEnum = getTypeEnumFromType(rawType);
-        prepareGenerator(type, randomInstanceGenerator, typeEnum);
-        return typeEnum;
-    }
-
-    /**
-     * prepare the generator with setting its randomInstanceGenerator and type fields
-     *
-     * @param type                    Type instance
-     * @param randomInstanceGenerator RandomInstanceGenerator that will be used in generating nested objects
-     * @param typeEnum                TypeEnum instance that we prepare its generator
-     */
-    private static void prepareGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator, TypeEnum typeEnum) {
-        typeEnum.setType(type);
-        typeEnum.setRandomInstanceGenerator(randomInstanceGenerator);
+    public static TypeGenerator getGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
+        TypeEnum typeEnum = getTypeEnumFromType(type);
+        return typeEnum.createGeneratorInstance(type, randomInstanceGenerator);
     }
 
     /**
@@ -76,20 +66,23 @@ public enum TypeEnum {
      * @return the rawType of the type object
      */
     private static Type getRawType(Type type) {
+        Type rawType = type;
         if (type instanceof ParameterizedType parameterizedType) {
-            return parameterizedType.getRawType();
+            rawType = parameterizedType.getRawType();
         }
-        return type;
+        return Primitives.wrap((Class<?>) rawType);
     }
 
     /**
      * gets the TypeEnum associated to the type object
      */
     private static TypeEnum getTypeEnumFromType(Type type) {
+        //we only need the raw type, for example : if we have the type of List<Sting> we only need now the class of List
+        Type rawType = getRawType(type);
         return Arrays.stream(TypeEnum.values())
-                .filter(tEnum -> tEnum.values.contains(type))
+                .filter(tEnum -> tEnum.type != null && tEnum.type.equals(rawType))
                 .findFirst()
-                .orElseGet(() -> getObjectIfNotEnum(type));
+                .orElseGet(() -> getObjectIfNotEnum(rawType));
     }
 
     @NonNull
@@ -99,17 +92,12 @@ public enum TypeEnum {
         return OBJECT;
     }
 
-    private void setRandomInstanceGenerator(RandomInstanceGenerator randomInstanceGenerator) {
-        this.generator.setRandomInstanceGenerator(randomInstanceGenerator);
-    }
-
-    public TypeGenerator generator() {
-        return this.generator;
-    }
-
-    public void setType(Type type) {
-        if (this.generator instanceof TypeBasedGenerator typeBasedGenerator) {
-            typeBasedGenerator.setType(type);
+    public TypeGenerator createGeneratorInstance(Type type, RandomInstanceGenerator randomInstanceGenerator) {
+        try {
+            return (AbstractTypeGenerator) this.generatorClass.getConstructor(Type.class, RandomInstanceGenerator.class)
+                    .newInstance(type, randomInstanceGenerator);
+        } catch (ReflectiveOperationException e) {
+            throw new JavaRIGInternalException(e);
         }
     }
 }

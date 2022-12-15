@@ -1,6 +1,10 @@
 package io.javarig.generator;
 
-import io.javarig.exception.*;
+import io.javarig.RandomInstanceGenerator;
+import io.javarig.exception.AbstractClassInstantiationException;
+import io.javarig.exception.InstanceGenerationException;
+import io.javarig.exception.InvocationSetterException;
+import io.javarig.exception.NoAccessibleDefaultConstructorException;
 import io.javarig.util.Utils;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,9 +20,12 @@ import java.util.List;
 @Getter
 @Setter
 @Slf4j
-public class ObjectGenerator extends AbstractTypeGenerator implements TypeBasedGenerator {
+public class ObjectGenerator extends AbstractTypeGenerator {
     private static final String SETTER_PREFIX = "set";
-    private Type type;
+
+    public ObjectGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
+        super(type, randomInstanceGenerator);
+    }
 
     @Override
     public Object generate() throws InstanceGenerationException {
@@ -42,7 +49,7 @@ public class ObjectGenerator extends AbstractTypeGenerator implements TypeBasedG
     }
 
     private void generateFieldWithSetter(Object generatedObject, Class<?> objectClass, Method setter) {
-        String fieldName = Utils.getFieldNameFromSetterMethodName(setter.getName(),SETTER_PREFIX);
+        String fieldName = Utils.getFieldNameFromSetterMethodName(setter.getName(), SETTER_PREFIX);
         try {
             Field field = objectClass.getDeclaredField(fieldName);
             generateField(generatedObject, setter, field);

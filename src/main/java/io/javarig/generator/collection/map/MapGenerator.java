@@ -1,14 +1,13 @@
 package io.javarig.generator.collection.map;
 
+import io.javarig.RandomInstanceGenerator;
 import io.javarig.exception.InstanceGenerationException;
-import io.javarig.exception.NewInstanceCreationException;
+import io.javarig.exception.JavaRIGInternalException;
 import io.javarig.generator.AbstractTypeGenerator;
-import io.javarig.generator.TypeBasedGenerator;
 import io.javarig.generator.collection.GenericCollectionGenerator;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -19,11 +18,14 @@ import java.util.Map;
 @Getter
 @Setter
 @SuppressWarnings({"rawtypes", "unchecked"})
-public abstract class MapGenerator extends AbstractTypeGenerator implements TypeBasedGenerator, GenericCollectionGenerator<Map> {
+public abstract class MapGenerator extends AbstractTypeGenerator implements GenericCollectionGenerator<Map> {
     private final static int NUMBER_OF_GENERIC_PARAMS = 2;
     private int minSizeInclusive = DEFAULT_MIN_SIZE_INCLUSIVE;
     private int maxSizeExclusive = DEFAULT_MAX_SIZE_EXCLUSIVE;
-    private Type type;
+
+    public MapGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
+        super(type, randomInstanceGenerator);
+    }
 
     @Override
     public int getNumberOfGenericParams() {
@@ -32,7 +34,7 @@ public abstract class MapGenerator extends AbstractTypeGenerator implements Type
 
     @Override
     public Map<Object, Object> generate() throws InstanceGenerationException {
-        checkIfValidNumberOfGenericArguments(type);
+        checkIfValidNumberOfGenericArguments(getType());
         int size = getRandom().nextInt(getMinSizeInclusive(), getMaxSizeExclusive());
         ParameterizedType parameterizedType = (ParameterizedType) getType();
         return generate(parameterizedType, size);
@@ -57,9 +59,8 @@ public abstract class MapGenerator extends AbstractTypeGenerator implements Type
     private Map<Object, Object> getNewMapInstance() {
         try {
             return getImplementationType().getConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                 NoSuchMethodException e) {
-            throw new NewInstanceCreationException(getImplementationType(), e);
+        } catch (ReflectiveOperationException e) {
+            throw new JavaRIGInternalException(e);
         }
     }
 }
