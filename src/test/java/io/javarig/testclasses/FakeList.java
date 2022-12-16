@@ -1,4 +1,4 @@
-package io.javarig.generator;
+package io.javarig.testclasses;
 
 import java.util.ArrayList;
 
