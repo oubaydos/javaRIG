@@ -25,8 +25,8 @@ public class ArrayGenerator<T> extends AbstractTypeGenerator implements TypeGene
         Class<?> arrayParameterType = ((Class<?>) getType()).componentType();
         List<Object> objectList = getRandomInstanceGenerator()
                 .generate(List.class, getMinSizeInclusive(), getMaxSizeExclusive(), arrayParameterType);
-        T[] o = (T[]) Array.newInstance(arrayParameterType, 0);
-        return objectList.toArray(o);
+        T[] arrayInstance = (T[]) Array.newInstance(arrayParameterType, 0);
+        return objectList.toArray(arrayInstance);
     }
 
     public static <T> ArrayGenerator<T> create(Class<T> type, RandomInstanceGenerator randomInstanceGenerator) {
