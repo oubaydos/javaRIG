@@ -1,7 +1,8 @@
-package io.javarig.generator;
+package io.javarig.generator.primitive;
 
 
 import io.javarig.RandomInstanceGenerator;
+import io.javarig.generator.AbstractTypeGenerator;
 
 import java.lang.reflect.Type;
 

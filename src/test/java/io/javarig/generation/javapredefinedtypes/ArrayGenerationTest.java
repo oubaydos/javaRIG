@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.BYTE_ARRAY;
+import static org.assertj.core.api.InstanceOfAssertFactories.ARRAY;
 
 @Slf4j
 public class ArrayGenerationTest {
@@ -17,32 +17,32 @@ public class ArrayGenerationTest {
         randomInstanceGenerator = new RandomInstanceGenerator();
     }
     @Test
-    public void shouldReturnByteArray() {
-        Object generated = randomInstanceGenerator.generate(byte[].class);
-        log.info("shouldReturnByteArray : {}", generated);
+    public void shouldReturnArray() {
+        Object generated = randomInstanceGenerator.generate(Integer[].class);
+        log.info("shouldReturnArray : {}", generated);
         assertThat(generated).isNotNull();
-        assertThat(generated).isInstanceOf(byte[].class);
+        assertThat(generated).isInstanceOf(Integer[].class);
     }
 
     @Test
-    public void shouldReturnByteArrayWithExactSize() {
+    public void shouldReturnArrayWithExactSize() {
         int size = 20;
-        Object generated = randomInstanceGenerator.generate(byte[].class, size);
-        log.info("shouldGenerateString : {}", generated);
+        Object generated = randomInstanceGenerator.generate(Double[].class,size);
+        log.info("shouldReturnArrayWithExactSize : {}", generated);
         assertThat(generated).isNotNull();
-        assertThat(generated).isInstanceOf(byte[].class);
-        assertThat(generated).asInstanceOf(BYTE_ARRAY).hasSize(size);
+        assertThat(generated).isInstanceOf(Double[].class);
+        assertThat(generated).asInstanceOf(ARRAY).hasSize(size);
     }
 
     @Test
-    public void shouldReturnByteArrayWithSizeBetween() {
+    public void shouldReturnArrayWithSizeBetween() {
         int minSize = 20;
         int maxSize = 40;
-        Object generated = randomInstanceGenerator.generate(byte[].class, minSize, maxSize);
-        log.info("shouldGenerateString : {}", generated);
+        Object generated = randomInstanceGenerator.generate(String[].class,minSize, maxSize);
+        log.info("shouldReturnArrayWithSizeBetween : {}", generated);
         assertThat(generated).isNotNull();
-        assertThat(generated).isInstanceOf(byte[].class);
-        assertThat(generated).asInstanceOf(BYTE_ARRAY).hasSizeBetween(minSize, maxSize);
+        assertThat(generated).isInstanceOf(String[].class);
+        assertThat(generated).asInstanceOf(ARRAY).hasSizeBetween(minSize, maxSize);
     }
 
 }

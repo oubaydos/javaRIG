@@ -6,6 +6,7 @@ import io.javarig.generator.*;
 import io.javarig.generator.collection.list.ArrayListGenerator;
 import io.javarig.generator.collection.map.HashMapGenerator;
 import io.javarig.generator.collection.map.TreeMapGenerator;
+import io.javarig.generator.primitive.*;
 import lombok.NonNull;
 
 import java.lang.reflect.ParameterizedType;
@@ -37,12 +38,13 @@ public enum TypeEnum {
     LIST(List.class, ArrayListGenerator.class),
     ARRAY_LIST(ArrayList.class, ArrayListGenerator.class),
     ENUM(null, EnumGenerator.class),
+    ARRAY(null, ArrayGenerator.class),
     OBJECT(null, ObjectGenerator.class);
 
     final Type type;
-    final Class<?> generatorClass;
+    final Class<? extends TypeGenerator> generatorClass;
 
-    TypeEnum(Type type, Class<?> generatorClass) {
+    TypeEnum(Type type, Class<? extends TypeGenerator> generatorClass) {
         this.type = type;
         this.generatorClass = generatorClass;
     }
@@ -65,7 +67,7 @@ public enum TypeEnum {
      * @param type Type instance
      * @return the rawType of the type object
      */
-    private static Type getRawType(Type type) {
+    private static Class<?> getRawType(Type type) {
         Type rawType = type;
         if (type instanceof ParameterizedType parameterizedType) {
             rawType = parameterizedType.getRawType();
@@ -78,7 +80,7 @@ public enum TypeEnum {
      */
     private static TypeEnum getTypeEnumFromType(Type type) {
         //we only need the raw type, for example : if we have the type of List<Sting> we only need now the class of List
-        Type rawType = getRawType(type);
+        Class<?> rawType = getRawType(type);
         return Arrays.stream(TypeEnum.values())
                 .filter(tEnum -> tEnum.type != null && tEnum.type.equals(rawType))
                 .findFirst()
@@ -86,15 +88,21 @@ public enum TypeEnum {
     }
 
     @NonNull
-    private static TypeEnum getObjectIfNotEnum(Type type) {
-        if (((Class<?>) type).isEnum())
+    private static TypeEnum getObjectIfNotEnum(Class<?> type) {
+        if (type.isArray()) {
+            return ARRAY;
+        }
+        if (type.isEnum())
             return ENUM;
         return OBJECT;
     }
 
     public TypeGenerator createGeneratorInstance(Type type, RandomInstanceGenerator randomInstanceGenerator) {
+        if (generatorClass.equals(ArrayGenerator.class)) {
+            return ArrayGenerator.create((Class<?>) type, randomInstanceGenerator);
+        }
         try {
-            return (AbstractTypeGenerator) this.generatorClass.getConstructor(Type.class, RandomInstanceGenerator.class)
+            return generatorClass.getConstructor(Type.class, RandomInstanceGenerator.class)
                     .newInstance(type, randomInstanceGenerator);
         } catch (ReflectiveOperationException e) {
             throw new JavaRIGInternalException(e);
