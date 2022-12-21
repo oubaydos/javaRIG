@@ -98,9 +98,6 @@ public enum TypeEnum {
     }
 
     public TypeGenerator createGeneratorInstance(Type type, RandomInstanceGenerator randomInstanceGenerator) {
-        if (generatorClass.equals(ArrayGenerator.class)) {
-            return ArrayGenerator.create((Class<?>) type, randomInstanceGenerator);
-        }
         try {
             return generatorClass.getConstructor(Type.class, RandomInstanceGenerator.class)
                     .newInstance(type, randomInstanceGenerator);
