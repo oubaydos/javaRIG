@@ -140,7 +140,7 @@ public class RandomInstanceGenerator {
     private TypeGenerator setCollectionSize(TypeGenerator generator, Consumer<CollectionGenerator> collectionSizeSetter) {
         if (generator instanceof CollectionGenerator collectionGenerator) {
             collectionSizeSetter.accept(collectionGenerator);
-            return collectionGenerator;
+            return (TypeGenerator) collectionGenerator;
         }
         return generator;
     }

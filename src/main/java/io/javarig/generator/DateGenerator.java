@@ -6,7 +6,7 @@ import java.lang.reflect.Type;
 import java.time.Instant;
 import java.util.Date;
 
-public class DateGenerator extends AbstractTypeGenerator {
+public class DateGenerator extends TypeGenerator {
     public DateGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
         super(type, randomInstanceGenerator);
     }

@@ -8,7 +8,7 @@ import java.lang.reflect.Type;
 
 @Getter
 @Setter
-public class ByteArrayGenerator extends AbstractTypeGenerator implements CollectionGenerator {
+public class ByteArrayGenerator extends TypeGenerator implements CollectionGenerator {
     private int maxSizeExclusive = DEFAULT_MAX_SIZE_EXCLUSIVE;
     private int minSizeInclusive = DEFAULT_MIN_SIZE_INCLUSIVE;
 

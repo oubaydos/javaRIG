@@ -4,7 +4,7 @@ package io.javarig.generator;
  * random generator for collections : lists, maps, arrays ...
  * aka the classes that accept a "size"
  */
-public interface CollectionGenerator extends TypeGenerator {
+public interface CollectionGenerator {
     int DEFAULT_MIN_SIZE_INCLUSIVE = 5;
     int DEFAULT_MAX_SIZE_EXCLUSIVE = 15;
 

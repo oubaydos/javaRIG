@@ -20,7 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @Slf4j
-public class ObjectGenerator extends AbstractTypeGenerator {
+public class ObjectGenerator extends TypeGenerator {
     private static final String SETTER_PREFIX = "set";
 
     public ObjectGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {

@@ -13,7 +13,7 @@ import java.util.List;
 
 @Setter
 @Getter
-public class ArrayGenerator extends AbstractTypeGenerator implements CollectionGenerator {
+public class ArrayGenerator extends TypeGenerator implements CollectionGenerator {
     private int minSizeInclusive = DEFAULT_MIN_SIZE_INCLUSIVE;
     private int maxSizeExclusive = DEFAULT_MAX_SIZE_EXCLUSIVE;
 

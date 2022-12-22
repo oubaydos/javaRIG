@@ -9,7 +9,7 @@ import java.lang.reflect.Type;
 
 @Setter
 @Getter
-public class StringGenerator extends AbstractTypeGenerator implements CollectionGenerator {
+public class StringGenerator extends TypeGenerator implements CollectionGenerator {
     private int minSizeInclusive = DEFAULT_MIN_SIZE_INCLUSIVE;
     private int maxSizeExclusive = DEFAULT_MAX_SIZE_EXCLUSIVE;
 

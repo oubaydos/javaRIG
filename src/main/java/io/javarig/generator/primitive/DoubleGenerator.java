@@ -1,11 +1,11 @@
 package io.javarig.generator.primitive;
 
 import io.javarig.RandomInstanceGenerator;
-import io.javarig.generator.AbstractTypeGenerator;
+import io.javarig.generator.TypeGenerator;
 
 import java.lang.reflect.Type;
 
-public class DoubleGenerator extends AbstractTypeGenerator {
+public class DoubleGenerator extends TypeGenerator {
     public DoubleGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
         super(type, randomInstanceGenerator);
     }

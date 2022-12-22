@@ -8,7 +8,7 @@ import java.lang.reflect.Type;
 
 @Getter
 @Setter
-public class EnumGenerator extends AbstractTypeGenerator {
+public class EnumGenerator extends TypeGenerator {
 
     public EnumGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
         super(type, randomInstanceGenerator);
