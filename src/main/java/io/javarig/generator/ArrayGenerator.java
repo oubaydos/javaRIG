@@ -20,20 +20,26 @@ public class ArrayGenerator extends AbstractTypeGenerator implements CollectionG
     public ArrayGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
         super(type, randomInstanceGenerator);
     }
-
-
     @Override
     public Object generate() throws InstanceGenerationException {
         Class<?> arrayParameterType = ((Class<?>) getType()).componentType();
-        boolean isPrimitive = arrayParameterType.isPrimitive();
-        if (isPrimitive)
-            arrayParameterType = ClassUtils.primitiveToWrapper(arrayParameterType);
+        if (arrayParameterType.isPrimitive()) {
+            return generatePrimitiveArray(arrayParameterType);
+        } else {
+            return generateArray(arrayParameterType);
+        }
+    }
+
+    private Object generatePrimitiveArray(Class<?> primitiveType) {
+        Class<?> wrapperType = ClassUtils.primitiveToWrapper(primitiveType);
+        return ArrayUtils.toPrimitive(generateArray(wrapperType));
+    }
+
+    private Object[] generateArray(Class<?> arrayParameterType) {
         List<Object> objectList = getRandomInstanceGenerator()
                 .generate(List.class, getMinSizeInclusive(), getMaxSizeExclusive(), arrayParameterType);
         Object[] arrayInstance = (Object[]) Array.newInstance(arrayParameterType, 0);
         arrayInstance = objectList.toArray(arrayInstance);
-        if (isPrimitive)
-            return ArrayUtils.toPrimitive(arrayInstance);
         return arrayInstance;
     }
 }
