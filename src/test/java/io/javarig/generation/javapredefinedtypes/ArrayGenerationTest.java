@@ -4,6 +4,8 @@ import io.javarig.RandomInstanceGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.ARRAY;
@@ -16,21 +18,23 @@ public class ArrayGenerationTest {
     public void setUp() {
         randomInstanceGenerator = new RandomInstanceGenerator();
     }
-    @Test
-    public void shouldReturnArray() {
-        Object generated = randomInstanceGenerator.generate(Integer[].class);
+    @ParameterizedTest
+    @ValueSource(classes = {Integer[].class, int[].class})
+    public void shouldReturnIntegerArray(Class<?> testClass) {
+        Object generated = randomInstanceGenerator.generate(testClass);
         log.info("shouldReturnArray : {}", generated);
         assertThat(generated).isNotNull();
-        assertThat(generated).isInstanceOf(Integer[].class);
+        assertThat(generated).isInstanceOf(testClass);
     }
 
-    @Test
-    public void shouldReturnArrayWithExactSize() {
+    @ParameterizedTest
+    @ValueSource(classes = {Double[].class, double[].class})
+    public void shouldReturnArrayWithExactSize(Class<?> testClass) {
         int size = 20;
-        Object generated = randomInstanceGenerator.generate(Double[].class,size);
+        Object generated = randomInstanceGenerator.generate(testClass,size);
         log.info("shouldReturnArrayWithExactSize : {}", generated);
         assertThat(generated).isNotNull();
-        assertThat(generated).isInstanceOf(Double[].class);
+        assertThat(generated).isInstanceOf(testClass);
         assertThat(generated).asInstanceOf(ARRAY).hasSize(size);
     }
 
