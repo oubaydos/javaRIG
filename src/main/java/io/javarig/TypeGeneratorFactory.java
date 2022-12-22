@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 
-public enum TypeEnum {
+public enum TypeGeneratorFactory {
 
     INTEGER(Integer.class, IntegerGenerator.class),
     STRING(String.class, StringGenerator.class),
@@ -44,7 +44,7 @@ public enum TypeEnum {
     final Type type;
     final Class<? extends TypeGenerator> generatorClass;
 
-    TypeEnum(Type type, Class<? extends TypeGenerator> generatorClass) {
+    TypeGeneratorFactory(Type type, Class<? extends TypeGenerator> generatorClass) {
         this.type = type;
         this.generatorClass = generatorClass;
     }
@@ -57,8 +57,8 @@ public enum TypeEnum {
      * @return TypeEnum instance associated to the type object with generator prepared with necessary objects
      */
     public static TypeGenerator getGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
-        TypeEnum typeEnum = getTypeEnumFromType(type);
-        return typeEnum.createGeneratorInstance(type, randomInstanceGenerator);
+        TypeGeneratorFactory typeGeneratorFactory = getTypeEnumFromType(type);
+        return typeGeneratorFactory.createGeneratorInstance(type, randomInstanceGenerator);
     }
 
     /**
@@ -78,17 +78,17 @@ public enum TypeEnum {
     /**
      * gets the TypeEnum associated to the type object
      */
-    private static TypeEnum getTypeEnumFromType(Type type) {
+    private static TypeGeneratorFactory getTypeEnumFromType(Type type) {
         //we only need the raw type, for example : if we have the type of List<Sting> we only need now the class of List
         Class<?> rawType = getRawType(type);
-        return Arrays.stream(TypeEnum.values())
+        return Arrays.stream(TypeGeneratorFactory.values())
                 .filter(tEnum -> tEnum.type != null && tEnum.type.equals(rawType))
                 .findFirst()
                 .orElseGet(() -> getTypeEnumForUnmatchedTypes(rawType));
     }
 
     @NonNull
-    private static TypeEnum getTypeEnumForUnmatchedTypes(Class<?> type) {
+    private static TypeGeneratorFactory getTypeEnumForUnmatchedTypes(Class<?> type) {
         if (type.isArray()) {
             return ARRAY;
         }
