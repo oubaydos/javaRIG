@@ -84,11 +84,11 @@ public enum TypeEnum {
         return Arrays.stream(TypeEnum.values())
                 .filter(tEnum -> tEnum.type != null && tEnum.type.equals(rawType))
                 .findFirst()
-                .orElseGet(() -> getObjectIfNotEnum(rawType));
+                .orElseGet(() -> getTypeEnumForUnmatchedTypes(rawType));
     }
 
     @NonNull
-    private static TypeEnum getObjectIfNotEnum(Class<?> type) {
+    private static TypeEnum getTypeEnumForUnmatchedTypes(Class<?> type) {
         if (type.isArray()) {
             return ARRAY;
         }
