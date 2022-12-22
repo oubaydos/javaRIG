@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 import static java.time.ZoneOffset.UTC;
 
-public class LocalDateGenerator extends AbstractTypeGenerator {
+public class LocalDateGenerator extends TypeGenerator {
     public LocalDateGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
         super(type, randomInstanceGenerator);
     }

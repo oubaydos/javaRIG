@@ -1,10 +1,11 @@
-package io.javarig.generator;
+package io.javarig.generator.primitive;
 
 import io.javarig.RandomInstanceGenerator;
+import io.javarig.generator.TypeGenerator;
 
 import java.lang.reflect.Type;
 
-public class ShortGenerator extends AbstractTypeGenerator {
+public class ShortGenerator extends TypeGenerator {
     public ShortGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
         super(type, randomInstanceGenerator);
     }
