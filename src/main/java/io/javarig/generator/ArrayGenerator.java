@@ -4,6 +4,8 @@ import io.javarig.RandomInstanceGenerator;
 import io.javarig.exception.InstanceGenerationException;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.ClassUtils;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Type;
@@ -23,9 +25,15 @@ public class ArrayGenerator extends AbstractTypeGenerator implements CollectionG
     @Override
     public Object generate() throws InstanceGenerationException {
         Class<?> arrayParameterType = ((Class<?>) getType()).componentType();
+        boolean isPrimitive = arrayParameterType.isPrimitive();
+        if (isPrimitive)
+            arrayParameterType = ClassUtils.primitiveToWrapper(arrayParameterType);
         List<Object> objectList = getRandomInstanceGenerator()
                 .generate(List.class, getMinSizeInclusive(), getMaxSizeExclusive(), arrayParameterType);
         Object[] arrayInstance = (Object[]) Array.newInstance(arrayParameterType, 0);
-        return objectList.toArray(arrayInstance);
+        arrayInstance = objectList.toArray(arrayInstance);
+        if (isPrimitive)
+            return ArrayUtils.toPrimitive(arrayInstance);
+        return arrayInstance;
     }
 }
