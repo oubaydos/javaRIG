@@ -27,9 +27,11 @@ Project Structure
     .
     ├── ...
         ├── ...    
-            ├── io.javarig.Main              # the playground for testing our code
-            ├── io.javarig.OldRandomGenerator   # the instance generator
-            ├── io.javarig.testclasses.TestClass         # the test class for which we will be trying to generate random objects
+            ├── io.javarig.exception                # package containing our custom exceptions
+            ├── io.javarig.generator                # generators for specific types: array, list, map, string, primitive ...
+            ├── io.javarig.RandomInstanceGenerator  # Entrypoint for our Project, contains generate method
+            ├── io.javarig.testclasses              # test classes, supplied to our testing methods.
+            ├── io.javarig.generation               # Junit testing classes.
     ├── README.md, LICENSE...   # other files
 
 To build sources locally follow these instructions.
