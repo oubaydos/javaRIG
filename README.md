@@ -25,6 +25,42 @@ giving a class Car that respects the requirements above, this code will generate
 RandomInstanceGenerator randomInstanceGenerator = new RandomInstanceGenerator();
 Car car = randomInstanceGenerator.generate(Car.class);
 ```
+#### Predefined Java Classes
+inorder to generate an object for a certain predefined java class or primitive type, 
+you may use the same method mentioned above
+```java
+String randomString = randomInstanceGenerator.generate(String.class);
+```
+#### RandomInstanceGenerator::generate
+the generate method represents the entrypoint for our program, it accepts multiple arguments.
+The easiest way to use it is with a single argument that represents the target class
+#### Collection Generation
+to generate a collection (classes that have a size; arrays, java collections, strings...)
+you may use the generate method with extra arguments
+##### Exact size
+```java
+  Double[] doubles = randomInstanceGenerator.generate(Double[].class, 6);
+```
+this piece of code will generate an array of length 6, that contains randomly generated Doubles
+if this size is not giving, it will be randomly generated between **5 and 15**
+##### Size between two bounds
+```java
+  Double[] doubles = randomInstanceGenerator.generate(Double[].class, 6,9);
+```
+this will generate an array of doubles of a random size from {6,7,8}
+
+#### Generic Types
+to generate a class that has a generic type (a Map per example) you may 
+pass the generic types last in the argument list, and use any of the 
+RandomInstanceGenerator::generate methods
+```java
+  HashMap<String,Float> map = randomInstanceGenerator.generate(HashMap.class , String.class , Float.class);
+```
+to precise the wanted size:
+```java
+  int size = 5; // per example
+  HashMap<String,Float> map = randomInstanceGenerator.generate(HashMap.class , String.class ,size, Float.class);
+```
 
 
 Javadocs
@@ -53,9 +89,7 @@ To build sources locally follow these instructions.
 
 ### Tests
 
-we just started working on unit tests.
-
-you are welcome to help on that matter.
+unit tests are done , with a 94% coverage
 
 Technologies
 --------
@@ -67,7 +101,7 @@ Technologies
 
 Project Status
 -------
-this project is _in progress_, many things are not yet started
+this project is _in progress_, the first release is planned before the end of 2022
 
 License
 -------
