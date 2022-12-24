@@ -21,8 +21,6 @@ public enum TypeGeneratorFactory {
     INTEGER(Integer.class, IntegerGenerator.class),
     STRING(String.class, StringGenerator.class),
     BYTE(Byte.class, ByteGenerator.class),
-    BYTE_ARRAY(Byte[].class, ByteArrayGenerator.class),
-    PRIMITIVE_BYTE_ARRAY(byte[].class, ByteArrayGenerator.class),
     SHORT(Short.class, ShortGenerator.class),
     LONG(Long.class, LongGenerator.class),
     DOUBLE(Double.class, DoubleGenerator.class),
