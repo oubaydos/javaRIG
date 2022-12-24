@@ -8,9 +8,24 @@ randomly using one of the random generators defined in ``src/main/java/io.javari
 
 
 
-UseCases
+UseCase
 ------------
 This generator will mainly be used is Random-Testing of all java software products.
+
+How To use
+------------
+in order to generate a random object of type YourClass, this class should have 
+* public no arguments constructor
+* public setters for fields you want to generate randomly 
+    - naming convention for setters is setFieldName
+    - fields with no publicly accessed setters will be left as the default value.
+
+giving a class Car that respects the requirements above, this code will generate a random car
+```java
+RandomInstanceGenerator randomInstanceGenerator = new RandomInstanceGenerator();
+Car car = randomInstanceGenerator.generate(Car.class);
+```
+
 
 Javadocs
 ------------
