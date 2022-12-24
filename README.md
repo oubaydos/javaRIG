@@ -4,7 +4,7 @@ Description
 ------------
 This project aims to provide a random instances generator for any class in java,
 it iterates through setters of an empty object and sets the fields values (using Java reflection api) 
-randomly using one of the random generators defined in ``src/main/java/io.javarig.OldRandomGenerator.java``
+randomly using one of the random generators defined in ``src/main/java/io.javarig.RandomInstanceGenerator.java``
 
 
 
