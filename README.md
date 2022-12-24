@@ -89,7 +89,7 @@ To build sources locally follow these instructions.
 
 ### Tests
 
-unit tests are done , with a 94% coverage
+unit tests are done , with a 98% coverage
 
 Technologies
 --------
