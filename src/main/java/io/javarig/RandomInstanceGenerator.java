@@ -14,12 +14,13 @@ import java.util.function.Consumer;
 public class RandomInstanceGenerator {
 
     private final Stack<Type> objectStack = new Stack<>();
+    private final TypeGeneratorFactory typeGeneratorFactory = new TypeGeneratorFactory();
 
     @SuppressWarnings({"unchecked"})
     private synchronized <T> T generate(Type type, Consumer<CollectionGenerator> collectionSizeSetter) throws InstanceGenerationException {
         checkForRecursion(type);
         objectStack.push(type);
-        TypeGenerator generator = TypeGeneratorFactory.getGenerator(type, this);
+        TypeGenerator generator = typeGeneratorFactory.getGenerator(type, this);
         generator = setCollectionSize(generator, collectionSizeSetter);
         T generated = (T) generator.generate();
         objectStack.pop();
