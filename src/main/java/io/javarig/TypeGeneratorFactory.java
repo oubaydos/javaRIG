@@ -2,50 +2,16 @@ package io.javarig;
 
 import com.google.common.primitives.Primitives;
 import io.javarig.exception.JavaRIGInternalException;
-import io.javarig.generator.*;
-import io.javarig.generator.collection.list.ArrayListGenerator;
-import io.javarig.generator.collection.map.HashMapGenerator;
-import io.javarig.generator.collection.map.TreeMapGenerator;
-import io.javarig.generator.primitive.*;
+import io.javarig.generator.TypeGenerator;
 import lombok.NonNull;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.*;
+import java.util.Arrays;
 
+import static io.javarig.TypeEnum.*;
 
-public enum TypeGeneratorFactory {
-
-    INTEGER(Integer.class, IntegerGenerator.class),
-    STRING(String.class, StringGenerator.class),
-    BYTE(Byte.class, ByteGenerator.class),
-    SHORT(Short.class, ShortGenerator.class),
-    LONG(Long.class, LongGenerator.class),
-    DOUBLE(Double.class, DoubleGenerator.class),
-    FLOAT(Float.class, FloatGenerator.class),
-    BOOLEAN(Boolean.class, BooleanGenerator.class),
-    CHAR(Character.class, CharGenerator.class),
-    INSTANT(Instant.class, InstantGenerator.class),
-    DATE(Date.class, DateGenerator.class),
-    LOCAL_DATE(LocalDate.class, LocalDateGenerator.class),
-    MAP(Map.class, HashMapGenerator.class),
-    HASH_MAP(HashMap.class, HashMapGenerator.class),
-    TREE_MAP(TreeMap.class, TreeMapGenerator.class),
-    LIST(List.class, ArrayListGenerator.class),
-    ARRAY_LIST(ArrayList.class, ArrayListGenerator.class),
-    ENUM(null, EnumGenerator.class),
-    ARRAY(null, ArrayGenerator.class),
-    OBJECT(null, ObjectGenerator.class);
-
-    final Type type;
-    final Class<? extends TypeGenerator> generatorClass;
-
-    TypeGeneratorFactory(Type type, Class<? extends TypeGenerator> generatorClass) {
-        this.type = type;
-        this.generatorClass = generatorClass;
-    }
+public class TypeGeneratorFactory {
 
     /**
      * gets a TypeEnum instance and prepare its generator
@@ -54,9 +20,12 @@ public enum TypeGeneratorFactory {
      * @param randomInstanceGenerator instance that will be used to generate nested objects
      * @return TypeEnum instance associated to the type object with generator prepared with necessary objects
      */
-    public static TypeGenerator getGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
-        TypeGeneratorFactory typeGeneratorFactory = getTypeEnumFromType(type);
-        return typeGeneratorFactory.createGeneratorInstance(type, randomInstanceGenerator);
+    public TypeGenerator getGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
+        try {
+            return createGeneratorInstance(type, randomInstanceGenerator);
+        } catch (ReflectiveOperationException e) {
+            throw new JavaRIGInternalException(e);
+        }
     }
 
     /**
@@ -65,7 +34,7 @@ public enum TypeGeneratorFactory {
      * @param type Type instance
      * @return the rawType of the type object
      */
-    private static Class<?> getRawType(Type type) {
+    private Class<?> getRawType(Type type) {
         Type rawType = type;
         if (type instanceof ParameterizedType parameterizedType) {
             rawType = parameterizedType.getRawType();
@@ -76,17 +45,17 @@ public enum TypeGeneratorFactory {
     /**
      * gets the TypeEnum associated to the type object
      */
-    private static TypeGeneratorFactory getTypeEnumFromType(Type type) {
+    private TypeEnum getTypeEnumFromType(Type type) {
         //we only need the raw type, for example : if we have the type of List<Sting> we only need now the class of List
         Class<?> rawType = getRawType(type);
-        return Arrays.stream(TypeGeneratorFactory.values())
+        return Arrays.stream(TypeEnum.values())
                 .filter(tEnum -> tEnum.type != null && tEnum.type.equals(rawType))
                 .findFirst()
                 .orElseGet(() -> getTypeEnumForUnmatchedTypes(rawType));
     }
 
     @NonNull
-    private static TypeGeneratorFactory getTypeEnumForUnmatchedTypes(Class<?> type) {
+    private TypeEnum getTypeEnumForUnmatchedTypes(Class<?> type) {
         if (type.isArray()) {
             return ARRAY;
         }
@@ -95,12 +64,9 @@ public enum TypeGeneratorFactory {
         return OBJECT;
     }
 
-    public TypeGenerator createGeneratorInstance(Type type, RandomInstanceGenerator randomInstanceGenerator) {
-        try {
-            return generatorClass.getConstructor(Type.class, RandomInstanceGenerator.class)
-                    .newInstance(type, randomInstanceGenerator);
-        } catch (ReflectiveOperationException e) {
-            throw new JavaRIGInternalException(e);
-        }
+    public TypeGenerator createGeneratorInstance(Type type, RandomInstanceGenerator randomInstanceGenerator) throws ReflectiveOperationException {
+        TypeEnum typeEnum = getTypeEnumFromType(type);
+        return typeEnum.generatorClass.getConstructor(Type.class, RandomInstanceGenerator.class)
+                .newInstance(type, randomInstanceGenerator);
     }
 }
