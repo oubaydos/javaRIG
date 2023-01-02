@@ -17,6 +17,8 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 
+import static io.javarig.util.Utils.getOwnOrInheritedFieldByName;
+
 @Getter
 @Setter
 @Slf4j
@@ -43,7 +45,7 @@ public class ObjectGenerator extends TypeGenerator {
     }
 
     private static List<Method> getSetters(Class<?> objectClass) {
-        return Arrays.stream(objectClass.getDeclaredMethods())
+        return Arrays.stream(objectClass.getMethods())
                 .filter(method -> method.getName().startsWith(SETTER_PREFIX))
                 .toList();
     }
@@ -51,7 +53,7 @@ public class ObjectGenerator extends TypeGenerator {
     private void generateFieldWithSetter(Object generatedObject, Class<?> objectClass, Method setter) {
         String fieldName = Utils.getFieldNameFromSetterMethodName(setter.getName(), SETTER_PREFIX);
         try {
-            Field field = objectClass.getDeclaredField(fieldName);
+            Field field = getOwnOrInheritedFieldByName(objectClass, fieldName);
             generateField(generatedObject, setter, field);
         } catch (NoSuchFieldException ignore) {
             log.warn("no such field with name {} for setter {}", fieldName, setter.getName());
