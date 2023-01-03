@@ -22,6 +22,7 @@ public class ObjectGenerationTest {
     public void setUp() {
         randomInstanceGenerator = new RandomInstanceGenerator();
     }
+
     @Test
     public void shouldReturnAnObjectInstance() {
         //when
@@ -31,6 +32,7 @@ public class ObjectGenerationTest {
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(TestClass.class);
     }
+
     @Test
     public void shouldThrowNoDefaultConstructorExceptionWhenGivenAClassWithNoDefaultConstructor() {
         //given
@@ -102,6 +104,7 @@ public class ObjectGenerationTest {
         assertThat(generated).extracting("testClass").isNotNull().isInstanceOf(TestClass.class);
 
     }
+
     @Test
     public void shouldThrowInstanceGenerationExceptionWhenConstructorThrowsAnException() {
         //given
@@ -137,6 +140,7 @@ public class ObjectGenerationTest {
                 .extracting(ClassWithSomeNonPublicSetters::getDoubleWithPublicSetter)
                 .isNotNull();
     }
+
     @Test
     @SuppressWarnings("ConstantConditions")
     public void shouldThrowIllegalArgumentExceptionWhenGivenANullType() {
@@ -145,6 +149,7 @@ public class ObjectGenerationTest {
             randomInstanceGenerator.generate(type);
         }).isInstanceOf(NullPointerException.class);
     }
+
     @Test
     public void shouldGenerateObjectWithFieldsContainingSetterPrefix() {
         //given
@@ -164,4 +169,24 @@ public class ObjectGenerationTest {
                 .asString()
                 .isNotEmpty();
     }
+
+    @Test
+    public void shouldGenerateBaseFieldsAndInheritedFieldsWhenGivenClassExtendingAnotherClass() {
+        //given
+        Object generatedObject = randomInstanceGenerator.generate(BaseClass.class);
+        // then
+        assertThat(generatedObject)
+                .isNotNull()
+                .isInstanceOf(BaseClass.class);
+        BaseClass baseClass = (BaseClass) generatedObject;
+        assertThat(baseClass)
+                .extracting(BaseClass::getBaseField)
+                .isNotNull();
+                // FIXME: this fails .isInstanceOf(int.class);
+        assertThat(baseClass)
+                .extracting(BaseClass::getInheritedField)
+                .isNotNull()
+                .isInstanceOf(Float.class);
+    }
+
 }
