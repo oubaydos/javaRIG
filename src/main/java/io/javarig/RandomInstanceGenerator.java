@@ -3,11 +3,13 @@ package io.javarig;
 import io.javarig.exception.InstanceGenerationException;
 import io.javarig.exception.NestedObjectRecursionException;
 import io.javarig.generator.CollectionGenerator;
+import io.javarig.generator.ObjectGenerator;
 import io.javarig.generator.TypeGenerator;
 import lombok.NonNull;
 import org.apache.commons.lang3.Validate;
 
 import java.lang.reflect.Type;
+import java.util.Map;
 import java.util.Stack;
 import java.util.function.Consumer;
 
@@ -32,7 +34,7 @@ public class RandomInstanceGenerator {
      *
      * @return the generated object
      * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
-     *                                     default constructor , class have a non-public default constructor , setter cannot be invoked ... )
+     * a default constructor , class have a non-public default constructor , setter cannot be invoked ... )
      */
     public <T> T generate(@NonNull Type objectType) throws InstanceGenerationException {
         return generate(objectType, ignore -> {
@@ -45,7 +47,7 @@ public class RandomInstanceGenerator {
      * @param collectionSize the size of the collection to generate
      * @return the generated object
      * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
-     *                                     default constructor , class have a non-public default constructor , setter cannot be invoked ... )
+     * a default constructor , class have a non-public default constructor , setter cannot be invoked ... )
      */
     public <T> T generate(
             @NonNull Type type,
@@ -61,7 +63,7 @@ public class RandomInstanceGenerator {
      * @param <T> the generic type of the object to generate
      * @return the generated object
      * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
-     *                                     default constructor , class have a non-public default constructor , setter cannot be invoked ... )
+     * a default constructor , class have a non-public default constructor , setter cannot be invoked ... )
      */
     public <T> T generate(@NonNull Type objectType,
                           int minSizeInclusive,
@@ -80,7 +82,7 @@ public class RandomInstanceGenerator {
      * @param genericTypes types of generic parameters
      * @return the generated object
      * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
-     *                                     default constructor , class have a non-public default constructor , setter cannot be invoked ... )
+     * a default constructor , class have a non-public default constructor , setter cannot be invoked ... )
      */
     public <T> T generate(
             @NonNull Type objectType,
@@ -90,13 +92,34 @@ public class RandomInstanceGenerator {
         return generate(parameterizedType);
     }
 
+    public <T> T generate(
+            @NonNull Type objectType,
+            @NonNull Map<String,Type> genericTypes
+    ) throws InstanceGenerationException {
+        checkForRecursion(objectType);
+        objectStack.push(objectType);
+        TypeGenerator generator = typeGeneratorFactory.getGenerator(objectType, this);
+        generator = setGenericTypes(generator, genericTypes);
+        T generated = (T) generator.generate();
+        objectStack.pop();
+        return generated;
+    }
+
+    private TypeGenerator setGenericTypes(TypeGenerator generator, Map<String, Type> genericTypes) {
+        if(generator instanceof ObjectGenerator objectGenerator){
+            objectGenerator.setGenericTypes(genericTypes);
+            return objectGenerator;
+        }
+        return generator;
+    }
+
     /**
      * generate a random instance of a generic collection with a fixed size
      *
      * @param genericTypes types of generic parameters
      * @return the generated object
      * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
-     *                                     default constructor , class have a non-public default constructor , setter cannot be invoked ... )
+     * a default constructor , class have a non-public default constructor , setter cannot be invoked ... )
      */
     public <T> T generate(
             @NonNull Type type,
@@ -113,7 +136,7 @@ public class RandomInstanceGenerator {
      * @param genericTypes types of generic parameters
      * @return the generated object
      * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
-     *                                     default constructor , class have a non-public default constructor , setter cannot be invoked ... )
+     * a default constructor , class have a non-public default constructor , setter cannot be invoked ... )
      */
     public <T> T generate(
             @NonNull Type type,

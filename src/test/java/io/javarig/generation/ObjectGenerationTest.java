@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -187,6 +188,26 @@ public class ObjectGenerationTest {
                 .extracting(BaseClass::getInheritedField)
                 .isNotNull()
                 .isInstanceOf(Float.class);
+    }
+
+    @Test
+    public void shouldGenerateAGenericClass() {
+        //given
+        Type genericType = Integer.class;
+        Map<String, Type> genericTypes = Map.of("T", genericType);
+        Object generatedObject = randomInstanceGenerator.generate(GenericTestClass.class, genericTypes);
+        // then
+        assertThat(generatedObject)
+                .isNotNull()
+                .isInstanceOf(GenericTestClass.class);
+        GenericTestClass<String> genericTestClass = (GenericTestClass) generatedObject;
+        assertThat(genericTestClass)
+                .extracting(GenericTestClass::getList)
+                .asList()
+                .isNotNull()
+                .hasSizeBetween(CollectionGenerator.DEFAULT_MIN_SIZE_INCLUSIVE, CollectionGenerator.DEFAULT_MAX_SIZE_EXCLUSIVE)// could be better if we had access to collectionGenerator defaultMin defaultMax size as public static fields
+                .element(0)
+                .isInstanceOf((Class<?>) genericType);
     }
 
 }
