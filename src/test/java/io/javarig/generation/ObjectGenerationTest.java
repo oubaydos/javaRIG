@@ -7,6 +7,8 @@ import io.javarig.testclasses.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
@@ -190,10 +192,10 @@ public class ObjectGenerationTest {
                 .isInstanceOf(Float.class);
     }
 
-    @Test
-    public void shouldGenerateAGenericClass() {
+    @ParameterizedTest
+    @ValueSource(classes = {String.class, Integer.class, Double.class, BaseClass.class})
+    public void shouldGenerateAGenericClass(Type genericType) {
         //given
-        Type genericType = Integer.class;
         Map<String, Type> genericTypes = Map.of("T", genericType);
         Object generatedObject = randomInstanceGenerator.generate(GenericTestClass.class, genericTypes);
         // then
