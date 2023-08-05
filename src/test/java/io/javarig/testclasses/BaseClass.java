@@ -9,6 +9,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class BaseClass extends SuperClass{
-    int baseField;
+public class BaseClass extends SuperClass {
+  int baseField;
 }
