@@ -19,11 +19,11 @@ public class RandomInstanceGenerator {
     private final TypeGeneratorFactory typeGeneratorFactory = new TypeGeneratorFactory();
 
     @SuppressWarnings({"unchecked"})
-    private synchronized <T> T generate(Type type, Consumer<CollectionGenerator> collectionSizeSetter) throws InstanceGenerationException {
+    private synchronized <T> T generate(Type type, Consumer<TypeGenerator> setUpGenerator) throws InstanceGenerationException {
         checkForRecursion(type);
         objectStack.push(type);
         TypeGenerator generator = typeGeneratorFactory.getGenerator(type, this);
-        generator = setCollectionSize(generator, collectionSizeSetter);
+        setUpGenerator.accept(generator);
         T generated = (T) generator.generate();
         objectStack.pop();
         return generated;
@@ -54,7 +54,11 @@ public class RandomInstanceGenerator {
             int collectionSize
     ) throws InstanceGenerationException {
         validateSize(collectionSize);
-        return generate(type, collectionGenerator -> collectionGenerator.setSize(collectionSize));
+        return generate(type, generator -> {
+            if(generator instanceof CollectionGenerator collectionGenerator){
+                collectionGenerator.setSize(collectionSize);
+            }
+        });
     }
 
     /**
@@ -70,9 +74,11 @@ public class RandomInstanceGenerator {
                           int maxSizeExclusive
     ) throws InstanceGenerationException {
         validateSize(minSizeInclusive, maxSizeExclusive);
-        return generate(objectType, collectionGenerator -> {
-            collectionGenerator.setMinSizeInclusive(minSizeInclusive);
-            collectionGenerator.setMaxSizeExclusive(maxSizeExclusive);
+        return generate(objectType, generator -> {
+            if(generator instanceof CollectionGenerator collectionGenerator){
+                collectionGenerator.setMinSizeInclusive(minSizeInclusive);
+                collectionGenerator.setMaxSizeExclusive(maxSizeExclusive);
+            }
         });
     }
 
@@ -96,21 +102,11 @@ public class RandomInstanceGenerator {
             @NonNull Type objectType,
             @NonNull Map<String,Type> genericTypes
     ) throws InstanceGenerationException {
-        checkForRecursion(objectType);
-        objectStack.push(objectType);
-        TypeGenerator generator = typeGeneratorFactory.getGenerator(objectType, this);
-        generator = setGenericTypes(generator, genericTypes);
-        T generated = (T) generator.generate();
-        objectStack.pop();
-        return generated;
-    }
-
-    private TypeGenerator setGenericTypes(TypeGenerator generator, Map<String, Type> genericTypes) {
-        if(generator instanceof ObjectGenerator objectGenerator){
-            objectGenerator.setGenericTypes(genericTypes);
-            return objectGenerator;
-        }
-        return generator;
+        return generate(objectType, generator -> {
+            if(generator instanceof ObjectGenerator objectGenerator){
+                objectGenerator.setGenericTypes(genericTypes);
+            }
+        });
     }
 
     /**
@@ -159,14 +155,6 @@ public class RandomInstanceGenerator {
         if (!objectStack.isEmpty() && objectStack.contains(type)) {
             throw new NestedObjectRecursionException(type);
         }
-    }
-
-    private TypeGenerator setCollectionSize(TypeGenerator generator, Consumer<CollectionGenerator> collectionSizeSetter) {
-        if (generator instanceof CollectionGenerator collectionGenerator) {
-            collectionSizeSetter.accept(collectionGenerator);
-            return (TypeGenerator) collectionGenerator;
-        }
-        return generator;
     }
 
     private void validateSize(int minSizeInclusive, int maxSizeExclusive) {
