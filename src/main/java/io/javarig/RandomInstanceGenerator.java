@@ -3,13 +3,11 @@ package io.javarig;
 import io.javarig.exception.InstanceGenerationException;
 import io.javarig.exception.NestedObjectRecursionException;
 import io.javarig.generator.CollectionGenerator;
-import io.javarig.generator.ObjectGenerator;
 import io.javarig.generator.TypeGenerator;
 import lombok.NonNull;
 import org.apache.commons.lang3.Validate;
 
 import java.lang.reflect.Type;
-import java.util.Map;
 import java.util.Stack;
 import java.util.function.Consumer;
 
@@ -98,16 +96,6 @@ public class RandomInstanceGenerator {
         return generate(parameterizedType);
     }
 
-    public <T> T generate(
-            @NonNull Type objectType,
-            @NonNull Map<String,Type> genericTypes
-    ) throws InstanceGenerationException {
-        return generate(objectType, generator -> {
-            if(generator instanceof ObjectGenerator objectGenerator){
-                objectGenerator.setGenericTypes(genericTypes);
-            }
-        });
-    }
 
     /**
      * generate a random instance of a generic collection with a fixed size

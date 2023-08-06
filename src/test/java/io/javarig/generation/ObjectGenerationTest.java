@@ -12,9 +12,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -198,8 +195,7 @@ public class ObjectGenerationTest {
     @ValueSource(classes = {String.class, Integer.class, Double.class, BaseClass.class})
     public void shouldGenerateAGenericClass(Type genericType) {
         //given
-        Map<String, Type> genericTypes = Map.of("T", genericType);
-        Object generatedObject = randomInstanceGenerator.generate(GenericTestClass.class, genericTypes);
+        Object generatedObject = randomInstanceGenerator.generate(GenericTestClass.class, genericType);
         // then
         assertThat(generatedObject)
                 .isNotNull()
@@ -214,4 +210,32 @@ public class ObjectGenerationTest {
                 .isInstanceOf((Class<?>) genericType);
     }
 
+    @Test
+    public void shouldGenerateAGenericClassWithRightOrderTypes() {
+        //given
+        Class<String> classParam1 = String.class;
+        Class<Integer> classParam2 = Integer.class;
+        Object generatedObject = randomInstanceGenerator.generate(GenericTestClass2.class, classParam1, classParam2);
+        // then
+        assertThat(generatedObject)
+                .isNotNull()
+                .isInstanceOf(GenericTestClass2.class);
+
+        GenericTestClass2<String, Integer> genericTestClass2 = (GenericTestClass2) generatedObject;
+        assertThat(genericTestClass2)
+                .extracting(GenericTestClass2::getGenericClass3)
+                .isNotNull()
+                .isInstanceOf(GenericTestClass3.class)
+                .extracting(GenericTestClass3::getT)
+                .isNotNull()
+                .isInstanceOf(classParam2);
+
+        assertThat(genericTestClass2)
+                .extracting(GenericTestClass2::getGenericClass3)
+                .isNotNull()
+                .isInstanceOf(GenericTestClass3.class)
+                .extracting(GenericTestClass3::getK)
+                .isNotNull()
+                .isInstanceOf(classParam1);
+    }
 }
