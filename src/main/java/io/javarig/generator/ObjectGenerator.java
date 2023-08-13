@@ -81,7 +81,7 @@ public class ObjectGenerator extends TypeGenerator {
     private void generateField(Object generatedObject, Method setter, Field field) throws InstanceGenerationException {
         Type type = field.getGenericType();
         if(type instanceof ParameterizedType parameterizedType){
-            type = setTypeArguments(parameterizedType);
+            type = resolveTypeArguments(parameterizedType);
         }
         Object generatedField = getRandomInstanceGenerator().generate(GenericTypes.resolve(type, genericTypesMap));
         try {
@@ -95,7 +95,7 @@ public class ObjectGenerator extends TypeGenerator {
         }
     }
 
-    private Type setTypeArguments(Type type) {
+    private Type resolveTypeArguments(Type type) {
         ParameterizedType parameterizedType = (ParameterizedType) type;
         List<Type> typeArguments = Arrays.stream(parameterizedType.getActualTypeArguments())
                 .map((typeArgument -> GenericTypes.resolve(typeArgument, genericTypesMap)))

@@ -17,11 +17,11 @@ public class RandomInstanceGenerator {
     private final TypeGeneratorFactory typeGeneratorFactory = new TypeGeneratorFactory();
 
     @SuppressWarnings({"unchecked"})
-    private synchronized <T> T generate(Type type, Consumer<TypeGenerator> setUpGenerator) throws InstanceGenerationException {
+    private synchronized <T> T generate(Type type, Consumer<TypeGenerator> generatorSetup) throws InstanceGenerationException {
         checkForRecursion(type);
         objectStack.push(type);
         TypeGenerator generator = typeGeneratorFactory.getGenerator(type, this);
-        setUpGenerator.accept(generator);
+        generatorSetup.accept(generator);
         T generated = (T) generator.generate();
         objectStack.pop();
         return generated;
