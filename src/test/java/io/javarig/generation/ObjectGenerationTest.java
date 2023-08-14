@@ -7,6 +7,8 @@ import io.javarig.testclasses.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
@@ -189,4 +191,51 @@ public class ObjectGenerationTest {
                 .isInstanceOf(Float.class);
     }
 
+    @ParameterizedTest
+    @ValueSource(classes = {String.class, Integer.class, Double.class, BaseClass.class})
+    public void shouldGenerateAGenericClass(Type genericType) {
+        //given
+        Object generatedObject = randomInstanceGenerator.generate(GenericTestClass.class, genericType);
+        // then
+        assertThat(generatedObject)
+                .isNotNull()
+                .isInstanceOf(GenericTestClass.class);
+        GenericTestClass<String> genericTestClass = (GenericTestClass) generatedObject;
+        assertThat(genericTestClass)
+                .extracting(GenericTestClass::getList)
+                .asList()
+                .isNotNull()
+                .hasSizeBetween(CollectionGenerator.DEFAULT_MIN_SIZE_INCLUSIVE, CollectionGenerator.DEFAULT_MAX_SIZE_EXCLUSIVE)// could be better if we had access to collectionGenerator defaultMin defaultMax size as public static fields
+                .element(0)
+                .isInstanceOf((Class<?>) genericType);
+    }
+
+    @Test
+    public void shouldGenerateAGenericClassWithRightOrderTypes() {
+        //given
+        Class<String> classParam1 = String.class;
+        Class<Integer> classParam2 = Integer.class;
+        Object generatedObject = randomInstanceGenerator.generate(GenericTestClass2.class, classParam1, classParam2);
+        // then
+        assertThat(generatedObject)
+                .isNotNull()
+                .isInstanceOf(GenericTestClass2.class);
+
+        GenericTestClass2<String, Integer> genericTestClass2 = (GenericTestClass2) generatedObject;
+        assertThat(genericTestClass2)
+                .extracting(GenericTestClass2::getGenericClass3)
+                .isNotNull()
+                .isInstanceOf(GenericTestClass3.class)
+                .extracting(GenericTestClass3::getT)
+                .isNotNull()
+                .isInstanceOf(classParam2);
+
+        assertThat(genericTestClass2)
+                .extracting(GenericTestClass2::getGenericClass3)
+                .isNotNull()
+                .isInstanceOf(GenericTestClass3.class)
+                .extracting(GenericTestClass3::getK)
+                .isNotNull()
+                .isInstanceOf(classParam1);
+    }
 }

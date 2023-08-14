@@ -9,6 +9,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class BaseClass extends SuperClass{
-    int baseField;
+public class GenericTestClass2<T,K> {
+    private GenericTestClass3<K,T> genericClass3;
 }

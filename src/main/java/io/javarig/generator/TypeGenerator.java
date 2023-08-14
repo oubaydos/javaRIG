@@ -19,7 +19,6 @@ public abstract class TypeGenerator {
     private final Random random = new Random();
     private final Type type;
     private final RandomInstanceGenerator randomInstanceGenerator;
-
     /**
      * generates a random object, its type is known from the extending class
      */

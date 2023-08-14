@@ -17,11 +17,11 @@ public class RandomInstanceGenerator {
     private final TypeGeneratorFactory typeGeneratorFactory = new TypeGeneratorFactory();
 
     @SuppressWarnings({"unchecked"})
-    private synchronized <T> T generate(Type type, Consumer<CollectionGenerator> collectionSizeSetter) throws InstanceGenerationException {
+    private synchronized <T> T generate(Type type, Consumer<TypeGenerator> generatorSetup) throws InstanceGenerationException {
         checkForRecursion(type);
         objectStack.push(type);
         TypeGenerator generator = typeGeneratorFactory.getGenerator(type, this);
-        generator = setCollectionSize(generator, collectionSizeSetter);
+        generatorSetup.accept(generator);
         T generated = (T) generator.generate();
         objectStack.pop();
         return generated;
@@ -32,7 +32,7 @@ public class RandomInstanceGenerator {
      *
      * @return the generated object
      * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
-     *                                     default constructor , class have a non-public default constructor , setter cannot be invoked ... )
+     * a default constructor , class have a non-public default constructor , setter cannot be invoked ... )
      */
     public <T> T generate(@NonNull Type objectType) throws InstanceGenerationException {
         return generate(objectType, ignore -> {
@@ -45,14 +45,18 @@ public class RandomInstanceGenerator {
      * @param collectionSize the size of the collection to generate
      * @return the generated object
      * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
-     *                                     default constructor , class have a non-public default constructor , setter cannot be invoked ... )
+     * a default constructor , class have a non-public default constructor , setter cannot be invoked ... )
      */
     public <T> T generate(
             @NonNull Type type,
             int collectionSize
     ) throws InstanceGenerationException {
         validateSize(collectionSize);
-        return generate(type, collectionGenerator -> collectionGenerator.setSize(collectionSize));
+        return generate(type, generator -> {
+            if(generator instanceof CollectionGenerator collectionGenerator){
+                collectionGenerator.setSize(collectionSize);
+            }
+        });
     }
 
     /**
@@ -61,16 +65,18 @@ public class RandomInstanceGenerator {
      * @param <T> the generic type of the object to generate
      * @return the generated object
      * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
-     *                                     default constructor , class have a non-public default constructor , setter cannot be invoked ... )
+     * a default constructor , class have a non-public default constructor , setter cannot be invoked ... )
      */
     public <T> T generate(@NonNull Type objectType,
                           int minSizeInclusive,
                           int maxSizeExclusive
     ) throws InstanceGenerationException {
         validateSize(minSizeInclusive, maxSizeExclusive);
-        return generate(objectType, collectionGenerator -> {
-            collectionGenerator.setMinSizeInclusive(minSizeInclusive);
-            collectionGenerator.setMaxSizeExclusive(maxSizeExclusive);
+        return generate(objectType, generator -> {
+            if(generator instanceof CollectionGenerator collectionGenerator){
+                collectionGenerator.setMinSizeInclusive(minSizeInclusive);
+                collectionGenerator.setMaxSizeExclusive(maxSizeExclusive);
+            }
         });
     }
 
@@ -80,7 +86,7 @@ public class RandomInstanceGenerator {
      * @param genericTypes types of generic parameters
      * @return the generated object
      * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
-     *                                     default constructor , class have a non-public default constructor , setter cannot be invoked ... )
+     * a default constructor , class have a non-public default constructor , setter cannot be invoked ... )
      */
     public <T> T generate(
             @NonNull Type objectType,
@@ -90,13 +96,14 @@ public class RandomInstanceGenerator {
         return generate(parameterizedType);
     }
 
+
     /**
      * generate a random instance of a generic collection with a fixed size
      *
      * @param genericTypes types of generic parameters
      * @return the generated object
      * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
-     *                                     default constructor , class have a non-public default constructor , setter cannot be invoked ... )
+     * a default constructor , class have a non-public default constructor , setter cannot be invoked ... )
      */
     public <T> T generate(
             @NonNull Type type,
@@ -113,7 +120,7 @@ public class RandomInstanceGenerator {
      * @param genericTypes types of generic parameters
      * @return the generated object
      * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
-     *                                     default constructor , class have a non-public default constructor , setter cannot be invoked ... )
+     * a default constructor , class have a non-public default constructor , setter cannot be invoked ... )
      */
     public <T> T generate(
             @NonNull Type type,
@@ -136,14 +143,6 @@ public class RandomInstanceGenerator {
         if (!objectStack.isEmpty() && objectStack.contains(type)) {
             throw new NestedObjectRecursionException(type);
         }
-    }
-
-    private TypeGenerator setCollectionSize(TypeGenerator generator, Consumer<CollectionGenerator> collectionSizeSetter) {
-        if (generator instanceof CollectionGenerator collectionGenerator) {
-            collectionSizeSetter.accept(collectionGenerator);
-            return (TypeGenerator) collectionGenerator;
-        }
-        return generator;
     }
 
     private void validateSize(int minSizeInclusive, int maxSizeExclusive) {

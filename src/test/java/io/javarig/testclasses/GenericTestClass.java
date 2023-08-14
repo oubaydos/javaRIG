@@ -5,10 +5,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class BaseClass extends SuperClass{
-    int baseField;
+public class GenericTestClass<T> {
+    private List<T> list;
 }
