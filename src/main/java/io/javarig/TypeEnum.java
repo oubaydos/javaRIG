@@ -4,6 +4,9 @@ import io.javarig.generator.*;
 import io.javarig.generator.collection.list.ArrayListGenerator;
 import io.javarig.generator.collection.map.HashMapGenerator;
 import io.javarig.generator.collection.map.TreeMapGenerator;
+import io.javarig.generator.collection.set.HashSetGenerator;
+import io.javarig.generator.collection.set.LinkedHashSetGenerator;
+import io.javarig.generator.collection.set.TreeSetGenerator;
 import io.javarig.generator.primitive.*;
 
 import java.lang.reflect.Type;
@@ -31,6 +34,10 @@ public enum TypeEnum {
     TREE_MAP(TreeMap.class, TreeMapGenerator.class),
     LIST(List.class, ArrayListGenerator.class),
     ARRAY_LIST(ArrayList.class, ArrayListGenerator.class),
+    SET(Set.class, HashSetGenerator.class),
+    HASH_SET(HashSet.class, HashSetGenerator.class),
+    LINKED_HASH_SET(LinkedHashSet.class, LinkedHashSetGenerator.class),
+    TREE_SET(TreeSet.class, TreeSetGenerator.class),
     ENUM(null, EnumGenerator.class),
     ARRAY(null, ArrayGenerator.class),
     OBJECT(null, ObjectGenerator.class);
