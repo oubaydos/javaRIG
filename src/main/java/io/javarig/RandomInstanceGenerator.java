@@ -2,30 +2,27 @@ package io.javarig;
 
 import io.javarig.exception.InstanceGenerationException;
 import io.javarig.exception.NestedObjectRecursionException;
-import io.javarig.generator.CollectionGenerator;
 import io.javarig.generator.TypeGenerator;
+import lombok.Getter;
 import lombok.NonNull;
 import org.apache.commons.lang3.Validate;
 
 import java.lang.reflect.Type;
 import java.util.Stack;
-import java.util.function.Consumer;
 
+@Getter
 public class RandomInstanceGenerator {
-
+    
     private final Stack<Type> objectStack = new Stack<>();
     private final TypeGeneratorFactory typeGeneratorFactory = new TypeGeneratorFactory();
 
-    @SuppressWarnings({"unchecked"})
-    private synchronized <T> T generate(Type type, Consumer<TypeGenerator> generatorSetup) throws InstanceGenerationException {
-        checkForRecursion(type);
-        objectStack.push(type);
-        TypeGenerator generator = typeGeneratorFactory.getGenerator(type, this);
-        generatorSetup.accept(generator);
-        T generated = (T) generator.generate();
-        objectStack.pop();
-        return generated;
-    }
+    // default values
+    public final static int DEFAULT_MAX_SIZE_EXCLUSIVE = 15;
+    public final static int DEFAULT_MIN_SIZE_INCLUSIVE = 5;
+
+    // configurations 
+    private int maxSizeExclusive = DEFAULT_MAX_SIZE_EXCLUSIVE;
+    private int minSizeInclusive = DEFAULT_MIN_SIZE_INCLUSIVE;
 
     /**
      * generate a random instance of the given type
@@ -34,9 +31,14 @@ public class RandomInstanceGenerator {
      * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
      * a default constructor , class have a non-public default constructor , setter cannot be invoked ... )
      */
+    @SuppressWarnings({"unchecked"})
     public <T> T generate(@NonNull Type objectType) throws InstanceGenerationException {
-        return generate(objectType, ignore -> {
-        });
+        checkForRecursion(objectType);
+        objectStack.push(objectType);
+        TypeGenerator generator = typeGeneratorFactory.getGenerator(objectType, this);
+        T generated = (T) generator.generate();
+        objectStack.pop();
+        return generated;
     }
 
     /**
@@ -52,11 +54,8 @@ public class RandomInstanceGenerator {
             int collectionSize
     ) throws InstanceGenerationException {
         validateSize(collectionSize);
-        return generate(type, generator -> {
-            if(generator instanceof CollectionGenerator collectionGenerator){
-                collectionGenerator.setSize(collectionSize);
-            }
-        });
+        setSize(collectionSize);
+        return generate(type);
     }
 
     /**
@@ -72,12 +71,9 @@ public class RandomInstanceGenerator {
                           int maxSizeExclusive
     ) throws InstanceGenerationException {
         validateSize(minSizeInclusive, maxSizeExclusive);
-        return generate(objectType, generator -> {
-            if(generator instanceof CollectionGenerator collectionGenerator){
-                collectionGenerator.setMinSizeInclusive(minSizeInclusive);
-                collectionGenerator.setMaxSizeExclusive(maxSizeExclusive);
-            }
-        });
+        this.maxSizeExclusive = maxSizeExclusive;
+        this.minSizeInclusive = minSizeInclusive;
+        return generate(objectType);
     }
 
     /**
@@ -152,6 +148,11 @@ public class RandomInstanceGenerator {
 
     private void validateSize(int size) {
         Validate.isTrue(size >= 0, "Size must be non-negative.");
+    }
+
+    private void setSize(int size){
+        this.maxSizeExclusive = size + 1;
+        this.minSizeInclusive = size;
     }
 
 }

@@ -2,7 +2,6 @@ package io.javarig.generation;
 
 import io.javarig.RandomInstanceGenerator;
 import io.javarig.exception.*;
-import io.javarig.generator.CollectionGenerator;
 import io.javarig.testclasses.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -165,7 +164,7 @@ public class ObjectGenerationTest {
                 .extracting(ClassWithFieldContainingSetterPrefix::getSettersList)
                 .asList()
                 .isNotNull()
-                .hasSizeBetween(CollectionGenerator.DEFAULT_MIN_SIZE_INCLUSIVE, CollectionGenerator.DEFAULT_MAX_SIZE_EXCLUSIVE)// could be better if we had access to collectionGenerator defaultMin defaultMax size as public static fields
+                .hasSizeBetween(RandomInstanceGenerator.DEFAULT_MIN_SIZE_INCLUSIVE, RandomInstanceGenerator.DEFAULT_MAX_SIZE_EXCLUSIVE)// could be better if we had access to collectionGenerator defaultMin defaultMax size as public static fields
                 .element(0)
                 .isNotNull()
                 .asString()
@@ -205,7 +204,7 @@ public class ObjectGenerationTest {
                 .extracting(GenericTestClass::getList)
                 .asList()
                 .isNotNull()
-                .hasSizeBetween(CollectionGenerator.DEFAULT_MIN_SIZE_INCLUSIVE, CollectionGenerator.DEFAULT_MAX_SIZE_EXCLUSIVE)// could be better if we had access to collectionGenerator defaultMin defaultMax size as public static fields
+                .hasSizeBetween(RandomInstanceGenerator.DEFAULT_MIN_SIZE_INCLUSIVE, RandomInstanceGenerator.DEFAULT_MAX_SIZE_EXCLUSIVE)// could be better if we had access to collectionGenerator defaultMin defaultMax size as public static fields
                 .element(0)
                 .isInstanceOf((Class<?>) genericType);
     }

@@ -9,16 +9,13 @@ import java.lang.reflect.Type;
 
 @Setter
 @Getter
-public class StringGenerator extends TypeGenerator implements CollectionGenerator {
-    private int minSizeInclusive = DEFAULT_MIN_SIZE_INCLUSIVE;
-    private int maxSizeExclusive = DEFAULT_MAX_SIZE_EXCLUSIVE;
-
+public class StringGenerator extends TypeGenerator {
     public StringGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
         super(type, randomInstanceGenerator);
     }
 
     @Override
     public String generate() {
-        return RandomStringUtils.randomAlphanumeric(this.getMinSizeInclusive(), this.getMaxSizeExclusive());
+        return RandomStringUtils.randomAlphanumeric(getRandomInstanceGenerator().getMinSizeInclusive(), getRandomInstanceGenerator().getMaxSizeExclusive());
     }
 }
