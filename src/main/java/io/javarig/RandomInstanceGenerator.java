@@ -3,7 +3,10 @@ package io.javarig;
 import io.javarig.exception.InstanceGenerationException;
 import io.javarig.exception.NestedObjectRecursionException;
 import io.javarig.generator.TypeGenerator;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.apache.commons.lang3.Validate;
 
@@ -11,6 +14,9 @@ import java.lang.reflect.Type;
 import java.util.Stack;
 
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RandomInstanceGenerator {
     
     private final Stack<Type> objectStack = new Stack<>();
@@ -21,8 +27,8 @@ public class RandomInstanceGenerator {
     public final static int DEFAULT_MIN_SIZE_INCLUSIVE = 5;
 
     // configurations 
-    private int maxSizeExclusive = DEFAULT_MAX_SIZE_EXCLUSIVE;
-    private int minSizeInclusive = DEFAULT_MIN_SIZE_INCLUSIVE;
+    @Builder.Default private int maxSizeExclusive = DEFAULT_MAX_SIZE_EXCLUSIVE;
+    @Builder.Default private int minSizeInclusive = DEFAULT_MIN_SIZE_INCLUSIVE;
 
     /**
      * generate a random instance of the given type
