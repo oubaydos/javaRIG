@@ -16,6 +16,6 @@ public class StringGenerator extends TypeGenerator {
 
     @Override
     public String generate() {
-        return RandomStringUtils.randomAlphanumeric(getRandomInstanceGenerator().getMinSizeInclusive(), getRandomInstanceGenerator().getMaxSizeExclusive());
+        return RandomStringUtils.randomAlphanumeric(getConfig().getMinSizeInclusive(), getConfig().getMaxSizeExclusive());
     }
 }

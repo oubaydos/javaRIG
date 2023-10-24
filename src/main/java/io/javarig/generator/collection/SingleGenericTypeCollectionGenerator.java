@@ -28,7 +28,7 @@ public abstract class SingleGenericTypeCollectionGenerator<T extends Collection>
 
     @Override
     public T generate() throws InstanceGenerationException {
-        int randomSize = getRandom().nextInt(getRandomInstanceGenerator().getMinSizeInclusive(), getRandomInstanceGenerator().getMaxSizeExclusive());
+        int randomSize = getRandom().nextInt(getConfig().getMinSizeInclusive(), getConfig().getMaxSizeExclusive());
         checkIfValidNumberOfGenericArguments(getType());
         ParameterizedType parameterizedType = (ParameterizedType) getType();
         Type listParameterType = parameterizedType.getActualTypeArguments()[0];

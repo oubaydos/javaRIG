@@ -1,34 +1,31 @@
 package io.javarig;
 
+import io.javarig.config.JavaRIGConfig;
 import io.javarig.exception.InstanceGenerationException;
 import io.javarig.exception.NestedObjectRecursionException;
 import io.javarig.generator.TypeGenerator;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
 import org.apache.commons.lang3.Validate;
 
 import java.lang.reflect.Type;
 import java.util.Stack;
 
+@RequiredArgsConstructor
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class RandomInstanceGenerator {
-    
+
     private final Stack<Type> objectStack = new Stack<>();
     private final TypeGeneratorFactory typeGeneratorFactory = new TypeGeneratorFactory();
+    private final JavaRIGConfig generalConfig;
+    private JavaRIGConfig oneTimeConfig = null;
 
-    // default values
-    public final static int DEFAULT_MAX_SIZE_EXCLUSIVE = 15;
-    public final static int DEFAULT_MIN_SIZE_INCLUSIVE = 5;
-
-    // configurations 
-    @Builder.Default private int maxSizeExclusive = DEFAULT_MAX_SIZE_EXCLUSIVE;
-    @Builder.Default private int minSizeInclusive = DEFAULT_MIN_SIZE_INCLUSIVE;
+    public RandomInstanceGenerator() {
+        this.generalConfig = JavaRIGConfig.builder().build();
+    }
 
     /**
      * generate a random instance of the given type
@@ -60,8 +57,11 @@ public class RandomInstanceGenerator {
             int collectionSize
     ) throws InstanceGenerationException {
         validateSize(collectionSize);
-        setSize(collectionSize);
-        return generate(type);
+        JavaRIGConfig oneTimeConfig = JavaRIGConfig.builder()
+            .maxSizeExclusive(collectionSize + 1)
+            .minSizeInclusive(collectionSize)
+            .build();
+        return generateWithOneTimeConfig(type, oneTimeConfig);
     }
 
     /**
@@ -73,13 +73,15 @@ public class RandomInstanceGenerator {
      * a default constructor , class have a non-public default constructor , setter cannot be invoked ... )
      */
     public <T> T generate(@NonNull Type objectType,
-                          int minSizeInclusive,
-                          int maxSizeExclusive
+            int minSizeInclusive,
+            int maxSizeExclusive
     ) throws InstanceGenerationException {
         validateSize(minSizeInclusive, maxSizeExclusive);
-        this.maxSizeExclusive = maxSizeExclusive;
-        this.minSizeInclusive = minSizeInclusive;
-        return generate(objectType);
+        JavaRIGConfig oneTimeConfig = JavaRIGConfig.builder()
+                .maxSizeExclusive(maxSizeExclusive)
+                .minSizeInclusive(minSizeInclusive)
+                .build();
+        return generateWithOneTimeConfig(objectType, oneTimeConfig);
     }
 
     /**
@@ -97,7 +99,6 @@ public class RandomInstanceGenerator {
         Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) objectType);
         return generate(parameterizedType);
     }
-
 
     /**
      * generate a random instance of a generic collection with a fixed size
@@ -134,6 +135,13 @@ public class RandomInstanceGenerator {
         return generate(parameterizedType, minSizeInclusive, maxSizeExclusive);
     }
 
+    private <T> T generateWithOneTimeConfig(@NonNull Type type, JavaRIGConfig oneTimeConfig) {
+        this.oneTimeConfig = oneTimeConfig;
+        T generatedObject = generate(type);
+        this.oneTimeConfig = null;
+        return generatedObject;
+    }
+
     /**
      * check if type exists in objectStack, if so then object can't be generated because there is recursion
      * in this object's fields (there is a field that it's instantiation depends on owner object)
@@ -154,11 +162,6 @@ public class RandomInstanceGenerator {
 
     private void validateSize(int size) {
         Validate.isTrue(size >= 0, "Size must be non-negative.");
-    }
-
-    private void setSize(int size){
-        this.maxSizeExclusive = size + 1;
-        this.minSizeInclusive = size;
     }
 
 }

@@ -1,6 +1,7 @@
 package io.javarig.generator;
 
 import io.javarig.RandomInstanceGenerator;
+import io.javarig.config.JavaRIGConfig;
 import io.javarig.exception.InstanceGenerationException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,14 @@ public abstract class TypeGenerator {
     private final Random random = new Random();
     private final Type type;
     private final RandomInstanceGenerator randomInstanceGenerator;
+
+    protected JavaRIGConfig getConfig(){
+        if(getRandomInstanceGenerator().getOneTimeConfig() != null) {
+            return getRandomInstanceGenerator().getOneTimeConfig();
+        }
+        return getRandomInstanceGenerator().getGeneralConfig();
+    }
+
     /**
      * generates a random object, its type is known from the extending class
      */

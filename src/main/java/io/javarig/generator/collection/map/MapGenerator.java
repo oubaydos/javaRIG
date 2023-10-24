@@ -33,7 +33,7 @@ public abstract class MapGenerator extends TypeGenerator implements GenericColle
     @Override
     public Map<Object, Object> generate() throws InstanceGenerationException {
         checkIfValidNumberOfGenericArguments(getType());
-        int size = getRandom().nextInt(getRandomInstanceGenerator().getMinSizeInclusive(), getRandomInstanceGenerator().getMaxSizeExclusive());
+        int size = getRandom().nextInt(getConfig().getMinSizeInclusive(), getConfig().getMaxSizeExclusive());
         ParameterizedType parameterizedType = (ParameterizedType) getType();
         return generate(parameterizedType, size);
     }
