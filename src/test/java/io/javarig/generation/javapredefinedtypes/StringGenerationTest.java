@@ -1,6 +1,7 @@
 package io.javarig.generation.javapredefinedtypes;
 
 import io.javarig.RandomInstanceGenerator;
+import io.javarig.config.Configuration;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,7 @@ public class StringGenerationTest {
     @Test
     public void shouldGenerateStringWithExactSize() {
         int size = 20;
-        Object generated = randomInstanceGenerator.generate(String.class, size);
+        Object generated = randomInstanceGenerator.generate(String.class, Configuration.withSize(size));
         log.info("shouldGenerateString : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(String.class);
@@ -40,7 +41,7 @@ public class StringGenerationTest {
     public void shouldGenerateStringWithSizeBetween() {
         int minSize = 20;
         int maxSize = 40;
-        Object generated = randomInstanceGenerator.generate(String.class, minSize, maxSize);
+        Object generated = randomInstanceGenerator.generate(String.class, Configuration.withSize(minSize, maxSize));
         log.info("shouldGenerateString : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(String.class);
@@ -51,7 +52,7 @@ public class StringGenerationTest {
         int minSize = 40;
         int maxSize = 20;
         assertThatThrownBy(() -> {//when
-            randomInstanceGenerator.generate(String.class, minSize, maxSize);
+            randomInstanceGenerator.generate(String.class, Configuration.withSize(minSize, maxSize));
         }).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Start value must be smaller than end value.");
     }
@@ -60,7 +61,7 @@ public class StringGenerationTest {
     public void shouldThrowIllegalArgumentExceptionGivenStringHavingMinSizeSameASMaxSize() {
         int size = 30;
         assertThatThrownBy(() -> {//when
-            randomInstanceGenerator.generate(String.class, size, size);
+            randomInstanceGenerator.generate(String.class, Configuration.withSize(size, size));
         }).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Start value must be smaller than end value.");
     }
@@ -68,7 +69,7 @@ public class StringGenerationTest {
     public void shouldThrowIllegalArgumentExceptionWhenGivenNegativeSize() {
         int size = -20;
         assertThatThrownBy(() -> {//when
-            randomInstanceGenerator.generate(String.class, size);
+            randomInstanceGenerator.generate(String.class, Configuration.withSize(size));
         }).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Size must be non-negative.");
     }

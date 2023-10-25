@@ -35,7 +35,7 @@ public class ArrayGenerator extends TypeGenerator {
 
     private Object[] generateArray(Class<?> arrayParameterType) {
         List<Object> objectList = getRandomInstanceGenerator()
-                .generate(List.class, getConfig().getMinSizeInclusive(), getConfig().getMaxSizeExclusive(), arrayParameterType);
+                .generate(List.class, arrayParameterType);
         Object[] arrayInstance = (Object[]) Array.newInstance(arrayParameterType, 0);
         arrayInstance = objectList.toArray(arrayInstance);
         return arrayInstance;

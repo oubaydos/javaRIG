@@ -1,6 +1,7 @@
 package io.javarig.generation.javapredefinedtypes;
 
 import io.javarig.RandomInstanceGenerator;
+import io.javarig.config.Configuration;
 import io.javarig.testclasses.TestClass;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +34,7 @@ public class ArrayGenerationTest {
     @Test
     public void shouldReturnWrapperArrayWithExactSize() {
         int size = 20;
-        Object generated = randomInstanceGenerator.generate(Double[].class, size);
+        Object generated = randomInstanceGenerator.generate(Double[].class, Configuration.withSize(size));
         log.info("shouldReturnArrayWithExactSize : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(Double[].class);
@@ -43,7 +44,7 @@ public class ArrayGenerationTest {
     @Test
     public void shouldReturnPrimitiveArrayWithExactSize() {
         int size = 20;
-        Object generated = randomInstanceGenerator.generate(double[].class, size);
+        Object generated = randomInstanceGenerator.generate(double[].class, Configuration.withSize(size));
         log.info("shouldReturnArrayWithExactSize : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(double[].class);
@@ -54,7 +55,7 @@ public class ArrayGenerationTest {
     public void shouldReturnArrayWithSizeBetween() {
         int minSize = 20;
         int maxSize = 40;
-        Object generated = randomInstanceGenerator.generate(String[].class, minSize, maxSize);
+        Object generated = randomInstanceGenerator.generate(String[].class, Configuration.withSize(minSize, maxSize));
         log.info("shouldReturnArrayWithSizeBetween : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(String[].class);
@@ -72,7 +73,7 @@ public class ArrayGenerationTest {
     @Test
     public void shouldReturnTestClassArrayWithExactSize() {
         int size = 22;
-        Object generated = randomInstanceGenerator.generate(TestClass[].class, size);
+        Object generated = randomInstanceGenerator.generate(TestClass[].class, Configuration.withSize(size));
         log.info("shouldReturnTestClassArrayWithExactSize {} : {}", size, generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(TestClass[].class);
