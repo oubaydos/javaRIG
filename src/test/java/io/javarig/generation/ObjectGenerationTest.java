@@ -165,7 +165,7 @@ public class ObjectGenerationTest {
                 .extracting(ClassWithFieldContainingSetterPrefix::getSettersList)
                 .asList()
                 .isNotNull()
-                .hasSizeBetween(DefaultConfigValues.DEFAULT_MIN_SIZE_INCLUSIVE, DefaultConfigValues.DEFAULT_MAX_SIZE_EXCLUSIVE)// could be better if we had access to collectionGenerator defaultMin defaultMax size as public static fields
+                .hasSizeBetween(DefaultConfigValues.DEFAULT_MIN_SIZE_INCLUSIVE, DefaultConfigValues.DEFAULT_MAX_SIZE_EXCLUSIVE - 1)// could be better if we had access to collectionGenerator defaultMin defaultMax size as public static fields
                 .element(0)
                 .isNotNull()
                 .asString()
@@ -184,7 +184,7 @@ public class ObjectGenerationTest {
         assertThat(baseClass)
                 .extracting(BaseClass::getBaseField)
                 .isNotNull();
-                // FIXME: this fails .isInstanceOf(int.class);
+        // FIXME: this fails .isInstanceOf(int.class);
         assertThat(baseClass)
                 .extracting(BaseClass::getInheritedField)
                 .isNotNull()
@@ -205,7 +205,7 @@ public class ObjectGenerationTest {
                 .extracting(GenericTestClass::getList)
                 .asList()
                 .isNotNull()
-                .hasSizeBetween(DefaultConfigValues.DEFAULT_MIN_SIZE_INCLUSIVE, DefaultConfigValues.DEFAULT_MAX_SIZE_EXCLUSIVE)// could be better if we had access to collectionGenerator defaultMin defaultMax size as public static fields
+                .hasSizeBetween(DefaultConfigValues.DEFAULT_MIN_SIZE_INCLUSIVE, DefaultConfigValues.DEFAULT_MAX_SIZE_EXCLUSIVE - 1)
                 .element(0)
                 .isInstanceOf((Class<?>) genericType);
     }

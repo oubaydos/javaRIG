@@ -30,7 +30,7 @@ public class Configuration {
     public static Configuration withSize(int minSizeInclusive, int maxSizeExclusive) {
         validateSize(minSizeInclusive, maxSizeExclusive);
         return Configuration.builder()
-                .maxSizeExclusive(maxSizeExclusive + 1)
+                .maxSizeExclusive(maxSizeExclusive)
                 .minSizeInclusive(minSizeInclusive)
                 .build();
     }

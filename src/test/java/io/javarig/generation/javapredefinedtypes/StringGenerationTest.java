@@ -49,7 +49,7 @@ public class StringGenerationTest {
         log.info("shouldGenerateString : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(String.class);
-        assertThat(generated).asString().hasSizeBetween(minSize, maxSize);
+        assertThat(generated).asString().hasSizeBetween(minSize, maxSize-1);
     }
     @ParameterizedTest
     @ValueSource(strings = {"", "[a-zA-Z0-9,;:!?]"})
