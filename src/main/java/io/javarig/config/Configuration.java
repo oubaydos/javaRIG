@@ -6,6 +6,8 @@ import org.apache.commons.lang3.Validate;
 import lombok.Builder;
 import lombok.Getter;
 
+import static io.javarig.util.Utils.removeUnsupportedRegexCharacters;
+
 @Getter
 @Builder
 public class Configuration {
@@ -34,7 +36,7 @@ public class Configuration {
     }
 
     public static Configuration withRegexPattern(String regexPattern) {
-        validateRegexPattern(regexPattern);
+        validateRegexPattern(removeUnsupportedRegexCharacters(regexPattern));
         return Configuration.builder()
                 .regexPattern(regexPattern)
                 .build();
@@ -53,5 +55,6 @@ public class Configuration {
     private static void validateRegexPattern(String regexPattern) {
         Validate.isTrue(Generex.isValidPattern(regexPattern), "regex pattern not valid (or not supported).");
     }
+    // todo should override the build method to validate before building
 
 }

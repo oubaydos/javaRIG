@@ -1,5 +1,7 @@
 package io.javarig.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Optional;
@@ -21,5 +23,11 @@ public class Utils {
     // will be used later
     public static boolean isClassGeneric(Class<?> aClass) {
         return aClass != null && aClass.getTypeParameters().length > 0;
+    }
+    public static String removeUnsupportedRegexCharacters(String regexPattern){// if other chars are unsupported maybe convert to list and loop
+        regexPattern = StringUtils.replace(regexPattern, "^","");
+        regexPattern = StringUtils.replace(regexPattern, "$","");
+        regexPattern = StringUtils.replace(regexPattern, "\\","");
+        return regexPattern;
     }
 }
