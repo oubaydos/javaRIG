@@ -1,92 +1,82 @@
 package io.javarig;
 
+import io.javarig.config.Configuration;
 import io.javarig.exception.InstanceGenerationException;
 import io.javarig.exception.NestedObjectRecursionException;
-import io.javarig.generator.CollectionGenerator;
 import io.javarig.generator.TypeGenerator;
+import lombok.Getter;
 import lombok.NonNull;
-import org.apache.commons.lang3.Validate;
+import lombok.RequiredArgsConstructor;
+
 
 import java.lang.reflect.Type;
 import java.util.Stack;
-import java.util.function.Consumer;
 
+@RequiredArgsConstructor
+@Getter
 public class RandomInstanceGenerator {
 
     private final Stack<Type> objectStack = new Stack<>();
     private final TypeGeneratorFactory typeGeneratorFactory = new TypeGeneratorFactory();
+    private final Configuration generalConfig;
+    private Configuration oneTimeConfig = null;
 
+    public RandomInstanceGenerator() {
+        this.generalConfig = Configuration.builder().build();
+    }
+
+    /**
+     * generate a random instance of the given type
+     * 
+     * @param objectType type of the object
+     * @return the generated object
+     * @throws InstanceGenerationException if the instance cannot be generated for
+     *                                     some reason (class doesn't have a default
+     *                                     constructor , class have a non-public
+     *                                     default constructor , setter cannot be
+     *                                     invoked ... )
+     */
     @SuppressWarnings({"unchecked"})
-    private synchronized <T> T generate(Type type, Consumer<TypeGenerator> generatorSetup) throws InstanceGenerationException {
-        checkForRecursion(type);
-        objectStack.push(type);
-        TypeGenerator generator = typeGeneratorFactory.getGenerator(type, this);
-        generatorSetup.accept(generator);
+    public <T> T generate(@NonNull Type objectType) throws InstanceGenerationException {
+        checkForRecursion(objectType);
+        objectStack.push(objectType);
+        TypeGenerator generator = typeGeneratorFactory.getGenerator(objectType, this);
         T generated = (T) generator.generate();
         objectStack.pop();
         return generated;
     }
 
     /**
-     * generate a random instance of the given type
+     * generate a random instance for a collection, with a one time configuration
      *
+     * @param objectType    type of the object
+     * @param oneTimeConfig a configuration for the generator that gets applied one
+     *                      time and doesn't overide the general configuration
+     *                      provided at the creation
      * @return the generated object
-     * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
-     * a default constructor , class have a non-public default constructor , setter cannot be invoked ... )
-     */
-    public <T> T generate(@NonNull Type objectType) throws InstanceGenerationException {
-        return generate(objectType, ignore -> {
-        });
-    }
-
-    /**
-     * generate a random instance for a collection, with a fixed size
-     *
-     * @param collectionSize the size of the collection to generate
-     * @return the generated object
-     * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
-     * a default constructor , class have a non-public default constructor , setter cannot be invoked ... )
-     */
-    public <T> T generate(
-            @NonNull Type type,
-            int collectionSize
-    ) throws InstanceGenerationException {
-        validateSize(collectionSize);
-        return generate(type, generator -> {
-            if(generator instanceof CollectionGenerator collectionGenerator){
-                collectionGenerator.setSize(collectionSize);
-            }
-        });
-    }
-
-    /**
-     * generate a random instance for a collection, with size between a range
-     *
-     * @param <T> the generic type of the object to generate
-     * @return the generated object
-     * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
-     * a default constructor , class have a non-public default constructor , setter cannot be invoked ... )
+     * @throws InstanceGenerationException if the instance cannot be generated for
+     *                                     some reason (class doesn't have a default
+     *                                     constructor , class have a non-public
+     *                                     default constructor , setter cannot be
+     *                                     invoked ... )
      */
     public <T> T generate(@NonNull Type objectType,
-                          int minSizeInclusive,
-                          int maxSizeExclusive
+            Configuration oneTimeConfig
     ) throws InstanceGenerationException {
-        validateSize(minSizeInclusive, maxSizeExclusive);
-        return generate(objectType, generator -> {
-            if(generator instanceof CollectionGenerator collectionGenerator){
-                collectionGenerator.setMinSizeInclusive(minSizeInclusive);
-                collectionGenerator.setMaxSizeExclusive(maxSizeExclusive);
-            }
-        });
+        return generateWithOneTimeConfig(objectType, oneTimeConfig);
     }
 
     /**
      * generate a random instance of a generic type
      *
+     * @param objectType   type of the object
      * @param genericTypes types of generic parameters
      * @return the generated object
-     * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
-     * a default constructor , class have a non-public default constructor , setter cannot be invoked ... )
+     * @throws InstanceGenerationException if the instance cannot be generated for
+     *                                     some reason (class doesn't have a default
+     *                                     constructor , class have a non-public
+     *                                     default constructor , setter cannot be
+     *                                     invoked ... )
      */
     public <T> T generate(
             @NonNull Type objectType,
@@ -96,40 +86,35 @@ public class RandomInstanceGenerator {
         return generate(parameterizedType);
     }
 
-
     /**
      * generate a random instance of a generic collection with a fixed size
      *
-     * @param genericTypes types of generic parameters
+     * @param objectType    type of the object
+     * @param oneTimeConfig a configuration for the generator that gets applied one
+     *                      time and doesn't overide the general configuration
+     *                      provided at the creation
+     * @param genericTypes  types of generic parameters
      * @return the generated object
-     * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
-     * a default constructor , class have a non-public default constructor , setter cannot be invoked ... )
+     * @throws InstanceGenerationException if the instance cannot be generated for
+     *                                     some reason (class doesn't have
+     *                                     a default constructor , class have a
+     *                                     non-public default constructor , setter
+     *                                     cannot be invoked ... )
      */
     public <T> T generate(
-            @NonNull Type type,
-            int collectionSize,
+            @NonNull Type objectType,
+            Configuration oneTimeConfig,
             @NonNull Type... genericTypes
     ) throws InstanceGenerationException {
-        Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type);
-        return generate(parameterizedType, collectionSize);
+        Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) objectType);
+        return generate(parameterizedType, oneTimeConfig);
     }
 
-    /**
-     * generate a random instance of a generic collection with a size between a range
-     *
-     * @param genericTypes types of generic parameters
-     * @return the generated object
-     * @throws InstanceGenerationException if the instance cannot be generated for some reason (class doesn't have
-     * a default constructor , class have a non-public default constructor , setter cannot be invoked ... )
-     */
-    public <T> T generate(
-            @NonNull Type type,
-            int minSizeInclusive,
-            int maxSizeExclusive,
-            @NonNull Type... genericTypes
-    ) throws InstanceGenerationException {
-        Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) type);
-        return generate(parameterizedType, minSizeInclusive, maxSizeExclusive);
+    private <T> T generateWithOneTimeConfig(@NonNull Type objectType, Configuration oneTimeConfig) {
+        this.oneTimeConfig = oneTimeConfig;
+        T generatedObject = generate(objectType);
+        this.oneTimeConfig = null;
+        return generatedObject;
     }
 
     /**
@@ -139,19 +124,12 @@ public class RandomInstanceGenerator {
      *
      * @param type - a type to search for in the stack
      */
-    private void checkForRecursion(Type type) {
-        if (!objectStack.isEmpty() && objectStack.contains(type)) {
-            throw new NestedObjectRecursionException(type);
+    private void checkForRecursion(Type objectType) {
+        if (!objectStack.isEmpty() && objectStack.contains(objectType)) {
+            throw new NestedObjectRecursionException(objectType);
         }
     }
 
-    private void validateSize(int minSizeInclusive, int maxSizeExclusive) {
-        Validate.isTrue(maxSizeExclusive > minSizeInclusive, "Start value must be smaller than end value.");
-        Validate.isTrue(minSizeInclusive >= 0, "Both range values must be non-negative.");
-    }
 
-    private void validateSize(int size) {
-        Validate.isTrue(size >= 0, "Size must be non-negative.");
-    }
 
 }

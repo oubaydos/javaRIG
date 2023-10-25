@@ -2,6 +2,7 @@ package io.javarig.generation.javapredefinedtypes.collection;
 
 import io.javarig.ParameterizedTypeImpl;
 import io.javarig.RandomInstanceGenerator;
+import io.javarig.config.Configuration;
 import io.javarig.exception.InvalidGenericParametersNumberException;
 import io.javarig.exception.JavaRIGInternalException;
 import io.javarig.generator.collection.map.MapGenerator;
@@ -59,7 +60,7 @@ public class MapGenerationTest {
         Class<?> valueType = Integer.class;
 
         //when
-        Object generated = randomInstanceGenerator.generate(mapClass, size, keyType, valueType);
+        Object generated = randomInstanceGenerator.generate(mapClass, Configuration.withSize(size), keyType, valueType);
         //then
         log.info("shouldReturnMapWithExactSize of type {} : {}", mapClass.getName(), generated);
         assertThat(generated).isNotNull();
@@ -84,7 +85,7 @@ public class MapGenerationTest {
         Class<?> valueType = Integer.class;
 
         //when
-        Object generated = randomInstanceGenerator.generate(mapClass, minSize, maxSize, keyType, valueType);
+        Object generated = randomInstanceGenerator.generate(mapClass, Configuration.withSize(minSize, maxSize), keyType, valueType);
         //then
         log.info("shouldReturnMapWithSizeBetween of type {} : {}", mapClass.getName(), generated);
         assertThat(generated).isNotNull();

@@ -13,9 +13,7 @@ import java.util.List;
 
 @Setter
 @Getter
-public class ArrayGenerator extends TypeGenerator implements CollectionGenerator {
-    private int minSizeInclusive = DEFAULT_MIN_SIZE_INCLUSIVE;
-    private int maxSizeExclusive = DEFAULT_MAX_SIZE_EXCLUSIVE;
+public class ArrayGenerator extends TypeGenerator {
 
     public ArrayGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
         super(type, randomInstanceGenerator);
@@ -37,7 +35,7 @@ public class ArrayGenerator extends TypeGenerator implements CollectionGenerator
 
     private Object[] generateArray(Class<?> arrayParameterType) {
         List<Object> objectList = getRandomInstanceGenerator()
-                .generate(List.class, getMinSizeInclusive(), getMaxSizeExclusive(), arrayParameterType);
+                .generate(List.class, arrayParameterType);
         Object[] arrayInstance = (Object[]) Array.newInstance(arrayParameterType, 0);
         arrayInstance = objectList.toArray(arrayInstance);
         return arrayInstance;

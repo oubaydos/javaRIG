@@ -20,8 +20,6 @@ import java.util.Map;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class MapGenerator extends TypeGenerator implements GenericCollectionGenerator<Map> {
     private final static int NUMBER_OF_GENERIC_PARAMS = 2;
-    private int minSizeInclusive = DEFAULT_MIN_SIZE_INCLUSIVE;
-    private int maxSizeExclusive = DEFAULT_MAX_SIZE_EXCLUSIVE;
 
     public MapGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
         super(type, randomInstanceGenerator);
@@ -35,10 +33,9 @@ public abstract class MapGenerator extends TypeGenerator implements GenericColle
     @Override
     public Map<Object, Object> generate() throws InstanceGenerationException {
         checkIfValidNumberOfGenericArguments(getType());
-        int size = getRandom().nextInt(getMinSizeInclusive(), getMaxSizeExclusive());
+        int size = getRandom().nextInt(getConfig().getMinSizeInclusive(), getConfig().getMaxSizeExclusive());
         ParameterizedType parameterizedType = (ParameterizedType) getType();
         return generate(parameterizedType, size);
-
     }
 
     /**
