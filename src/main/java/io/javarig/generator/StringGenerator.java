@@ -1,10 +1,9 @@
 package io.javarig.generator;
 
+import com.mifmif.common.regex.Generex;
 import io.javarig.RandomInstanceGenerator;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.RandomStringUtils;
-
 import java.lang.reflect.Type;
 
 @Setter
@@ -14,8 +13,13 @@ public class StringGenerator extends TypeGenerator {
         super(type, randomInstanceGenerator);
     }
 
+    /**
+     * if minLength < possible regex generation, it will be ignored
+     * todo ignore ^ and $
+     */
     @Override
     public String generate() {
-        return RandomStringUtils.randomAlphanumeric(getConfig().getMinSizeInclusive(), getConfig().getMaxSizeExclusive());
+        Generex generex = new Generex(getConfig().getRegexPattern(), getRandom());
+        return generex.random(getConfig().getMinSizeInclusive(), getConfig().getMaxSizeExclusive() - 1);
     }
 }
