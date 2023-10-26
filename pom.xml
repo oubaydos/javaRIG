@@ -7,6 +7,41 @@
     <groupId>io.github.oubaydos</groupId>
     <artifactId>java-random-generator</artifactId>
     <version>1.1</version>
+    <name>javaRIG</name>
+    <description>This project aims to provide a random instances generator for any class in java, it iterates through setters of an empty object and sets the fields values (using Java reflection api) randomly</description>
+    <url>https://github.com/oubaydos/javaRIG/</url>
+    <scm>
+        <connection>scm:git:git://github.com/oubaydos/javaRIG.git</connection>
+        <developerConnection>scm:git:git://github.com/oubaydos/javaRIG.git</developerConnection>
+        <url>https://github.com/oubaydos/javaRIG</url>
+    </scm>
+    <developers>
+        <developer>
+            <id>oubaydos</id>
+            <name>obaydah bouifadene</name>
+            <email>oubayda56@gmail.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>byazid</id>
+            <name>hamza ben yazid</name>
+            <email>benyazidhamza969@gmail.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
+    <licenses>
+        <license>
+            <name>The MIT License</name>
+            <url>https://raw.githubusercontent.com/oubaydos/javaRIG/main/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
     <dependencies>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -146,6 +181,20 @@
                         <id>attach-javadocs</id>
                         <goals>
                             <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
                         </goals>
                     </execution>
                 </executions>
