@@ -53,12 +53,22 @@ public class StringGenerationTest {
     }
     @ParameterizedTest
     @ValueSource(strings = {"", "[a-zA-Z0-9,;:!?]"})
-    public void shouldGenerateStringMatchingRegexPatternMatchingStringsSmallerThanGivenSize(String regexPattern) {
+    public void shouldGenerateStringMatchingRegexPatternBellowGivenMinimumLength(String regexPattern) {
         Object generated = randomInstanceGenerator.generate(String.class, Configuration.withRegexPattern(regexPattern));
         log.info("shouldGenerateString : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(String.class);
-        assertThat(generated).asString().hasSizeLessThan(DefaultConfigValues.DEFAULT_MAX_SIZE_EXCLUSIVE);
+        assertThat(generated).asString().hasSizeLessThan(DefaultConfigValues.DEFAULT_MIN_SIZE_INCLUSIVE);
+        assertThat(generated).asString().matches(regexPattern);
+    }
+    @Test
+    public void shouldGenerateStringMatchingRegexPatternOverGivenMaximumLength() {
+        String regexPattern = "abcdefghijklmnopqrstuvwxyz";
+        Object generated = randomInstanceGenerator.generate(String.class, Configuration.withRegexPattern(regexPattern));
+        log.info("shouldGenerateString : {}", generated);
+        assertThat(generated).isNotNull();
+        assertThat(generated).isInstanceOf(String.class);
+        assertThat(generated).asString().hasSizeGreaterThanOrEqualTo(DefaultConfigValues.DEFAULT_MAX_SIZE_EXCLUSIVE);
         assertThat(generated).asString().matches(regexPattern);
     }
     @Test
