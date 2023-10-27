@@ -165,7 +165,7 @@ public class ObjectGenerationTest {
                 .extracting(ClassWithFieldContainingSetterPrefix::getSettersList)
                 .asList()
                 .isNotNull()
-                .hasSizeBetween(DefaultConfigValues.DEFAULT_MIN_SIZE_INCLUSIVE, DefaultConfigValues.DEFAULT_MAX_SIZE_EXCLUSIVE - 1)// could be better if we had access to collectionGenerator defaultMin defaultMax size as public static fields
+                .hasSizeBetween(DefaultConfigValues.DEFAULT_MIN_SIZE_INCLUSIVE, DefaultConfigValues.DEFAULT_MAX_SIZE_EXCLUSIVE - 1)
                 .element(0)
                 .isNotNull()
                 .asString()
