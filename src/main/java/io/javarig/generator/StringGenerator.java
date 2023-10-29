@@ -17,7 +17,7 @@ public class StringGenerator extends TypeGenerator {
     }
 
     /**
-     * if minLength < possible regex generation, it will be ignored
+     * if minLength (maxLength) is smaller (greater) than possible regex generation, it will be ignored
      * anchors (^, $) and backslash (\) are not supported, and will be ignored
      */
     @Override
