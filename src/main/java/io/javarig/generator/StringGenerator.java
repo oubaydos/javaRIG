@@ -1,11 +1,13 @@
 package io.javarig.generator;
 
+import com.mifmif.common.regex.Generex;
 import io.javarig.RandomInstanceGenerator;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.RandomStringUtils;
 
 import java.lang.reflect.Type;
+
+import static io.javarig.util.Utils.removeUnsupportedRegexCharacters;
 
 @Setter
 @Getter
@@ -14,8 +16,14 @@ public class StringGenerator extends TypeGenerator {
         super(type, randomInstanceGenerator);
     }
 
+    /**
+     * if minLength < possible regex generation, it will be ignored
+     * anchors (^, $) and backslash (\) are not supported, and will be ignored
+     */
     @Override
     public String generate() {
-        return RandomStringUtils.randomAlphanumeric(getConfig().getMinSizeInclusive(), getConfig().getMaxSizeExclusive());
+        String regex = removeUnsupportedRegexCharacters(getConfig().getRegexPattern());
+        Generex generex = new Generex(regex, getRandom());
+        return generex.random(getConfig().getMinSizeInclusive(), getConfig().getMaxSizeExclusive() - 1);
     }
 }

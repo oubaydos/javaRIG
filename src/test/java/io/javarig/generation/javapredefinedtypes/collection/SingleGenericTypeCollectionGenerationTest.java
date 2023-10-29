@@ -80,7 +80,7 @@ public class SingleGenericTypeCollectionGenerationTest {
         log.info("shouldReturnListWithSizeBetween : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(collectionClass);
-        assertThat(generated).asInstanceOf(COLLECTION).hasSizeBetween(minSize, maxSize);
+        assertThat(generated).asInstanceOf(COLLECTION).hasSizeBetween(minSize, maxSize-1);
 
         //asserting type
         assertThat(generated).asInstanceOf(COLLECTION).first().isInstanceOf(type);

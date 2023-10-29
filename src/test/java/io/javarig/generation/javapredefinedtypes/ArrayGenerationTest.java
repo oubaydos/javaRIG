@@ -59,7 +59,7 @@ public class ArrayGenerationTest {
         log.info("shouldReturnArrayWithSizeBetween : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(String[].class);
-        assertThat(generated).asInstanceOf(ARRAY).hasSizeBetween(minSize, maxSize);
+        assertThat(generated).asInstanceOf(ARRAY).hasSizeBetween(minSize, maxSize-1);
     }
 
     @Test

@@ -90,7 +90,7 @@ public class MapGenerationTest {
         log.info("shouldReturnMapWithSizeBetween of type {} : {}", mapClass.getName(), generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(mapClass);
-        assertThat(generated).asInstanceOf(MAP).hasSizeBetween(minSize, maxSize);
+        assertThat(generated).asInstanceOf(MAP).hasSizeBetween(minSize, maxSize-1);
 
         //asserting keys type
         assertThat(generated).asInstanceOf(MAP).extracting((map) -> map.keySet().toArray()[0]).isInstanceOf(keyType);
