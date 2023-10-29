@@ -6,7 +6,7 @@
 
     <groupId>io.github.oubaydos</groupId>
     <artifactId>java-random-generator</artifactId>
-    <version>1.1</version>
+    <version>1.1.1</version>
     <name>javaRIG</name>
     <description>This project aims to provide a random instances generator for any class in java, it iterates through setters of an empty object and sets the fields values (using Java reflection api) randomly</description>
     <url>https://github.com/oubaydos/javaRIG/</url>
@@ -91,7 +91,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>31.1-jre</version>
+            <version>32.1.3-jre</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
