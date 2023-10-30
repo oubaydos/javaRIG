@@ -2,7 +2,6 @@ package io.javarig.generator.collection;
 
 import io.javarig.ParameterizedTypeImpl;
 import io.javarig.RandomInstanceGenerator;
-import io.javarig.config.Configuration;
 import io.javarig.exception.InvalidGenericParametersNumberException;
 import io.javarig.exception.JavaRIGInternalException;
 import io.javarig.generator.collection.list.ListGenerator;
@@ -56,7 +55,7 @@ public class CollectionGenerationTest {
         int size = 20;
         Class<?> type = String.class;
         //when
-        Object generated = randomInstanceGenerator.generate(collectionClass, Configuration.withSize(size), type);
+        Object generated = randomInstanceGenerator.withSize(size).generate(collectionClass, type);
         //then
         log.info("shouldReturn{}WithExactSize : {}",collectionClass.getSimpleName(), generated);
         assertThat(generated).isNotNull();
@@ -75,7 +74,7 @@ public class CollectionGenerationTest {
         int maxSize = 40;
         Class<?> type = String.class;
         //when
-        Object generated = randomInstanceGenerator.generate(collectionClass, Configuration.withSize(minSize, maxSize), type);
+        Object generated = randomInstanceGenerator.withSize(minSize, maxSize).generate(collectionClass, type);
         //then
         log.info("shouldReturnListWithSizeBetween : {}", generated);
         assertThat(generated).isNotNull();
@@ -108,7 +107,7 @@ public class CollectionGenerationTest {
     public void shouldThrowIllegalArgumentExceptionGivenMinSizeEqualsMaxSize(Class<?> collectionClass) {
         int size = 30;
         assertThatThrownBy(() -> {//when
-            randomInstanceGenerator.generate(collectionClass, Configuration.withSize(size, size));
+            randomInstanceGenerator.withSize(size, size).generate(collectionClass);
         }).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Start value must be smaller than end value.");
     }

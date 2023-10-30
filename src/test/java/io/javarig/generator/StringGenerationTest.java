@@ -1,7 +1,6 @@
 package io.javarig.generator;
 
 import io.javarig.RandomInstanceGenerator;
-import io.javarig.config.Configuration;
 import io.javarig.config.DefaultConfigValues;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +33,7 @@ public class StringGenerationTest {
     @Test
     public void shouldGenerateStringWithExactSize() {
         int size = 20;
-        Object generated = randomInstanceGenerator.generate(String.class, Configuration.withSize(size));
+        Object generated = randomInstanceGenerator.withSize(size).generate(String.class);
         log.info("shouldGenerateString : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(String.class);
@@ -45,7 +44,7 @@ public class StringGenerationTest {
     public void shouldGenerateStringWithSizeBetween() {
         int minSize = 20;
         int maxSize = 40;
-        Object generated = randomInstanceGenerator.generate(String.class, Configuration.withSize(minSize, maxSize));
+        Object generated = randomInstanceGenerator.withSize(minSize, maxSize).generate(String.class);
         log.info("shouldGenerateString : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(String.class);
@@ -54,7 +53,7 @@ public class StringGenerationTest {
     @ParameterizedTest
     @ValueSource(strings = {"", "[a-zA-Z0-9,;:!?]"})
     public void shouldGenerateStringMatchingRegexPatternBellowGivenMinimumLength(String regexPattern) {
-        Object generated = randomInstanceGenerator.generate(String.class, Configuration.withRegexPattern(regexPattern));
+        Object generated = randomInstanceGenerator.withRegexPattern(regexPattern).generate(String.class);
         log.info("shouldGenerateString : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(String.class);
@@ -64,7 +63,7 @@ public class StringGenerationTest {
     @Test
     public void shouldGenerateStringMatchingRegexPatternOverGivenMaximumLength() {
         String regexPattern = "abcdefghijklmnopqrstuvwxyz";
-        Object generated = randomInstanceGenerator.generate(String.class, Configuration.withRegexPattern(regexPattern));
+        Object generated = randomInstanceGenerator.withRegexPattern(regexPattern).generate(String.class);
         log.info("shouldGenerateString : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(String.class);
@@ -74,7 +73,7 @@ public class StringGenerationTest {
     @Test
     public void shouldGenerateStringMatchingRegexPattern() {
         String regexPattern = "[a-z][A-Z]*[0-9]+a[a(b;c][12]";
-        Object generated = randomInstanceGenerator.generate(String.class, Configuration.withRegexPattern(regexPattern));
+        Object generated = randomInstanceGenerator.withRegexPattern(regexPattern).generate(String.class);
         log.info("shouldGenerateString : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(String.class);
@@ -85,7 +84,7 @@ public class StringGenerationTest {
     public void shouldGenerateStringMatchingRegexPatternWhileIgnoringUnsupportedCharacters() {
         String regexPattern = "[a-z]^[A-Z]*[0-9]+$a[ab;\\c$$$$^^i][12]";
         String  temp = removeUnsupportedRegexCharacters(regexPattern);
-        Object generated = randomInstanceGenerator.generate(String.class, Configuration.withRegexPattern(regexPattern));
+        Object generated = randomInstanceGenerator.withRegexPattern(regexPattern).generate(String.class);
         log.info("shouldGenerateString : {}", generated);
         assertThat(generated).isNotNull();
         assertThat(generated).isInstanceOf(String.class);
@@ -97,7 +96,7 @@ public class StringGenerationTest {
         int minSize = 40;
         int maxSize = 20;
         assertThatThrownBy(() -> {//when
-            randomInstanceGenerator.generate(String.class, Configuration.withSize(minSize, maxSize));
+            randomInstanceGenerator.withSize(minSize, maxSize).generate(String.class);
         }).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Start value must be smaller than end value.");
     }
@@ -106,7 +105,7 @@ public class StringGenerationTest {
     public void shouldThrowIllegalArgumentExceptionGivenStringHavingMinSizeSameASMaxSize() {
         int size = 30;
         assertThatThrownBy(() -> {//when
-            randomInstanceGenerator.generate(String.class, Configuration.withSize(size, size));
+            randomInstanceGenerator.withSize(size, size).generate(String.class);
         }).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Start value must be smaller than end value.");
     }
@@ -114,7 +113,7 @@ public class StringGenerationTest {
     public void shouldThrowIllegalArgumentExceptionWhenGivenNegativeSize() {
         int size = -20;
         assertThatThrownBy(() -> {//when
-            randomInstanceGenerator.generate(String.class, Configuration.withSize(size));
+            randomInstanceGenerator.withSize(size).generate(String.class);
         }).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Size must be non-negative.");
     }
