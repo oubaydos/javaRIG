@@ -5,7 +5,7 @@ import io.javarig.RandomInstanceGenerator;
 import io.javarig.config.Configuration;
 import io.javarig.exception.InvalidGenericParametersNumberException;
 import io.javarig.exception.JavaRIGInternalException;
-import io.javarig.generator.collection.map.MapGenerator;
+import io.javarig.generator.map.MapGenerator;
 import io.javarig.testclasses.FakeMap;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;

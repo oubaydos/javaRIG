@@ -1,4 +1,4 @@
-package io.javarig.generator.collection.map;
+package io.javarig.generator.map;
 
 import io.javarig.RandomInstanceGenerator;
 
