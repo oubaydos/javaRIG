@@ -1,4 +1,4 @@
-package io.javarig.generation.javapredefinedtypes.collection;
+package io.javarig.generator.map;
 
 import io.javarig.ParameterizedTypeImpl;
 import io.javarig.RandomInstanceGenerator;

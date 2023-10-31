@@ -1,4 +1,4 @@
-package io.javarig.generation.javapredefinedtypes;
+package io.javarig.generator;
 
 import io.javarig.RandomInstanceGenerator;
 import io.javarig.testclasses.NullTestEnum;
