@@ -1,10 +1,11 @@
-package io.javarig.generator.collection.map;
+package io.javarig.generator.map;
 
+import io.javarig.GenericType;
+import io.javarig.ImplementationProvider;
 import io.javarig.RandomInstanceGenerator;
 import io.javarig.exception.InstanceGenerationException;
 import io.javarig.exception.JavaRIGInternalException;
 import io.javarig.generator.TypeGenerator;
-import io.javarig.generator.collection.GenericCollectionGenerator;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +19,7 @@ import java.util.Map;
 @Getter
 @Setter
 @SuppressWarnings({"rawtypes", "unchecked"})
-public abstract class MapGenerator extends TypeGenerator implements GenericCollectionGenerator<Map> {
+public abstract class MapGenerator extends TypeGenerator implements ImplementationProvider<Map>, GenericType {
     private final static int NUMBER_OF_GENERIC_PARAMS = 2;
 
     public MapGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {

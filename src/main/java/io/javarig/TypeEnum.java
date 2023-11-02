@@ -2,12 +2,15 @@ package io.javarig;
 
 import io.javarig.generator.*;
 import io.javarig.generator.collection.list.ArrayListGenerator;
-import io.javarig.generator.collection.map.HashMapGenerator;
-import io.javarig.generator.collection.map.TreeMapGenerator;
 import io.javarig.generator.collection.set.HashSetGenerator;
 import io.javarig.generator.collection.set.LinkedHashSetGenerator;
 import io.javarig.generator.collection.set.TreeSetGenerator;
+import io.javarig.generator.map.HashMapGenerator;
+import io.javarig.generator.map.TreeMapGenerator;
 import io.javarig.generator.primitive.*;
+import io.javarig.generator.time.DateGenerator;
+import io.javarig.generator.time.InstantGenerator;
+import io.javarig.generator.time.LocalDateGenerator;
 
 import java.lang.reflect.Type;
 import java.time.Instant;

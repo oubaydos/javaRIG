@@ -1,4 +1,4 @@
-package io.javarig.generation.javapredefinedtypes.collection;
+package io.javarig.generator.collection;
 
 import io.javarig.ParameterizedTypeImpl;
 import io.javarig.RandomInstanceGenerator;
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.InstanceOfAssertFactories.COLLECTION;
 
 @Slf4j
-public class SingleGenericTypeCollectionGenerationTest {
+public class CollectionGenerationTest {
     private RandomInstanceGenerator randomInstanceGenerator;
     private static final Class<?>[] implementedCollectionClasses = {List.class, ArrayList.class, Set.class, HashSet.class, LinkedHashSet.class, TreeSet.class};
 
@@ -30,7 +30,7 @@ public class SingleGenericTypeCollectionGenerationTest {
         randomInstanceGenerator = new RandomInstanceGenerator();
     }
     private static Class<?>[] getImplementedCollectionClasses(){
-        return SingleGenericTypeCollectionGenerationTest.implementedCollectionClasses;
+        return CollectionGenerationTest.implementedCollectionClasses;
     }
 
     @ParameterizedTest

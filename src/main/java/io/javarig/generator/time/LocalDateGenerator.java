@@ -1,6 +1,7 @@
-package io.javarig.generator;
+package io.javarig.generator.time;
 
 import io.javarig.RandomInstanceGenerator;
+import io.javarig.generator.TypeGenerator;
 
 import java.lang.reflect.Type;
 import java.time.Instant;

@@ -1,7 +1,7 @@
 package io.javarig.generator.collection.list;
 
 import io.javarig.RandomInstanceGenerator;
-import io.javarig.generator.collection.SingleGenericTypeCollectionGenerator;
+import io.javarig.generator.collection.CollectionGenerator;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  */
 
 @SuppressWarnings({"rawtypes"})
-public abstract class ListGenerator extends SingleGenericTypeCollectionGenerator<List> {
+public abstract class ListGenerator extends CollectionGenerator<List> {
 
     public ListGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
         super(type, randomInstanceGenerator);

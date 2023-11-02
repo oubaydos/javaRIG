@@ -1,5 +1,7 @@
 package io.javarig.generator.collection;
 
+import io.javarig.GenericType;
+import io.javarig.ImplementationProvider;
 import io.javarig.RandomInstanceGenerator;
 import io.javarig.exception.InstanceGenerationException;
 import io.javarig.exception.JavaRIGInternalException;
@@ -14,10 +16,10 @@ import java.util.Collection;
 @Setter
 @Getter
 @SuppressWarnings({"rawtypes", "unchecked"})
-public abstract class SingleGenericTypeCollectionGenerator<T extends Collection> extends TypeGenerator implements GenericCollectionGenerator<T> {
+public abstract class CollectionGenerator<T extends Collection> extends TypeGenerator implements ImplementationProvider<T>, GenericType {
     private final static int NUMBER_OF_GENERIC_PARAMS = 1;
 
-    public SingleGenericTypeCollectionGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
+    public CollectionGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
         super(type, randomInstanceGenerator);
     }
 

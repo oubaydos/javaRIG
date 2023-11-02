@@ -1,11 +1,11 @@
-package io.javarig.generator;
+package io.javarig;
 
 import io.javarig.exception.InvalidGenericParametersNumberException;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-public interface GenericTypeGenerator {
+public interface GenericType {
     int getNumberOfGenericParams();
 
     default void checkIfValidNumberOfGenericArguments(Type type) {

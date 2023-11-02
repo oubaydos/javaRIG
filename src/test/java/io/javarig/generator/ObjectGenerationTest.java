@@ -1,4 +1,4 @@
-package io.javarig.generation;
+package io.javarig.generator;
 
 import io.javarig.RandomInstanceGenerator;
 import io.javarig.config.DefaultConfigValues;
