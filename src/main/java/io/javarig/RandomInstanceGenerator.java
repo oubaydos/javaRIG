@@ -26,6 +26,11 @@ public class RandomInstanceGenerator {
         this.generalConfig = Configuration.builder().build();
     }
 
+    public RandomInstanceGenerator(Configuration generalConfig, Configuration oneTimeConfig) {
+        this.generalConfig = generalConfig;
+        this.oneTimeConfig = oneTimeConfig;
+    }
+
     /**
      * generate a random instance of the given type
      * 
@@ -90,25 +95,23 @@ public class RandomInstanceGenerator {
 
     public RandomInstanceGenerator withSize(int size) {
         Validators.validateSize(size);
-        this.oneTimeConfig = generalConfig.withMaxSizeExclusive(size + 1).withMinSizeInclusive(size);
-        return this;
+        Configuration oneTimeConfig = generalConfig.withMaxSizeExclusive(size + 1).withMinSizeInclusive(size);
+        return new RandomInstanceGenerator(generalConfig, oneTimeConfig);
     }
 
     public RandomInstanceGenerator withSize(int minSizeInclusive, int maxSizeExclusive) {
         Validators.validateSize(minSizeInclusive, maxSizeExclusive);
-        this.oneTimeConfig = generalConfig.withMaxSizeExclusive(maxSizeExclusive)
+        Configuration oneTimeConfig = generalConfig.withMaxSizeExclusive(maxSizeExclusive)
                 .withMinSizeInclusive(minSizeInclusive);
-        return this;
+        return new RandomInstanceGenerator(generalConfig, oneTimeConfig);
     }
 
     public RandomInstanceGenerator withRegexPattern(String regexPattern) {
         Validators.validateRegexPattern(Utils.removeUnsupportedRegexCharacters(regexPattern));
-        this.oneTimeConfig = generalConfig.withRegexPattern(regexPattern);
-        return this;
+        return new RandomInstanceGenerator(generalConfig, generalConfig.withRegexPattern(regexPattern));
     }
 
     public RandomInstanceGenerator withOneTimeConfig(Configuration oneTimeConfig) {
-        this.oneTimeConfig = oneTimeConfig;
-        return this;
+        return new RandomInstanceGenerator(generalConfig, oneTimeConfig);
     }
 }
