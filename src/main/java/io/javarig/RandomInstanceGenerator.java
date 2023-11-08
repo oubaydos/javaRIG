@@ -4,10 +4,11 @@ import io.javarig.config.Configuration;
 import io.javarig.exception.InstanceGenerationException;
 import io.javarig.exception.NestedObjectRecursionException;
 import io.javarig.generator.TypeGenerator;
+import io.javarig.util.Utils;
+import io.javarig.util.Validators;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-
 
 import java.lang.reflect.Type;
 import java.util.Stack;
@@ -25,6 +26,11 @@ public class RandomInstanceGenerator {
         this.generalConfig = Configuration.builder().build();
     }
 
+    public RandomInstanceGenerator(Configuration generalConfig, Configuration oneTimeConfig) {
+        this.generalConfig = generalConfig;
+        this.oneTimeConfig = oneTimeConfig;
+    }
+
     /**
      * generate a random instance of the given type
      * 
@@ -36,34 +42,15 @@ public class RandomInstanceGenerator {
      *                                     default constructor , setter cannot be
      *                                     invoked ... )
      */
-    @SuppressWarnings({"unchecked"})
+    @SuppressWarnings({ "unchecked" })
     public <T> T generate(@NonNull Type objectType) throws InstanceGenerationException {
         checkForRecursion(objectType);
         objectStack.push(objectType);
         TypeGenerator generator = typeGeneratorFactory.getGenerator(objectType, this);
         T generated = (T) generator.generate();
         objectStack.pop();
+        clearOneTimeConfig();
         return generated;
-    }
-
-    /**
-     * generate a random instance for a collection, with a one time configuration
-     *
-     * @param objectType    type of the object
-     * @param oneTimeConfig a configuration for the generator that gets applied one
-     *                      time and doesn't overide the general configuration
-     *                      provided at the creation
-     * @return the generated object
-     * @throws InstanceGenerationException if the instance cannot be generated for
-     *                                     some reason (class doesn't have a default
-     *                                     constructor , class have a non-public
-     *                                     default constructor , setter cannot be
-     *                                     invoked ... )
-     */
-    public <T> T generate(@NonNull Type objectType,
-            Configuration oneTimeConfig
-    ) throws InstanceGenerationException {
-        return generateWithOneTimeConfig(objectType, oneTimeConfig);
     }
 
     /**
@@ -80,46 +67,16 @@ public class RandomInstanceGenerator {
      */
     public <T> T generate(
             @NonNull Type objectType,
-            @NonNull Type... genericTypes
-    ) throws InstanceGenerationException {
+            @NonNull Type... genericTypes) throws InstanceGenerationException {
         Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) objectType);
         return generate(parameterizedType);
     }
 
     /**
-     * generate a random instance of a generic collection with a fixed size
-     *
-     * @param objectType    type of the object
-     * @param oneTimeConfig a configuration for the generator that gets applied one
-     *                      time and doesn't overide the general configuration
-     *                      provided at the creation
-     * @param genericTypes  types of generic parameters
-     * @return the generated object
-     * @throws InstanceGenerationException if the instance cannot be generated for
-     *                                     some reason (class doesn't have
-     *                                     a default constructor , class have a
-     *                                     non-public default constructor , setter
-     *                                     cannot be invoked ... )
-     */
-    public <T> T generate(
-            @NonNull Type objectType,
-            Configuration oneTimeConfig,
-            @NonNull Type... genericTypes
-    ) throws InstanceGenerationException {
-        Type parameterizedType = new ParameterizedTypeImpl(genericTypes, (Class<?>) objectType);
-        return generate(parameterizedType, oneTimeConfig);
-    }
-
-    private <T> T generateWithOneTimeConfig(@NonNull Type objectType, Configuration oneTimeConfig) {
-        this.oneTimeConfig = oneTimeConfig;
-        T generatedObject = generate(objectType);
-        this.oneTimeConfig = null;
-        return generatedObject;
-    }
-
-    /**
-     * check if type exists in objectStack, if so then object can't be generated because there is recursion
-     * in this object's fields (there is a field that it's instantiation depends on owner object)
+     * check if type exists in objectStack, if so then object can't be generated
+     * because there is recursion
+     * in this object's fields (there is a field that it's instantiation depends on
+     * owner object)
      * so NestedObjectRecursion is thrown
      *
      * @param type - a type to search for in the stack
@@ -130,6 +87,31 @@ public class RandomInstanceGenerator {
         }
     }
 
+    private void clearOneTimeConfig() {
+        if (objectStack.empty()) {
+            this.oneTimeConfig = null;
+        }
+    }
 
+    public RandomInstanceGenerator withSize(int size) {
+        Validators.validateSize(size);
+        Configuration oneTimeConfig = generalConfig.withMaxSizeExclusive(size + 1).withMinSizeInclusive(size);
+        return new RandomInstanceGenerator(generalConfig, oneTimeConfig);
+    }
 
+    public RandomInstanceGenerator withSize(int minSizeInclusive, int maxSizeExclusive) {
+        Validators.validateSize(minSizeInclusive, maxSizeExclusive);
+        Configuration oneTimeConfig = generalConfig.withMaxSizeExclusive(maxSizeExclusive)
+                .withMinSizeInclusive(minSizeInclusive);
+        return new RandomInstanceGenerator(generalConfig, oneTimeConfig);
+    }
+
+    public RandomInstanceGenerator withRegexPattern(String regexPattern) {
+        Validators.validateRegexPattern(Utils.removeUnsupportedRegexCharacters(regexPattern));
+        return new RandomInstanceGenerator(generalConfig, generalConfig.withRegexPattern(regexPattern));
+    }
+
+    public RandomInstanceGenerator withOneTimeConfig(Configuration oneTimeConfig) {
+        return new RandomInstanceGenerator(generalConfig, oneTimeConfig);
+    }
 }
