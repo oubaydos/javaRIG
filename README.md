@@ -1,7 +1,4 @@
 # JavaRIG
-```diff
-- this description is outdated
-```
 Description
 ------------
 This project aims to provide a random instances generator for any class in java,
