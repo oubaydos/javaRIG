@@ -1,115 +1,126 @@
 # JavaRIG
+
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.oubaydos/java-random-generator?logo=apache-maven)](https://central.sonatype.com/artifact/io.github.oubaydos/java-random-generator)
+[![Javadocs](https://javadoc.io/badge2/io.github.oubaydos/java-random-generator/javadoc.svg)](https://javadoc.io/doc/io.github.oubaydos/java-random-generator)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Description
-------------
-This project aims to provide a random instances generator for any class in java,
-it iterates through setters of an empty object and sets the fields values (using Java reflection api) 
-randomly using one of the random generators defined in ``src/main/java/io.javarig.RandomInstanceGenerator.java``
+---
+Small, reflection-based random instance generator for Java. Given a type, JavaRIG builds a random instance by walking setters (and common JDK types), with guards to prevent infinite recursion.
 
+Latest release: 1.1.1 (2023-10-28).
 
+Supported types
+---
+> Source of truth: `io.javarig.TypeEnum` and the corresponding `TypeGenerator`.
 
-UseCase
-------------
-This generator will mainly be used is Random-Testing of all java software products.
+| Category | Types |
+|---|---|
+| Primitives / wrappers | `Integer`, `Long`, `Double`, `Float`, `Short`, `Byte`, `Boolean`, `Character` |
+| Text | `String` |
+| Time | `java.time.Instant`, `java.util.Date`, `java.time.LocalDate` |
+| Collections | `List` / `ArrayList` |
+| Sets | `Set`, `HashSet`, `LinkedHashSet`, `TreeSet` |
+| Maps | `Map`, `HashMap`, `TreeMap` |
+| Other | Arrays, Enums, arbitrary Objects (via public no-args ctor + setters) |
 
-How To use
-------------
-in order to generate a random object of type YourClass, this class should have 
-* public no arguments constructor
-* public setters for fields you want to generate randomly 
-    - naming convention for setters is setFieldName
-    - fields with no publicly accessed setters will be left as the default value.
-
-giving a class Car that respects the requirements above, this code will generate a random car
-```java
-RandomInstanceGenerator randomInstanceGenerator = new RandomInstanceGenerator();
-Car car = randomInstanceGenerator.generate(Car.class);
-```
-#### Predefined Java Classes
-inorder to generate an object for a certain predefined java class or primitive type, 
-you may use the same method mentioned above
-```java
-String randomString = randomInstanceGenerator.generate(String.class);
-```
-#### RandomInstanceGenerator::generate
-the generate method represents the entrypoint for our program, it accepts multiple arguments.
-The easiest way to use it is with a single argument that represents the target class
-#### Collection Generation
-to generate a collection (classes that have a size; arrays, java collections, strings...)
-you may use the generate method with extra arguments
-##### Exact size
-```java
-  Double[] doubles = randomInstanceGenerator.generate(Double[].class, 6);
-```
-this piece of code will generate an array of length 6, that contains randomly generated Doubles
-if this size is not giving, it will be randomly generated between **5 and 15**
-##### Size between two bounds
-```java
-  Double[] doubles = randomInstanceGenerator.generate(Double[].class, 6,9);
-```
-this will generate an array of doubles of a random size from {6,7,8}
-
-#### Generic Types
-to generate a class that has a generic type (a Map per example) you may 
-pass the generic types last in the argument list, and use any of the 
-RandomInstanceGenerator::generate methods
-```java
-  HashMap<String,Float> map = randomInstanceGenerator.generate(HashMap.class , String.class , Float.class);
-```
-to precise the wanted size:
-```java
-  int size = 5; // per example
-  HashMap<String,Float> map = randomInstanceGenerator.generate(HashMap.class , String.class ,size, Float.class);
+Install
+---
+### Maven
+```xml
+<dependency>
+  <groupId>io.github.oubaydos</groupId>
+  <artifactId>java-random-generator</artifactId>
+  <version>1.1.1</version>
+  <scope>test</scope>
+</dependency>
 ```
 
+### Gradle
 
-Javadocs
-------------
-javadocs are not yet hosted but will be soon
+```gradle
+gradletestImplementation("io.github.oubaydos:java-random-generator:1.1.1")
+```
 
+Artifact coordinates from Maven Central. Maven Repository
+
+Quick start
+---
+
+```java
+import io.javarig.RandomInstanceGenerator;
+
+RandomInstanceGenerator rig = new RandomInstanceGenerator();
+
+// 1) Simple POJO
+User user = rig.generate(User.class);
+
+// 2) Generics (e.g., Map<String, Integer>)
+java.util.Map<String, Integer> scores = rig.generate(Map.class, String.class, Integer.class);
+
+// 3) Collections with exact size
+java.util.List<String> names = rig.withSize(10).generate(ArrayList.class, String.class);
+
+// 4) Collections with size range [min, max)
+java.util.Set<Long> ids = rig.withSize(3, 7).generate(HashSet.class, Long.class);
+
+// 5) Regex-constrained String
+String phone = rig.withRegexPattern("[a-zA-Z0-9,;:!?]").generate(String.class);
+
+// 6) Arrays & enums
+Color[] palette = rig.withSize(4).generate(Color[].class);
+```
+
+API essentials
+---
+#### RandomInstanceGenerator
+
+```java
+<T> T generate(Type objectType);
+<T> T generate(Type objectType, Type... genericTypes);
+RandomInstanceGenerator withSize(int size);                  // exact size
+RandomInstanceGenerator withSize(int minSizeInclusive, int maxSizeExclusive);
+RandomInstanceGenerator withRegexPattern(String regex);
+RandomInstanceGenerator withOneTimeConfig(Configuration cfg);
+```
+
+- Use `withSize(...)` to control sizes for arrays/collections/strings for the next generation only (one-time config).
+- `withRegexPattern(...)` constrains String values for the next generation. 
+- Cycles in object graphs cause `NestedObjectRecursionException`.
+
+Requirements & limitations
+---
+
+- POJO generation expects a **public no-args constructor** and **public setters** for fields to populate. 
+- The generator keeps an internal stack to detect recursion; mutating and not thread-safe → create a generator per thread if needed. 
+- Regex support is a practical subset; unsupported tokens are sanitized before use. 
+- Defaults (e.g., size ranges) come from `Configuration`; override with `withSize(...)`.
+
+Why JavaRIG?
+---
+
+It’s a tiny dependency that does the basics well handy for tests and fakes without bringing a heavyweight fixture library.
+
+Roadmap
+---
+
+- More built-in generators (BigDecimal, UUID, etc.)
+- Thread-safe mode 
+- Public extensibility for custom TypeGenerators
 
 Contributing
-------------
-This is a new project, so we welcome all contributions, feel free to open a pull request
+---
 
-Project Structure
---------
-
-    .
-    ├── ...
-        ├── ...    
-            ├── io.javarig.exception                # package containing our custom exceptions
-            ├── io.javarig.generator                # generators for specific types: array, list, map, string, primitive ...
-            ├── io.javarig.RandomInstanceGenerator  # Entrypoint for our Project, contains generate method
-            ├── io.javarig.testclasses              # test classes, supplied to our testing methods.
-            ├── io.javarig.generation               # Junit testing classes.
-    ├── README.md, LICENSE...   # other files
-
-To build sources locally follow these instructions.
-
-### Tests
-
-unit tests are done , with a 98% coverage
-
-Technologies
---------
-
-* Java
-* Maven
-* JUNIT 5
-* Java Reflection Api
-
-Project Status
--------
-this project is _in progress_, the first release is planned before the end of 2022
+Issues and PRs welcome. Keep changes small and covered by tests. (See repo issues.) GitHub
 
 License
--------
+---
+MIT. See LICENSE. GitHub
 
-Copyright (c) 2022 {Obaydah Bouifadene, Hamza Ben Yazid, Ismail Mosleh, Ibrahim Mestadi}
+Links
+---
 
-Licensed under
-the [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+- **Repo**: github.com/oubaydos/javaRIG GitHub 
+- **Maven Central artifact page**: io.github.oubaydos:java-random-generator Maven Repository
 
-Contact
--------
-Check our github ☺
+---
