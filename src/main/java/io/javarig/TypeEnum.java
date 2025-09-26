@@ -8,13 +8,10 @@ import io.javarig.generator.collection.set.TreeSetGenerator;
 import io.javarig.generator.map.HashMapGenerator;
 import io.javarig.generator.map.TreeMapGenerator;
 import io.javarig.generator.primitive.*;
-import io.javarig.generator.time.DateGenerator;
-import io.javarig.generator.time.InstantGenerator;
-import io.javarig.generator.time.LocalDateGenerator;
+import io.javarig.generator.time.*;
 
 import java.lang.reflect.Type;
-import java.time.Instant;
-import java.time.LocalDate;
+import java.time.*;
 import java.util.*;
 
 
@@ -32,6 +29,10 @@ public enum TypeEnum {
     INSTANT(Instant.class, InstantGenerator.class),
     DATE(Date.class, DateGenerator.class),
     LOCAL_DATE(LocalDate.class, LocalDateGenerator.class),
+    LOCAL_DATE_TIME(LocalDateTime.class, LocalDateTimeGenerator.class),
+    LOCAL_TIME(LocalTime.class, LocalTimeGenerator.class),
+    ZONED_DATE_TIME(ZonedDateTime.class, ZonedDateTimeGenerator.class),
+    OFFSET_DATE_TIME(OffsetDateTime.class, OffsetDateTimeGenerator.class),
     MAP(Map.class, HashMapGenerator.class),
     HASH_MAP(HashMap.class, HashMapGenerator.class),
     TREE_MAP(TreeMap.class, TreeMapGenerator.class),

@@ -1,19 +1,18 @@
 package io.javarig.generator.time;
 
 import io.javarig.RandomInstanceGenerator;
-import io.javarig.generator.TypeGenerator;
 
 import java.lang.reflect.Type;
-import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
-public class DateGenerator extends TypeGenerator {
+public class DateGenerator extends BaseDateTimeGenerator<Date> {
     public DateGenerator(Type type, RandomInstanceGenerator randomInstanceGenerator) {
         super(type, randomInstanceGenerator);
     }
 
     @Override
-    public Date generate() {
-        return Date.from(getRandomInstanceGenerator().generate(Instant.class));
+    protected Date convert(ZonedDateTime zonedDateTime) {
+        return Date.from(zonedDateTime.toInstant());
     }
 }

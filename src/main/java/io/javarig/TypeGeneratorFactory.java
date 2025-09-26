@@ -56,9 +56,8 @@ public class TypeGeneratorFactory {
 
     @NonNull
     private TypeEnum getTypeEnumForUnmatchedTypes(Class<?> type) {
-        if (type.isArray()) {
+        if (type.isArray())
             return ARRAY;
-        }
         if (type.isEnum())
             return ENUM;
         return OBJECT;
