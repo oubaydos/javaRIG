@@ -18,7 +18,7 @@ Supported types
 |---|---|
 | Primitives / wrappers | `Integer`, `Long`, `Double`, `Float`, `Short`, `Byte`, `Boolean`, `Character` |
 | Text | `String` |
-| Time | `java.time.Instant`, `java.util.Date`, `java.time.LocalDate` |
+| Time | `java.time.Instant`, `java.util.Date`, `java.time.LocalDate`, etc |
 | Collections | `List` / `ArrayList` |
 | Sets | `Set`, `HashSet`, `LinkedHashSet`, `TreeSet` |
 | Maps | `Map`, `HashMap`, `TreeMap` |
